@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="roleRM" type="cn.edu.bjtu.jzlj.dao.Role">
+        <id column="id" property="id" />
+        <result column="role_name" property="role_name" />
+        <result column="role_desc" property="role_desc" />
+    </resultMap>
+
+    <!-- cz 通过角色id查找role -->
+    <select id="findUserRoleByRoleId" parameterType="cn.edu.bjtu.jzlj.dao.Role" resultMap="roleRM">
+		select * from sys_role where id = #{id}
+	</select>
+
+    <!-- cz 通过角色role_name查找role -->
+    <select id="findRoleByRname" resultMap="roleRM">
+		select * from sys_role where role_name = #{role_name}
+	</select>
+
+    <!-- cz 添加角色 -->
+    <insert id="addRole" keyProperty="id" parameterType="cn.edu.bjtu.jzlj.dao.Role">
+            INSERT INTO
+            sys_role
+            (id, role_name, role_desc)
+            VALUES
+            (
+            'id',
+            'rolename',
+            'description'
+            )
+    </insert>
+
+    <!--    用户列表分页查询-->
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.Role"
+            resultType="cn.edu.bjtu.jzlj.dao.Role">
+        SELECT * FROM sys_role WHERE 1=1
+        <if test="role.roleName != null and role.roleName != ''">
+            AND role_name = '${role.roleName}'
+        </if>
+    </select>
+
+    <!--    用户列表不分页查询-->
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.Role"
+            resultType="cn.edu.bjtu.jzlj.dao.Role">
+        SELECT * FROM sys_role WHERE 1=1
+        <if test="_parameter.containsKey('role') and role != null">
+            <if test="role.roleName != null and role.roleName != ''">
+                AND role_name = '${role.roleName}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
+
+    <!-- cz role列表 -->
+    <select id="getAllRoles" resultMap="roleRM">
+		select * from sys_role
+	</select>
+
+    <select id="findALL" resultMap="roleRM">
+		select * from sys_role
+	</select>
+
+    <!-- cz 更新角色 -->
+    <update id="updateRoleByRoleId" keyProperty="id" parameterType="cn.edu.bjtu.jzlj.dao.Role">
+        <if test="role != null">
+            <if test="role.id != null and role.id != '' ">
+                update sys_role set
+                role_name=#{role_name},
+                role_desc=#{role_desc}
+                where id=#{id}
+            </if>
+        </if>
+    </update>
+
+    <!-- sys_user_role添加新id -->
+    <insert id="updateUserRoleByRoleId" parameterType="cn.edu.bjtu.jzlj.dao.SysUserRole">
+            insert into sys_user_role(role_id, user_id) values (#{roleId}, #{userId})
+    </insert>
+
+<!--    &lt;!&ndash; sys_organization_user添加新id &ndash;&gt;-->
+<!--    <insert id="updateUserOrganizationByUREntity" parameterType="cn.edu.bjtu.jzlj.dao.SysUserOrganization">-->
+<!--        <if test="role != null">-->
+<!--            insert into sys_user_role(role_id, user_id) values (#{role_id}, #{user_id})-->
+<!--        </if>-->
+<!--    </insert>-->
+
+
+    <!-- sys_user_role添加新id -->
+    <insert id="insert_org" keyProperty="id" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganizationUser">
+        <if test="role != null">
+            insert into sys_organization_user(orgid, userid) values (
+            #{orgid},
+            #{userid}
+            )
+        </if>
+    </insert>
+
+    <!-- 根据角色名删除角色 -->
+    <delete id="delRoleByRoleName"  parameterType="cn.edu.bjtu.jzlj.dao.Role">
+                delete from sys_role where role_name = #{rname}
+    </delete>
+
+    <delete id="deleteRoleById"  parameterType="cn.edu.bjtu.jzlj.dao.Role">
+                delete from sys_role where id = #{roleId}
+    </delete>
+
+    <delete id="deleteRoleById_get"  parameterType="cn.edu.bjtu.jzlj.dao.Role">
+                delete from sys_role where id = #{roleid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.CarTrailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.CarTrail">
+        <result column="trail_id" property="trailId" />
+        <result column="car_id" property="carId" />
+        <result column="speed" property="speed" />
+        <result column="car_long" property="carLong" />
+        <result column="car_laT" property="carLat" />
+        <result column="airtight" property="airtight" />
+        <result column="lift" property="lift" />
+        <result column="video_address" property="videoAddress" />
+        <result column="input_time" property="inputTime" />
+        <result column="content" property="content" />
+    </resultMap>
+
+    <!-- 可以用 Wrapper和 Ipage实现 -->
+    <select id="getDynamicTrail" resultType="cn.edu.bjtu.jzlj.dao.CarTrail">
+        SELECT * FROM car_trail_info WHERE 1=1
+        <if test="  CAR_ID != null and CAR_ID != '' ">
+            AND car_id = #{CAR_ID}
+        </if>
+        <if test="  limit != null and limit != '' ">
+            LIMIT #{limit},1
+        </if>
+
+    </select>
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.CarTrail"
+            resultType="cn.edu.bjtu.jzlj.dao.CarTrail">
+        SELECT * FROM car_trail_info WHERE 1=1
+        <if test="carTrail.carId != null and carTrail.carId != ''">
+            AND car_id = '${carTrail.carId }'
+        </if>
+        <if test="TIME_STA != null and TIME_STA != '' ">
+            AND input_time >= #{TIME_STA}
+        </if>
+        <if test="TIME_END != null and TIME_END != '' ">
+            AND input_time <![CDATA[<=]]> #{TIME_END}
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.CarTrail"
+            resultType="cn.edu.bjtu.jzlj.dao.CarTrail">
+        SELECT * FROM car_trail_info WHERE 1=1
+        <if test="_parameter.containsKey('carTrail') and carTrail!= null">
+            <if test="carTrail.carId != null and carTrail.carId  != ''">
+                AND car_id = '${carTrail.carId }'
+            </if>
+        </if>
+        <if test="TIME_STA != null and TIME_STA != '' ">
+            AND input_time >= #{TIME_STA}
+        </if>
+        <if test="TIME_END != null and TIME_END != '' ">
+            AND input_time <![CDATA[<=]]> #{TIME_END}
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.SourceInfoMapper">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.SourceInfo">
+            <id column="source_id" property="sourceId" />
+            <result column="source_name" property="sourceName" />
+            <result column="source_address" property="sourceAddress" />
+            <result column="source_long" property="sourceLong" />
+            <result column="source_lat" property="sourceLat" />
+            <result column="source_attrbute" property="sourceAttrbute" />
+            <result column="qm_dept_no" property="qmDeptNo" />
+            <result column="source_type" property="sourceType" />
+            <result column="waste_total" property="wasteTotal" />
+            <result column="start_date" property="startDate" />
+            <result column="source_company" property="sourceCompany" />
+            <result column="linkman" property="linkman" />
+            <result column="phone_no" property="phoneNo" />
+            <result column="input_name" property="inputName" />
+            <result column="input_time" property="inputTime" />
+            <result column="review_status" property="reviewStatus" />
+            <result column="end_date" property="endDate" />
+            <result column="waste_component" property="wasteComponent" />
+            <result column="waste_unit" property="wasteUnit" />
+            <result column="suggestion" property="suggestion" />
+            <result column="content" property="content" />
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+            source_id, source_name, source_address,source_long,source_lat,start_date,source_attrbute,qm_dept_no,source_type,waste_component,end_date,waste_total,start_date,source_company,linkman,phone_no,input_name,input_time,review_status, end_date, waste_component, waste_unit, suggestion, content
+        </sql>
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SourceInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.SourceInfo">
+        SELECT * FROM source_info WHERE 1=1
+        <if test="sourceInfo.sourceId != null and sourceInfo.sourceId != ''">
+            AND source_id = '${sourceInfo.sourceId}'
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SourceInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.SourceInfo">
+        SELECT * FROM source_info WHERE 1=1
+        <if test="_parameter.containsKey('sourceInfo') and sourceInfo!= null">
+            <if test="sourceInfo.sourceId != null and sourceInfo.sourceId != ''">
+                AND source_id = '${sourceInfo.sourceId}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+        ${ew.customSqlSegment}
+        </if>
+    </select>
+
+    <!--update SOURCE_INFO_NEW set REVIEW_STATUS = #{REVIEW_STATUS} where SOURCE_ID = #{SOURCE_ID}-->
+    <update id="updateReviewStatus" parameterType="cn.edu.bjtu.jzlj.dao.SourceInfo">
+        UPDATE source_info
+        <set>
+            review_status = #{reviewStatus},
+        </set>
+        WHERE source_id = #{sourceId};
+    </update>
+
+    <!--select * from SOURCE_INFO_NEW where INPUT_NAME = #{INPUT_NAME}-->
+    <select id="getSourceInfoByInputName" resultType="cn.edu.bjtu.jzlj.dao.SourceInfo">
+        SELECT * FROM source_info WHERE 1=1
+        <if test="  inputName != null and inputName != '' ">
+            AND input_name = #{inputName}
+        </if>
+    </select>
+    <!--select * from SOURCE_INFO_NEW where INPUT_NAME = #{INPUT_NAME}-->
+    <select id="getSourceInfoBySourceId" resultType="cn.edu.bjtu.jzlj.dao.SourceInfo">
+        SELECT * FROM source_info WHERE 1=1
+        <if test="  sourceId != null and sourceId != '' ">
+            AND source_id = #{sourceId}
+        </if>
+    </select>
+
+</mapper>

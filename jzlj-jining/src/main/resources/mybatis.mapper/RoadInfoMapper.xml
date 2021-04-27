@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.RoadInfoMapper">
+
+    <!--    通用结果查询-->
+    <resultMap id="roadRM_all" type="cn.edu.bjtu.jzlj.dao.RoadInfo">
+        <id property="roadId" column="road_id"/>
+        <result property="roadName" column="road_name"/>
+        <result property="roadAddress" column="road_address"/>
+        <result property="inputName" column="input_name"/>
+        <result property="inputTime" column="input_time"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            road_id, road_name, input_name, input_time
+    </sql>
+
+    <!--    插入路段信息-->
+    <insert id="insertRoadInfo">
+        INSERT INTO
+        road_info
+        (road_id, road_name, road_address, input_name, input_time, content)
+        VALUES
+        (
+        #{roadId, jdbcType=INTEGER},
+      #{roadName, jdbcType=VARCHAR},
+      #{roadAddress, jdbcType=VARCHAR},
+      #{inputName, jdbcType=VARCHAR},
+      #{inputTime, jdbcType=TIMESTAMP},
+      #{content, jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+<!--    根据id查询路段信息-->
+    <select id="getRoadInfo" resultType="cn.edu.bjtu.jzlj.dao.RoadInfo">
+    SELECT * from road_info where road_id = #{roadId, jdbcType=INTEGER}
+    </select>
+
+</mapper>

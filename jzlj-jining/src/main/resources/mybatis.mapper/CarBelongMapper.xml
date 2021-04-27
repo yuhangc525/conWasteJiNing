@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.CarBelongMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.CarBelong">
+        <id column="car_belong_id" property="carBelongId"/>
+        <result column="car_name" property="carName"/>
+        <result column="car_belong_company" property="carBelongCompany"/>
+        <result column="car_status" property="carStatus"/>
+        <result column="terminal_code" property="terminalCode"/>
+        <result column="car_types" property="carTypes"/>
+        <result column="car_contact_number" property="carContactNumber"/>
+        <result column="car_contact" property="carContact"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            car_belong_id, car_name, car_belong_company, car_status, terminal_code, car_types, car_contact_number, car_contact
+        </sql>
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.CarBelong"
+            resultType="cn.edu.bjtu.jzlj.dao.CarBelong">
+        SELECT * FROM car_belong WHERE 1=1
+        <if test="carBelong.carBelongId != null and carBelong.carBelongId != ''">
+            AND car_belong_id = '${carBelong.carBelongId}'
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.CarBelong"
+            resultType="cn.edu.bjtu.jzlj.dao.CarBelong">
+        SELECT * FROM car_belong WHERE 1=1
+        <if test="_parameter.containsKey('carBelong') and carBelong!= null">
+            <if test="carBelong.carBelongId != null and carBelong.carBelongId != ''">
+                AND car_belong_id = '${carBelong.carBelongId}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.SysUserMapper">
+
+        <!-- 通用查询映射结果 -->
+
+<!--        <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.SysUser">-->
+        <resultMap id="userRM_all" type="cn.edu.bjtu.jzlj.dao.SysUser">
+            <id jdbcType="VARCHAR" column="id" property="id" />
+            <result jdbcType="VARCHAR" column="password" property="password" />
+            <result jdbcType="VARCHAR" column="username" property="username" />
+            <result jdbcType="VARCHAR" property="mobile" column="mobile"/>
+            <result jdbcType="VARCHAR" property="organization" column="organization"/>
+            <result jdbcType="TINYINT" property="status" column="status"/>
+            <result jdbcType="VARCHAR" property="createUser" column="create_user"/>
+            <result jdbcType="TIMESTAMP" property="createTime" column="create_time"/>
+            <result jdbcType="VARCHAR" property="updateUser" column="update_user"/>
+            <result jdbcType="TIMESTAMP" property="updateTime" column="update_time"/>
+            <result jdbcType="VARCHAR" property="remark" column="remark"/>
+
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+            id, password, username, creat_time
+        </sql>
+<!--    用户列表分页查询-->
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SysUser"
+            resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        SELECT * FROM sys_user WHERE 1=1
+        <if test="sysUser.username != null and sysUser.username != ''">
+            AND username = '${sysUser.username}'
+        </if>
+    </select>
+
+<!--    用户列表不分页查询-->
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SysUser"
+            resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        SELECT * FROM sys_user WHERE 1=1
+        <if test="_parameter.containsKey('sysUser') and sysUser!= null">
+            <if test="sysUser.username != null and sysUser.username != ''">
+                AND username = '${sysUser.username}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+        ${ew.customSqlSegment}
+        </if>
+    </select>
+
+
+    <!--获取用户列表-->
+    <select id="selectUserList" resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        select u.id, u.username, u.password, u.mobile, u.organization,u.status,
+        u.create_user,u.create_time,u.update_user,u.update_time,u.remark, r.id as roleId, r.role_name, o.id as orgId, o.organization_name
+        from sys_user u
+        LEFT JOIN sys_user_role ur on ur.user_id=u.id
+        LEFT JOIN sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        AND u.status != 2;
+        <if test="vo.userName != null and vo.userName != ''">and username like '%${vo.userName}%'</if>
+    </select>
+
+<!--    创建新的用户-->
+    <insert id="creatUser">
+        INSERT INTO
+      sys_user
+      (id,username,password,mobile,organization,status,
+      create_user,create_time,update_user,update_time,remark)
+      VALUES
+      (
+      #{id, jdbcType=VARCHAR},
+      #{username, jdbcType=VARCHAR},
+      #{password, jdbcType=VARCHAR},
+      #{mobile, jdbcType=VARCHAR},
+      #{organization, jdbcType=VARCHAR},
+      #{status, jdbcType=INTEGER},
+      #{create_user, jdbcType=VARCHAR},
+      #{create_time, jdbcType=TIMESTAMP},
+      #{update_user, jdbcType=VARCHAR},
+      #{update_time, jdbcType=TIMESTAMP},
+      #{remark, jdbcType=VARCHAR})
+    </insert>
+
+
+<!--    根据id查询用户信息-->
+<!--   AND u.status != 2-->
+    <select id="getUserById" resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        select u.id,u.username,u.password,u.mobile,u.organization,u.status,
+        u.create_user,u.create_time,u.update_user,u.update_time,u.remark,r.id
+        as roleId,r.role_name,o.id AS orgId,o.organization_name
+        from sys_user u
+        left join sys_user_role ur on ur.user_id=u.id
+        left join sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        <if test="id != null and id != ''">AND u.id = #{id}</if>
+
+    </select>
+
+<!--    <update id="updateUserById" parameterType="cn.edu.bjtu.jzlj.dao.SysUser">-->
+<!--        UPDATE sys_user-->
+<!--        <set>-->
+<!--            <if test="id !=null">id = #{id},</if>-->
+<!--            <if test="username !=null">username = #{username},</if>-->
+<!--            <if test="password !=null">password = #{password},</if>-->
+<!--            <if test="mobile !=null">mobile = #{mobile},</if>-->
+<!--            <if test="organization !=null">organization = #{organization},</if>-->
+<!--            <if test="status !=null">status = #{status},</if>-->
+<!--            <if test="create_user !=null">create_user = #{create_user},</if>-->
+<!--            <if test="create_time !=null">create_time = #{create_time},</if>-->
+<!--            <if test="update_user !=null">update_user = #{update_user},</if>-->
+<!--            <if test="update_time !=null">update_time = #{update_time},</if>-->
+<!--            <if test="remark !=null">remark = #{remark},</if>-->
+<!--        </set>-->
+<!--    </update>-->
+
+
+<!--    根据id修改用户信息-->
+    <update id="updateUserById" parameterType="cn.edu.bjtu.jzlj.dao.SysUser">
+        UPDATE sys_user
+        <set>
+--             id = #{id},根据id修改不改变id
+            username = #{username},
+            password = #{password},
+            mobile = #{mobile},
+            organization = #{organization},
+            status = #{status},
+            create_user = #{create_user},
+            create_time = #{create_time},
+            update_user = #{update_user},
+            update_time = #{update_time},
+            remark = #{remark},
+        </set>
+        WHERE id = #{id};
+    </update>
+
+    <!--根据用户id更新用户信息，高级的-->
+    <update id="updateUserByUserId" parameterType="cn.edu.bjtu.jzlj.dao.SysUser">
+        UPDATE sys_user
+        <set>
+            <if test="username !=null">username = #{username},</if>
+            <if test="password !=null">password = #{password},</if>
+            <if test="mobile !=null">mobile = #{mobile},</if>
+            <if test="organization !=null">organization = #{organization},</if>
+            <if test="status !=null">status = #{status},</if>
+            <if test="createUser !=null">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateUser !=null">update_user = #{updateUser},</if>
+            <if test="updateTime !=null">update_time = #{updateTime},</if>
+            <if test="remark !=null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id};
+    </update>
+
+
+    <!--更新 UserRole by UserId : userId不能为空，roleId可以为空-->
+    <update id="updateUserRoleByUREntity" parameterType="cn.edu.bjtu.jzlj.dao.SysUserRole">
+      update sys_user_role set role_id = #{SysUserRole.roleId}
+      where user_id = #{SysUserRole.userId}
+    </update>
+
+
+    <!--更新 UserOrganization by UserId : userId不能为空，orgId可以为空-->
+    <update id="updateUserOrganizationByUREntity" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganizationUser">
+      update sys_organization_user
+      set orgid = #{sysOrganizationUser.orgid}
+      where userid = #{sysOrganizationUser.userid}
+    </update>
+
+
+
+<!--    根据用户名查询用户信息-->
+<!--    parameterType="cn.edu.bjtu.jzlj.dao.SysUser"-->
+    <select id="getUserByUname" resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        select u.id,u.username,u.password,u.mobile,u.organization,u.status,
+        u.create_user,u.create_time,u.update_user,u.update_time,u.remark,r.id
+        as roleId,r.role_name,o.id AS orgId,o.organization_name
+        from sys_user u
+        LEFT JOIN sys_user_role ur on ur.user_id=u.id
+        LEFT JOIN sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        <if test="username != null and username != ''">
+            AND u.username = #{username}
+        </if>
+<!--    <if test="username != null and username != ''">-->
+        AND u.status != 2
+    </select>
+
+    <!--根据用户名和密码查询用户-->
+    <select id="findUserByNameAndPassword" resultMap="userRM_all">
+      SELECT su.* ,sr.id AS roleid,sr.role_name AS roleName,
+      sr.role_desc AS roleDesc,so.id AS orgId,so.organization_name AS organizationName
+      FROM sys_user su
+      LEFT JOIN sys_user_role sur ON su.id=sur.user_id
+      LEFT JOIN sys_role sr ON sr.id=sur.role_id
+      LEFT JOIN sys_organization_user sou ON sou.userid=su.id
+      LEFT JOIN sys_organization so ON so.id = sou.orgid
+      WHERE su.username=#{uname} AND su.PASSWORD=#{upasswd}
+      AND su.STATUS != 2
+    </select>
+
+<!--    根据id禁用用户-->
+    <update id="disabledById">
+      UPDATE sys_user SET
+      status = 0,update_user = #{updateUser},update_time = #{updateTime}
+      WHERE id = #{id}
+    </update>
+
+    <!--    根据id解禁用户-->
+    <update id="enableById">
+      UPDATE sys_user SET
+      status = 1,update_user = #{updateUser},update_time = #{updateTime}
+      WHERE id = #{id}
+    </update>
+
+    <!--    根据id删除用户，逻辑删除-->
+<!--    <update id="deleteUserById">-->
+<!--      UPDATE sys_user SET-->
+<!--      status = 2, update_user = #{updateUser}, update_time = #{updateTime}-->
+<!--      WHERE id = #{id}-->
+<!--    </update>-->
+    <delete id="deleteUserById"  >
+        delete from sys_user where id = #{id}
+    </delete>
+
+    <!--    根据多个id删除多个用户，逻辑删除-->
+<!--    <update id="deleteMUserById">-->
+<!--      UPDATE sys_user SET-->
+<!--      status = 2, update_user = #{updateUser}, update_time = #{updateTime}-->
+<!--      WHERE id in-->
+<!--      <foreach collection="id" close=")" open="(" index="index" separator="," item="id">-->
+<!--          #{id}-->
+<!--      </foreach>-->
+<!--    </update>-->
+
+    <delete id="deleteMUserById" >
+        delete from
+        sys_user
+        where
+        id IN
+        <foreach collection="id" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMUserById_get" >
+        delete from
+        sys_user
+        where
+        id IN
+        <foreach collection="id" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    根据id重置密码-->
+    <update id="resetPW">
+      UPDATE sys_user
+      SET password = #{password},update_user = #{updateUser}, update_time = #{updateTime}
+      WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUserById_get"  parameterType="cn.edu.bjtu.jzlj.dao.SysUser">
+        delete from sys_user where id = #{id}
+    </delete>
+
+</mapper>

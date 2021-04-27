@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.CarRoadMapper">
+
+    <!--    通用结果查询-->
+    <resultMap id="carRoadRM_all" type="cn.edu.bjtu.jzlj.dao.CarRoad">
+        <id property="Id" column="id"/>
+        <result property="terminalId" column="terminal_id"/>
+        <result property="roadId" column="road_id"/>
+    </resultMap>
+
+
+
+    <!--    根据terminal_id查询路线列表-->
+    <select id="getRoadListByTerminalId" resultType="cn.edu.bjtu.jzlj.dao.CarRoad">
+    SELECT road_id FROM car_road WHERE terminal_id = #{terminalId, jdbcType=VARCHAR}
+    </select>
+
+</mapper>

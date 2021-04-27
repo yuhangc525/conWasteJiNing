@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.IntakePlantInfoMapper">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+                    <id column="id" property="id" />
+                    <result column="intake_plant_id" property="intakePlantId" />
+                    <result column="intake_plant_name" property="intakePlantName" />
+                    <result column="intake_plant_address" property="intakePlantAddress" />
+                    <result column="intake_plant_long" property="intakePlantLong" />
+                    <result column="intake_plant_lat" property="intakePlantLat" />
+                    <result column="intake_linkman" property="intakeLinkman" />
+                    <result column="intake_phone_no" property="intakePhoneNo" />
+                    <result column="input_name" property="inputName" />
+                    <result column="input_time" property="inputTime" />
+                    <result column="content" property="content" />
+                    <result column="review_status" property="reviewStatus" />
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+            id, intake_plant_id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status
+        </sql>
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+        SELECT * FROM intake_plant_info WHERE 1=1
+        <if test="intakePlantInfo.id != null and intakePlantInfo.id != ''">
+            AND id = '${intakePlantInfo.id}'
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+        SELECT * FROM intake_plant_info WHERE 1=1
+        <if test="_parameter.containsKey('intakePlantInfo') and intakePlantInfo!= null">
+            <if test="intakePlantInfo.id != null and intakePlantInfo.id != ''">
+                AND id = '${intakePlantInfo.id}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+        ${ew.customSqlSegment}
+        </if>
+    </select>
+
+    <!--select * from INTAKE_PLANT_INFO_NEW where INPUT_NAME = #{INPUT_NAME}-->
+    <select id="getIntakePlantInfoByInputName" resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+        SELECT * FROM intake_plant_info WHERE 1=1
+        <if test="  inputName != null and inputName != '' ">
+            AND input_name = #{inputName}
+        </if>
+    </select>
+
+    <!--insert into INTAKE_PLANT_INFO_NEW(INTAKE_PLANT_ID, INTAKE_PLANT_NAME, INTAKE_PLANT_ADDRESS, " +
+            "INTAKE_PLANT_LONG, INTAKE_PLANT_LAT, INPUT_NAME, INPUT_TIME, CONTENT, " +
+            "REVIEW_STATUS)" +
+            "values(#{INTAKE_PLANT_ID},#{INTAKE_PLANT_NAME},#{INTAKE_PLANT_ADDRESS},#{INTAKE_PLANT_LONG}," +
+            "#{INTAKE_PLANT_LAT},#{INPUT_NAME},#{INPUT_TIME},#{CONTENT}," +
+            "#{REVIEW_STATUS})-->
+    <insert id="insertinfo">
+        INSERT INTO intake_plant_info
+      (id, intake_plant_id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
+      VALUES
+      (#{id, jdbcType=INTEGER},
+      #{intakePlantId, jdbcType=VARCHAR},
+      #{intakePlantName, jdbcType=VARCHAR},
+      #{intakePlantAddress, jdbcType=VARCHAR},
+      #{intakePlantLong, jdbcType=FLOAT},
+      #{intakePlantLat, jdbcType=FLOAT},
+      #{intakeLinkman, jdbcType=VARCHAR},
+      #{intakePhoneNo, jdbcType=VARCHAR},
+      #{inputName, jdbcType=VARCHAR},
+      #{inputTime, jdbcType=VARCHAR},
+      #{content, jdbcType=VARCHAR},
+      #{reviewStatus, jdbcType=INTEGER})
+    </insert>
+
+    <!--update INTAKE_PLANT_INFO_NEW set INTAKE_PLANT_NAME = #{INTAKE_PLANT_NAME}," +
+                "INTAKE_PLANT_ADDRESS = #{INTAKE_PLANT_ADDRESS}," +
+                "INTAKE_PLANT_LONG = #{INTAKE_PLANT_LONG},INTAKE_PLANT_LAT = #{INTAKE_PLANT_LAT},INPUT_NAME = #{INPUT_NAME}," +
+                "INPUT_TIME = #{INPUT_TIME},CONTENT = #{CONTENT},REVIEW_STATUS = #{REVIEW_STATUS} " +
+                "where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
+    <update id="updateinfo">
+        UPDATE intake_plant_info
+        <set>
+            intake_plant_name = #{intakePlantName},
+            intake_plant_address = #{intakePlantAddress},
+            intake_plant_long = #{intakePlantLong},
+            intake_plant_lat = #{intakePlantLat},
+            intake_linkman = #{intakeLinkman},
+            intake_phone_no = #{intakePhoneNo},
+            input_name = #{inputName},
+            input_time = #{inputTime},
+            content = #{content},
+            review_status = #{reviewStatus},
+        </set>
+        WHERE intake_plant_id = #{intakePlantId};
+    </update>
+
+    <!--    delete from INTAKE_PLANT_INFO_NEW where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
+    <delete id="deleteByINTAKE_PLANT_ID">
+        DELETE FROM intake_plant_info WHERE 1=1
+        <if test="  intakePlantId != null and intakePlantId != '' ">
+            AND intake_plant_id = #{intakePlantId}
+        </if>
+    </delete>
+
+    <!--update INTAKE_PLANT_INFO_NEW set REVIEW_STATUS = #{REVIEW_STATUS} where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
+    <update id="updateReviewStatus" parameterType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+        UPDATE intake_plant_info
+        <set>
+            review_status = #{reviewStatus},
+        </set>
+        WHERE intake_plant_id = #{intakePlantId};
+    </update>
+
+    <!--select * from INTAKE_PLANT_INFO_NEW where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
+    <select id="getIntakePlantInfoByINTakePlantID" resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
+        SELECT * FROM intake_plant_info WHERE 1=1
+        <if test="  intakePlantId != null and intakePlantId != '' ">
+            AND intake_plant_id = #{intakePlantId}
+        </if>
+    </select>
+
+</mapper>
