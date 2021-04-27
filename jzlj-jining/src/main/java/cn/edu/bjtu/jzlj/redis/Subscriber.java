@@ -12,6 +12,7 @@ import cn.edu.bjtu.jzlj.util.Gps;
 import cn.edu.bjtu.jzlj.util.PositionTransformationUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
+@Slf4j
 public class Subscriber extends JedisPubSub {
     private static final Logger LOGGER = LoggerFactory.getLogger(Subscriber.class);
 
@@ -57,6 +59,14 @@ public class Subscriber extends JedisPubSub {
     //收到消息会调用
     public void onMessage(String channel, String message) {
 //        System.out.println(String.format("receive redis published message, channel %s, message %s", channel, message));
+        giveAnAlarm(message);
+
+    };
+
+
+
+    public void giveAnAlarm (String message){
+
         // 将字符串转换成json格式
         JSONObject carRealTime_msg = JSONObject.parseObject(message);
         Integer acc =  carRealTime_msg.getInteger("acc");
@@ -113,24 +123,25 @@ public class Subscriber extends JedisPubSub {
                     System.out.println(terminalIdValueString);
 
 
-                    if (offsetState1 == null || offsetState1 == ""){
+                    if (offsetState1.equals(null) || offsetState1.equals("")){
                         System.out.println("状态放入第一个位置");
                         redisConfig.set(terminalIdKey, terminalIdValueString, 0);
-                    } else if (offsetState2 == null || offsetState2 == "") {
+                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
                         System.out.println("放入第二个");
 
                         redisConfig.set(terminalIdKey, terminalIdValueString, 300);
-                    } else if (offsetState3 == null || offsetState3 == "") {
+                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
                         System.out.println("放入第三个");
                         redisConfig.set(terminalIdKey, terminalIdValueString, 600);
                     } else {
+                        redisConfig.remove(terminalIdKey);
 
                         //第二个的状态放入第一个位置
                         redisConfig.set(terminalIdKey, offsetState2, 0);
                         //第三个的状态放入第二个位置
                         redisConfig.set(terminalIdKey, offsetState3, 300);
                         //最新的状态放入第三个位置
-                        redisConfig.set(terminalIdKey, terminalIdValueString);
+                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
                     }
 
                 }else {
@@ -147,19 +158,21 @@ public class Subscriber extends JedisPubSub {
                     System.out.println(terminalIdValueString);
 
 
-                    if (offsetState1 == null || offsetState1 == ""){
+                    if (offsetState1.equals(null) || offsetState1.equals("")){
                         System.out.println("状态放入第一个位置");
 //                        redisConfig.set(terminalIdKey, terminalIdValueString, 0);
                         redisConfig.set(terminalIdKey, terminalIdValueString + "", 0);
-                    } else if (offsetState2 == null || offsetState2 == "") {
+                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
                         System.out.println("放入第二个");
 //                        redisConfig.set(terminalIdKey, terminalIdValueString, 300);
                         redisConfig.set(terminalIdKey, terminalIdValueString + "", 300);
-                    } else if (offsetState3 == null || offsetState3 == "") {
+                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
                         System.out.println("放入第三个");
 //                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
                         redisConfig.set(terminalIdKey, terminalIdValueString + "", 600);
                     } else {
+
+                        redisConfig.remove(terminalIdKey);
                         //第二个的状态放入第一个位置
                         redisConfig.set(terminalIdKey, offsetState2, 0);
                         //第三个的状态放入第二个位置
@@ -174,7 +187,7 @@ public class Subscriber extends JedisPubSub {
                     String offsetState22 =  redisConfig.get(terminalIdKey,300,600);
                     String offsetState33 =  redisConfig.get(terminalIdKey,600,900);
 
-                    if ((offsetState11 != null && offsetState11 != "") && (offsetState22 != null && offsetState22 != "") && (offsetState33 != null && offsetState33 != "")){
+                    if ((!offsetState11.equals(null)  && !offsetState11.equals("")) && (!offsetState22.equals(null) && !offsetState22.equals("")) && (!offsetState33.equals(null)  && !offsetState33.equals(""))){
 
                         StringEscapeUtils.unescapeJavaScript(offsetState11);
 
@@ -195,22 +208,21 @@ public class Subscriber extends JedisPubSub {
 
         }
 
-    };
-
-
-
+    }
 
 
 
 
 
     @Override
-    public void onSubscribe(String channel, int subscribedChannels) {    //订阅了频道会调用
+    //订阅了频道会调用
+    public void onSubscribe(String channel, int subscribedChannels) {
         System.out.println(String.format("subscribe redis channel success, channel %s, subscribedChannels %d",
                 channel, subscribedChannels));
     }
     @Override
-    public void onUnsubscribe(String channel, int subscribedChannels) {   //取消订阅 会调用
+    //取消订阅 会调用
+    public void onUnsubscribe(String channel, int subscribedChannels) {
         System.out.println(String.format("unsubscribe redis channel, channel %s, subscribedChannels %d",
                 channel, subscribedChannels));
     }
