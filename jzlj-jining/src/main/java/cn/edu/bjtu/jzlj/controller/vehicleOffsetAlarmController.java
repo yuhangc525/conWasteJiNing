@@ -1,15 +1,18 @@
 package cn.edu.bjtu.jzlj.controller;
 
+import cn.edu.bjtu.jzlj.dao.CarAlarm;
 import cn.edu.bjtu.jzlj.dao.CarRoad;
 import cn.edu.bjtu.jzlj.dao.PointEntity;
 
 //import com.alibaba.fastjson.JSONArray;
 import cn.edu.bjtu.jzlj.dao.RoadInfo;
+import cn.edu.bjtu.jzlj.service.CarAlarmService;
 import cn.edu.bjtu.jzlj.service.CarRoadService;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
 import cn.edu.bjtu.jzlj.util.GetDistance;
 import cn.edu.bjtu.jzlj.util.Gps;
 import cn.edu.bjtu.jzlj.util.PositionTransformationUtil;
+import cn.edu.bjtu.jzlj.util.results.Resp;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 //import net.sf.json.JSONObject;
@@ -18,11 +21,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import net.sf.json.JsonConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -43,11 +45,16 @@ import java.util.Map;
 @RequestMapping("/vehicleAlarm")
 public class vehicleOffsetAlarmController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SysUserController.class);
+
     @Autowired
     private RoadInfoService roadInfoService;
 
     @Autowired
     private CarRoadService carRoadService;
+
+    @Autowired
+    private CarAlarmService carAlarmService;
 
 //    测试实现车辆偏移路线逻辑
     String s = "{\n" +
@@ -83,8 +90,8 @@ public class vehicleOffsetAlarmController {
       * @return
       * @throws:
       **/
-    @ApiOperation(value = "判断车辆是否偏离路段", httpMethod = "GET")
-    @GetMapping("/ifOffset")
+//    @ApiOperation(value = "判断车辆是否偏离路段", httpMethod = "GET")
+//    @GetMapping("/ifOffset")
 
     public int ifOffset(String s, PointEntity pointEntity) {
         try{
@@ -129,30 +136,26 @@ public class vehicleOffsetAlarmController {
     }
 
 
-     /**
-      * @Author: 田英杰
-      * @Description:
-      * 1、明确车要走哪条路线，得到这条路线
-      * 2、根据车辆的位置去调用ifOffset方法看车辆现在在没在路上
-      * 3、记录状态，判断是否满足报警条件。
-      * @Date 2021/4/22 10:29
-      * @Param  * @param null
-      * @return
-      * @throws:
-      **/
-//     @ApiOperation(value = "记录偏移状态，判断是否报警", httpMethod = "POST")
-//     @PostMapping("/ifAlarm")
-//    public boolean ifAlarm(Integer roadId){
-//         //获取路线信息
-//        RoadInfo roadInfo = roadInfoService.getRoadInfo(roadId);
-//        String roadAddress = roadInfo.getRoadAddress();
-//        //获取车辆位置信息
-//        PointEntity pointEntity = new PointEntity();
-//        //判断是否偏离
-//        boolean A = ifOffset(roadAddress, pointEntity);
-//
-//        return A;
-//    }
+
+    @ApiOperation(value = "插入车辆报警信息", httpMethod = "POST")
+    @PostMapping("/insertCarAlarmInfo")
+    public Resp insertCarAlarmInfo(@RequestBody  CarAlarm carAlarm){
+        long startTime = System.currentTimeMillis();
+        if (null == carAlarm) {
+            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
+        }
+        try {
+                carAlarmService.insertCarAlarmInfo(carAlarm);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("插入车辆报警信息成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("插入车辆报警信息成功", Resp.STRING, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("插入车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("创建异常，原因：" + e.getMessage(), Resp.SINGLE, carAlarm);
+        }
+
+    }
 
 
     @ApiOperation(value = "根据车辆终端id获取路线id列表", httpMethod = "POST")
@@ -168,6 +171,44 @@ public class vehicleOffsetAlarmController {
 
          }
          return roadList;
+    }
+
+
+
+
+
+     /**
+      * @Author: 田英杰
+      * @Description: 获取需要处理的车辆报警信息
+      * @Date 2021/4/29 17:15
+      * @Param  * @param null
+      * @return
+      * @throws:
+      **/
+    @ApiOperation(value = "获取未处理的报警信息", httpMethod = "GET")
+    @GetMapping("/getAllUnHandle")
+    public List<CarAlarm> getAllUnHandle(){
+
+        List<CarAlarm> list = carAlarmService.getAllUnHandle();
+
+        return list;
+
+    }
+
+
+     /**
+      * @Author: 田英杰
+      * @Description: 处理报警信息，也就是改变handle的状态
+      * @Date 2021/4/29 17:14
+      * @Param  * @param null
+      * @return
+      * @throws:
+      **/
+    @ApiOperation(value = "处理报警信息", httpMethod = "POST")
+    @PostMapping("/handleCarAlarm")
+    public int handleCarAlarm(CarAlarm carAlarm){
+        int a = carAlarmService.handleCarAlarm(carAlarm);
+        return a;
     }
 
 

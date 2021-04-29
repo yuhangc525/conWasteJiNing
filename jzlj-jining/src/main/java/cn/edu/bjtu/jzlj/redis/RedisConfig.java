@@ -1,6 +1,9 @@
 package cn.edu.bjtu.jzlj.redis;
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -23,16 +26,27 @@ public class RedisConfig {
     /**
      * key值出现\xac\xed\x00\x05t\x00前缀
      * 查阅资料发现 RedisTemplate默认序列化方式用的是JdkSerializationRedisSerializer
+     * 田英杰-20210427 redis取值的双引号问题，改成了这个stringRedisSerializer
      * 此处修改为 Jackson2JsonRedisSerializer 序列化 */
     @Autowired(required = false)
     @SuppressWarnings("rawtypes")
     public void setRedisTemplate(RedisTemplate redisTemplate) {
-        RedisSerializer stringSerializer = new StringRedisSerializer();//序列化为String
+//        RedisSerializer stringSerializer = new StringRedisSerializer();//序列化为String
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);//序列化为Json
-        redisTemplate.setKeySerializer(stringSerializer);
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+        jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
+
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+
         this.redisTemplate = redisTemplate;
     }
 

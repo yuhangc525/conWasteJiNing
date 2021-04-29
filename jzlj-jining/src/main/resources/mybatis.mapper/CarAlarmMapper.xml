@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.CarAlarmMapper">
+
+    <!--    通用结果查询-->
+    <resultMap id="carAlarmRM_all" type="cn.edu.bjtu.jzlj.dao.CarAlarm">
+        <id property="Id" column="id"/>
+        <result property="terminalId" column="terminal_id"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="handled" column="handled"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+
+    <!--    根据terminal_id查询路线列表-->
+    <select id="getAllUnHandle" resultType="cn.edu.bjtu.jzlj.dao.CarAlarm">
+    SELECT * FROM car_alarm WHERE handled = 0
+    </select>
+
+    <insert id="insertCarAlarmInfo">
+        INSERT into car_alarm
+        (id, terminal_id, latitude, longitude, handled, update_user, update_time)
+        VALUES
+        (#{id},#{terminalId},#{latitude},#{longitude},#{handled},#{updateUser},#{updateTime})
+    </insert>
+
+    <update id="handleCarAlarm" parameterType="cn.edu.bjtu.jzlj.dao.CarAlarm">
+        update car_alarm
+        <set>
+            handled = #{handled},
+            update_user = #{updateUser},
+            update_time = #{updateTime}
+
+        </set>
+        where id = #{id};
+    </update>
+
+
+
+
+</mapper>

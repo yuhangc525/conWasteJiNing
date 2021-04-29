@@ -1,10 +1,9 @@
 package cn.edu.bjtu.jzlj.redis;
 
 import cn.edu.bjtu.jzlj.controller.SysUserController;
-import cn.edu.bjtu.jzlj.dao.CarRoad;
-import cn.edu.bjtu.jzlj.dao.PointEntity;
-import cn.edu.bjtu.jzlj.dao.RoadInfo;
+import cn.edu.bjtu.jzlj.dao.*;
 import cn.edu.bjtu.jzlj.mapper.CarRoadMapper;
+import cn.edu.bjtu.jzlj.service.CarAlarmService;
 import cn.edu.bjtu.jzlj.service.CarRoadService;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
 import cn.edu.bjtu.jzlj.util.GetDistance;
@@ -22,7 +21,9 @@ import redis.clients.jedis.JedisPubSub;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +37,14 @@ public class Subscriber extends JedisPubSub {
     @Resource
     public void setCarRoadService(CarRoadService carRoadService) {
         Subscriber.carRoadService = carRoadService;
+    }
+
+
+    private static CarAlarmService carAlarmService;
+
+    @Resource
+    public void setCarAlarmService(CarAlarmService carAlarmService) {
+        Subscriber.carAlarmService = carAlarmService;
     }
 
     private static RoadInfoService roadInfoService;
@@ -55,6 +64,8 @@ public class Subscriber extends JedisPubSub {
     public Subscriber(){}
 
 
+
+
     @Override
     //收到消息会调用
     public void onMessage(String channel, String message) {
@@ -70,32 +81,43 @@ public class Subscriber extends JedisPubSub {
         // 将字符串转换成json格式
         JSONObject carRealTime_msg = JSONObject.parseObject(message);
         Integer acc =  carRealTime_msg.getInteger("acc");
+        Integer position = carRealTime_msg.getInteger("position");
         //只处理处于开火状态的车辆
-        if (acc == 1){
+        if (acc == 1 && position == 1){
             System.out.println(message);
             String terminalId = carRealTime_msg.getString("terminalId");
+            Long updateTime = carRealTime_msg.getLong("uptime");
+            Date date = new Date();
+            date.setTime(updateTime);
 
+//            String terminalIdKey = "14268527765" + "-key";
             String terminalIdKey = terminalId + "-key";
 
             //获取车辆的经纬度坐标
             double lat = carRealTime_msg.getDouble("lat");
             double lon = carRealTime_msg.getDouble("lon");
+//            long updateTime = carRealTime_msg.getLong("uptime");
 
             //保存到redis的偏移状态
-            JSONObject terminalIdValue = new JSONObject();
-            terminalIdValue.put("terminalId", terminalId);
-            terminalIdValue.put("updateTime",carRealTime_msg.getLong("uptime"));
-            terminalIdValue.put("latitude", lat);
-            terminalIdValue.put("longitude", lon);
+//            OffsetState offsetState = new OffsetState();
+//            offsetState.setTerminalId(terminalId);
+//            offsetState.setLatitude(lat);
+//            offsetState.setLongitude(lon);
+//            offsetState.setUpdateTime(updateTime);
+//            JSONObject terminalIdValue = new JSONObject();
+//            terminalIdValue.put("terminalId", terminalId);
+//            terminalIdValue.put("updateTime",carRealTime_msg.getLong("uptime"));
+//            terminalIdValue.put("latitude", lat);
+//            terminalIdValue.put("longitude", lon);
 
             PointEntity pointEntity = new PointEntity();
 
             //获取车辆相应的路线列表
-            List<CarRoad> roadList = carRoadService.getRoadListByTerminalId("14335712832");;
+            List<CarRoad> roadList = carRoadService.getRoadListByTerminalId(terminalId);;
 
             if (roadList.size() == 0 || roadList == null){
                 LOGGER.info("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
-//                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
+                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
             } else {
                 //车辆实时位置点信息
                 pointEntity.setPointLongitude(lon);
@@ -112,41 +134,75 @@ public class Subscriber extends JedisPubSub {
                 //onRoad > 0 说明车辆没有偏移路线
                 if (onRoad > 0){
                     System.out.println("车辆没有偏移路线");
+
                     //1表示没有偏移
-                    terminalIdValue.put("isOffset", 1);
+//                    offsetState.setIsOffset(1);
+//                    terminalIdValue.put("isOffset", 1);
 
-                    String offsetState1 = redisConfig.get(terminalIdKey,0,300);
-                    String offsetState2 = redisConfig.get(terminalIdKey,300,600);
-                    String offsetState3 = redisConfig.get(terminalIdKey,600,900);
+//                    String offsetState1 = redisConfig.get(terminalIdKey,0,300);
+//                    String offsetState2 = redisConfig.get(terminalIdKey,300,600);
+//                    String offsetState3 = redisConfig.get(terminalIdKey,600,900);
 
-                    String terminalIdValueString = terminalIdValue.toJSONString();
-                    System.out.println(terminalIdValueString);
+//                    String terminalIdValueString = terminalIdValue.toJSONString();
+//                    System.out.println(terminalIdValueString);
 
-
-                    if (offsetState1.equals(null) || offsetState1.equals("")){
-                        System.out.println("状态放入第一个位置");
-                        redisConfig.set(terminalIdKey, terminalIdValueString, 0);
-                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
-                        System.out.println("放入第二个");
-
-                        redisConfig.set(terminalIdKey, terminalIdValueString, 300);
-                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
-                        System.out.println("放入第三个");
-                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
-                    } else {
+                    String lastOffsetState = (String) redisConfig.get(terminalIdKey);
+                    if (lastOffsetState != null || "NoOffset".equals(lastOffsetState) || "offset".equals(lastOffsetState)){
                         redisConfig.remove(terminalIdKey);
-
-                        //第二个的状态放入第一个位置
-                        redisConfig.set(terminalIdKey, offsetState2, 0);
-                        //第三个的状态放入第二个位置
-                        redisConfig.set(terminalIdKey, offsetState3, 300);
-                        //最新的状态放入第三个位置
-                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
                     }
+                    String curOffsetState = "NoOffset";
+                    redisConfig.set(terminalIdKey, curOffsetState);
+
+//                    if (offsetState1.equals(null) || offsetState1.equals("")){
+//                        System.out.println("状态放入第一个位置");
+//                        redisConfig.set(terminalIdKey, terminalIdValueString, 0);
+//                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
+//                        System.out.println("放入第二个");
+//
+//                        redisConfig.set(terminalIdKey, terminalIdValue, 300);
+//                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
+//                        System.out.println("放入第三个");
+//                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
+//                    } else {
+//                        redisConfig.remove(terminalIdKey);
+//
+//                        //第二个的状态放入第一个位置
+//                        redisConfig.set(terminalIdKey, offsetState2, 0);
+//                        //第三个的状态放入第二个位置
+//                        redisConfig.set(terminalIdKey, offsetState3, 300);
+//                        //最新的状态放入第三个位置
+//                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
+//                    }
 
                 }else {
                     System.out.println("车辆偏移le路线");
-                    //0表示车辆偏移了
+
+                    String curOffsetState = "offset";
+                    String  lastOffsetState = (String) redisConfig.get(terminalIdKey);
+                    if (lastOffsetState != null && !"NoOffset".equals(lastOffsetState) && !"offset".equals(lastOffsetState)){
+                        redisConfig.remove(terminalIdKey);
+                    }
+                    System.out.println("上一次的状态是：" + lastOffsetState);
+                    //车辆由不偏变成偏，报警
+                    if (lastOffsetState != null && "NoOffset".equals(lastOffsetState) && "offset".equals(curOffsetState)){
+                        System.out.println("车辆报警!!!");
+
+                        CarAlarm carAlarm = new CarAlarm();
+                        carAlarm.setHandled(0);
+                        carAlarm.setLatitude(lat);
+                        carAlarm.setLongitude(lon);
+                        carAlarm.setTerminalId(terminalId);
+                        carAlarm.setUpdateTime(date);
+
+                        carAlarmService.insertCarAlarmInfo(carAlarm);
+
+                    }
+                    redisConfig.set(terminalIdKey, curOffsetState);
+
+
+
+/*                    0表示车辆偏移了
+                    offsetState.setIsOffset(1);
                     terminalIdValue.put("isOffset", 0);
 
                     String offsetState1 = redisConfig.get(terminalIdKey,0,300).trim();
@@ -172,7 +228,7 @@ public class Subscriber extends JedisPubSub {
                         redisConfig.set(terminalIdKey, terminalIdValueString + "", 600);
                     } else {
 
-                        redisConfig.remove(terminalIdKey);
+//                        redisConfig.remove(terminalIdKey);
                         //第二个的状态放入第一个位置
                         redisConfig.set(terminalIdKey, offsetState2, 0);
                         //第三个的状态放入第二个位置
@@ -187,7 +243,8 @@ public class Subscriber extends JedisPubSub {
                     String offsetState22 =  redisConfig.get(terminalIdKey,300,600);
                     String offsetState33 =  redisConfig.get(terminalIdKey,600,900);
 
-                    if ((!offsetState11.equals(null)  && !offsetState11.equals("")) && (!offsetState22.equals(null) && !offsetState22.equals("")) && (!offsetState33.equals(null)  && !offsetState33.equals(""))){
+                    if ((!offsetState11.equals(null)  && !offsetState11.equals("")) &&
+                            (!offsetState22.equals(null) && !offsetState22.equals("")) && (!offsetState33.equals(null)  && !offsetState33.equals(""))){
 
                         StringEscapeUtils.unescapeJavaScript(offsetState11);
 
@@ -200,7 +257,7 @@ public class Subscriber extends JedisPubSub {
                                 && offsetState33json.getInteger("isOffset") == 0) {
                             System.out.println("车辆连续偏移三次，需要报警！！");
                         }
-                    }
+                    }*/
 
                 }
             }
