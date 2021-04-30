@@ -239,9 +239,64 @@ public class IntakePlantInfoController {
 //
     }
 
+    /*
+     * @Author zjwang
+     * @Description 根据intake_name判断插入或者更新数据，并返回intake_id
+     * @Date 11:27 2021/4/22
+     * @ParamTypes [cn.edu.bjtu.jzlj.dao.IntakePlantInfo]
+     * @return cn.edu.bjtu.jzlj.util.results.Resp
+     **/
+    @ApiOperation(value = "根据intake_name判断插入或者更新数据，并返回intake_id", httpMethod = "PUT")
+    @PutMapping("/updateOrInsertIntake")
+    @ControllerEndpoint(operation = "更新或插入成功！", exceptionMessage = "操作失败")
+    public Resp updateOrInsertIntake(@RequestBody IntakePlantInfo intakePlantInfo) {
+        long startTime = System.currentTimeMillis();
+        try {
+            // 业务逻辑
+            String id = intakePlantInfoService.updateOrInsertIntake(intakePlantInfo);
+            if(id == null){
+                throw new Exception("intakePlantName为空！Error！");
+            }
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("根据intake_name判断插入或者更新数据，用时：" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("updateOrInsertIntake成功", Resp.STRING, id);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("根据intake_name判断插入或者更新数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
+            return Resp.getInstantiationError("updateOrInsertIntake失败："+ e.getMessage(),Resp.LIST,null );
+        }
+//
+    }
 
-
-
+    /**
+     * @Author: sjyzj
+     * @Description: 
+     * @Date 2021/4/29 9:46
+     * @Param intakePlantInfo
+     * @return cn.edu.bjtu.jzlj.util.results.Resp
+     * @throws:
+     **/
+    @ApiOperation(value = "根据ApplyInfo更新数据", httpMethod = "PUT")
+    @PutMapping("/updateDataAccordingApplyInfo")
+    @ControllerEndpoint(operation = "根据ApplyInfo更新数据", exceptionMessage = "更新失败")
+    public Resp updateDataAccordingApplyInfo(@RequestBody IntakePlantInfo intakePlantInfo) {
+        long startTime = System.currentTimeMillis();
+        try {
+            if(intakePlantInfo.getIntakePlantId() == null){
+                long endTime = System.currentTimeMillis();
+                LOGGER.error("修改失败，原因：修改不存在，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationError("修改失败，原因：修改的id不存在，", null, null);
+            }
+            intakePlantInfoService.updateInfoByApplyInfo(intakePlantInfo);
+            long endTime =  System.currentTimeMillis();
+            LOGGER.info("修改成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("修改成功", null, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("普通用户更新数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
+            return Resp.getInstantiationError("普通用户更新数据失败："+ e.getMessage(),Resp.LIST,null );
+        }
+    }
 
 
 

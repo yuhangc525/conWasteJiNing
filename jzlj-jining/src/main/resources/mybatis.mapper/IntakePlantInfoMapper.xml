@@ -4,8 +4,8 @@
 
         <!-- 通用查询映射结果 -->
         <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
-                    <id column="id" property="id" />
-                    <result column="intake_plant_id" property="intakePlantId" />
+                    <id column="intake_plant_id" property="intakePlantId" />
+                    <result column="id" property="id" />
                     <result column="intake_plant_name" property="intakePlantName" />
                     <result column="intake_plant_address" property="intakePlantAddress" />
                     <result column="intake_plant_long" property="intakePlantLong" />
@@ -20,14 +20,14 @@
 
         <!-- 通用查询结果列 -->
         <sql id="Base_Column_List">
-            id, intake_plant_id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status
+            intake_plant_id, id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status
         </sql>
 
     <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo"
             resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
         SELECT * FROM intake_plant_info WHERE 1=1
-        <if test="intakePlantInfo.id != null and intakePlantInfo.id != ''">
-            AND id = '${intakePlantInfo.id}'
+        <if test="intakePlantInfo.intakePlantId != null and intakePlantInfo.intakePlantId != ''">
+            AND id = '${intakePlantInfo.intakePlantId}'
         </if>
     </select>
 
@@ -35,8 +35,8 @@
             resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
         SELECT * FROM intake_plant_info WHERE 1=1
         <if test="_parameter.containsKey('intakePlantInfo') and intakePlantInfo!= null">
-            <if test="intakePlantInfo.id != null and intakePlantInfo.id != ''">
-                AND id = '${intakePlantInfo.id}'
+            <if test="intakePlantInfo.intakePlantId != null and intakePlantInfo.intakePlantId != ''">
+                AND intake_plant_id = '${intakePlantInfo.intakePlantId}'
             </if>
         </if>
         <if test="_parameter.containsKey('ew') and ew!= null">
@@ -60,10 +60,10 @@
             "#{REVIEW_STATUS})-->
     <insert id="insertinfo">
         INSERT INTO intake_plant_info
-      (id, intake_plant_id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
+      (id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
       VALUES
-      (#{id, jdbcType=INTEGER},
-      #{intakePlantId, jdbcType=VARCHAR},
+      (
+      #{id, jdbcType=VARCHAR},
       #{intakePlantName, jdbcType=VARCHAR},
       #{intakePlantAddress, jdbcType=VARCHAR},
       #{intakePlantLong, jdbcType=FLOAT},
@@ -122,5 +122,16 @@
             AND intake_plant_id = #{intakePlantId}
         </if>
     </select>
+
+
+    <update id="updateInfoByApplyInfo">
+        UPDATE intake_plant_info
+        <set>
+            intake_plant_name = #{intakePlantName},
+            intake_linkman = #{intakeLinkman},
+            intake_phone_no = #{intakePhoneNo},
+        </set>
+        WHERE intake_plant_id = #{intakePlantId};
+    </update>
 
 </mapper>

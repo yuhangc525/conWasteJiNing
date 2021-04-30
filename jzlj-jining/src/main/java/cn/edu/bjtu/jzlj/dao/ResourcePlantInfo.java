@@ -27,8 +27,8 @@ public class ResourcePlantInfo {
     private String resourcePlantId;
     private String resourcePlantName;
     private String resourcePlantAddress;
-    private Float resourcePlantLong;
-    private Float resourcePlantLat;
+    private Float resourceLong;
+    private Float resourceLat;
     private String legalPerson;
     private String responsiblePerson;
     private String resourcePlantType;

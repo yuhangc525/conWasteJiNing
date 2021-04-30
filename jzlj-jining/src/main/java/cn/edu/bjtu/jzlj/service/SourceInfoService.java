@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.SourceInfo;
 
 //import cn.edu.bjtu.jzlj.dao.SourceInfoNew;
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.transform.Source;
 import java.util.List;
 
 /**
@@ -42,5 +44,10 @@ public interface SourceInfoService extends IService<SourceInfo> {
     /*Id查询*/
     List<SourceInfo> getSourceInfoBySourceId(String sourceId);
 
+    // 根据IntakePlantName查询数据
+    List<SourceInfo> getInfoBySourceName(String sourceName);
+
+    // 根据IntakePlantName插入或者更新数据，并返回id
+    String updateOrInsertSource(SourceInfo sourceInfo);
 }
 

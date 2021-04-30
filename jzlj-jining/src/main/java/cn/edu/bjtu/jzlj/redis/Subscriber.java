@@ -113,11 +113,11 @@ public class Subscriber extends JedisPubSub {
             PointEntity pointEntity = new PointEntity();
 
             //获取车辆相应的路线列表
-            List<CarRoad> roadList = carRoadService.getRoadListByTerminalId(terminalId);;
+            List<CarRoad> roadList = carRoadService.getRoadListByTerminalId("14268527702");;
 
             if (roadList.size() == 0 || roadList == null){
-                LOGGER.info("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
-                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
+                LOGGER.info("车辆终端id为: " + terminalId + "的车辆没有对应的路线！");
+//                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
             } else {
                 //车辆实时位置点信息
                 pointEntity.setPointLongitude(lon);
@@ -147,42 +147,43 @@ public class Subscriber extends JedisPubSub {
 //                    System.out.println(terminalIdValueString);
 
                     String lastOffsetState = (String) redisConfig.get(terminalIdKey);
-                    if (lastOffsetState != null || "NoOffset".equals(lastOffsetState) || "offset".equals(lastOffsetState)){
+                    if (lastOffsetState != null && (!"NoOffset".equals(lastOffsetState) || !"offset".equals(lastOffsetState))){
                         redisConfig.remove(terminalIdKey);
                     }
                     String curOffsetState = "NoOffset";
                     redisConfig.set(terminalIdKey, curOffsetState);
 
-//                    if (offsetState1.equals(null) || offsetState1.equals("")){
-//                        System.out.println("状态放入第一个位置");
-//                        redisConfig.set(terminalIdKey, terminalIdValueString, 0);
-//                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
-//                        System.out.println("放入第二个");
-//
-//                        redisConfig.set(terminalIdKey, terminalIdValue, 300);
-//                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
-//                        System.out.println("放入第三个");
-//                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
-//                    } else {
-//                        redisConfig.remove(terminalIdKey);
-//
-//                        //第二个的状态放入第一个位置
-//                        redisConfig.set(terminalIdKey, offsetState2, 0);
-//                        //第三个的状态放入第二个位置
-//                        redisConfig.set(terminalIdKey, offsetState3, 300);
-//                        //最新的状态放入第三个位置
-//                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
-//                    }
+/*                    if (offsetState1.equals(null) || offsetState1.equals("")){
+                        System.out.println("状态放入第一个位置");
+                        redisConfig.set(terminalIdKey, terminalIdValueString, 0);
+                    } else if (offsetState2.equals(null) || offsetState2.equals("")) {
+                        System.out.println("放入第二个");
+
+                        redisConfig.set(terminalIdKey, terminalIdValue, 300);
+                    } else if (offsetState3.equals(null) || offsetState3.equals("")) {
+                        System.out.println("放入第三个");
+                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
+                    } else {
+                        redisConfig.remove(terminalIdKey);
+
+                        //第二个的状态放入第一个位置
+                        redisConfig.set(terminalIdKey, offsetState2, 0);
+                        //第三个的状态放入第二个位置
+                        redisConfig.set(terminalIdKey, offsetState3, 300);
+                        //最新的状态放入第三个位置
+                        redisConfig.set(terminalIdKey, terminalIdValueString, 600);
+                    }*/
 
                 }else {
                     System.out.println("车辆偏移le路线");
 
                     String curOffsetState = "offset";
                     String  lastOffsetState = (String) redisConfig.get(terminalIdKey);
-                    if (lastOffsetState != null && !"NoOffset".equals(lastOffsetState) && !"offset".equals(lastOffsetState)){
+                    if (lastOffsetState != null && (!"NoOffset".equals(lastOffsetState) || !"offset".equals(lastOffsetState))){
                         redisConfig.remove(terminalIdKey);
                     }
-                    System.out.println("上一次的状态是：" + lastOffsetState);
+                    System.out.println("车辆："+ terminalId +"上一次的状态是：" + lastOffsetState);
+                    System.out.println("车辆："+ terminalId +"这一次的状态是：" + curOffsetState);
                     //车辆由不偏变成偏，报警
                     if (lastOffsetState != null && "NoOffset".equals(lastOffsetState) && "offset".equals(curOffsetState)){
                         System.out.println("车辆报警!!!");
@@ -293,7 +294,7 @@ public class Subscriber extends JedisPubSub {
     public int pointIfOffsetRoad(String s, PointEntity pointEntity) {
         try{
             //设定’圆的半径‘，超过说明暂时偏离了路线
-            double setMAx = 100;
+            double setMAx = 200;
 
 //            s = this.s;
             if (s == null){

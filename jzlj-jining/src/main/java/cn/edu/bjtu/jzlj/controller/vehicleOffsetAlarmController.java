@@ -137,9 +137,48 @@ public class vehicleOffsetAlarmController {
 
 
 
+
+    @ApiOperation(value = "根据车辆终端id获取路线id列表", httpMethod = "POST")
+    @PostMapping("/getRoadList")
+    public List<CarRoad> getRoadListByTerminalId(String terminalId) {
+
+        List<CarRoad> roadList = carRoadService.getRoadListByTerminalId(terminalId);
+        if (roadList.size() == 0){
+            System.out.println("没有对应路线");
+        }
+        for (CarRoad roadId : roadList){
+            System.out.println("路线id：" + roadId);
+
+        }
+        return roadList;
+    }
+
+
+    @ApiOperation(value = "增加车辆--路线对应关系信息", httpMethod = "POST")
+    @PostMapping("/insertCarRoadInfo")
+    public Resp insertCarRoadInfo(@RequestBody CarRoad carRoad){
+        long startTime = System.currentTimeMillis();
+        if (null == carRoad) {
+            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
+        }
+        try {
+            carRoadService.insertCarRoadInfo(carRoad);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("增加车辆--路线对应关系信息成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("增加车辆--路线对应关系信息成功", Resp.STRING, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("增加车辆--路线对应关系信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("增加车辆--路线对应关系信息异常，原因：" + e.getMessage(), Resp.SINGLE, carRoad);
+        }
+    }
+
+
+
     @ApiOperation(value = "插入车辆报警信息", httpMethod = "POST")
     @PostMapping("/insertCarAlarmInfo")
     public Resp insertCarAlarmInfo(@RequestBody  CarAlarm carAlarm){
+//        System.out.println(carAlarm);
         long startTime = System.currentTimeMillis();
         if (null == carAlarm) {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
@@ -158,24 +197,6 @@ public class vehicleOffsetAlarmController {
     }
 
 
-    @ApiOperation(value = "根据车辆终端id获取路线id列表", httpMethod = "POST")
-    @PostMapping("/getRoadList")
-    public List<CarRoad> getRoadListByTerminalId(String terminalId) {
-
-         List<CarRoad> roadList = carRoadService.getRoadListByTerminalId(terminalId);
-         if (roadList.size() == 0){
-             System.out.println("没有对应路线");
-         }
-         for (CarRoad roadId : roadList){
-             System.out.println("路线id：" + roadId);
-
-         }
-         return roadList;
-    }
-
-
-
-
 
      /**
       * @Author: 田英杰
@@ -187,11 +208,18 @@ public class vehicleOffsetAlarmController {
       **/
     @ApiOperation(value = "获取未处理的报警信息", httpMethod = "GET")
     @GetMapping("/getAllUnHandle")
-    public List<CarAlarm> getAllUnHandle(){
-
-        List<CarAlarm> list = carAlarmService.getAllUnHandle();
-
-        return list;
+    public Resp getAllUnHandle(){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<CarAlarm> list = carAlarmService.getAllUnHandle();
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("获取未处理的车辆报警信息成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("获取未处理的车辆报警信息成功", Resp.STRING, list);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("获取未处理的车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("获取未处理的车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE,null);
+        }
 
     }
 
@@ -206,10 +234,24 @@ public class vehicleOffsetAlarmController {
       **/
     @ApiOperation(value = "处理报警信息", httpMethod = "POST")
     @PostMapping("/handleCarAlarm")
-    public int handleCarAlarm(CarAlarm carAlarm){
-        int a = carAlarmService.handleCarAlarm(carAlarm);
-        return a;
+    public Resp handleCarAlarm(CarAlarm carAlarm){
+        long startTime = System.currentTimeMillis();
+        if (null == carAlarm) {
+            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
+        }
+        try {
+            carAlarmService.handleCarAlarm(carAlarm);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("处理车辆报警信息成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("处理车辆报警信息成功", Resp.STRING, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("处理车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("处理车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE, carAlarm);
+        }
+
     }
+
 
 
 

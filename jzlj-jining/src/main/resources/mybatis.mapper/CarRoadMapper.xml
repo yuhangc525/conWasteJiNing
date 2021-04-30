@@ -13,7 +13,16 @@
 
     <!--    根据terminal_id查询路线列表-->
     <select id="getRoadListByTerminalId" resultType="cn.edu.bjtu.jzlj.dao.CarRoad">
-    SELECT road_id FROM car_road WHERE terminal_id = #{terminalId, jdbcType=VARCHAR}
+    SELECT distinct route_id FROM car_route WHERE terminal_id = #{terminalId, jdbcType=VARCHAR}
     </select>
+
+
+<!--    插入路线和车辆的对应-->
+    <insert id="insertCarRoadInfo">
+        INSERT into car_road
+        (id, terminal_id, road_id)
+        VALUES
+        (#{id},#{terminalId},#{roadId})
+    </insert>
 
 </mapper>

@@ -84,7 +84,6 @@ public class RouteInfoController {
             LOGGER.error("根据routeId查询数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
             return Resp.getInstantiationError("根据routeId查询数据失败："+ e.getMessage(),Resp.LIST,null );
         }
-//
     }
 
     @ApiOperation(value = "查询路段信息", httpMethod = "GET")

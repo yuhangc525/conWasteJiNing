@@ -19,4 +19,14 @@ public interface CarRoadMapper extends BaseMapper<CarRoad>{
       * @throws:
       **/
     List<CarRoad> getRoadListByTerminalId(String terminalId);
+
+     /**
+      * @Author: 田英杰
+      * @Description: 插入车辆和路线的对应关系
+      * @Date 2021/4/29 19:29
+      * @Param  * @param null
+      * @return
+      * @throws:
+      **/
+    Boolean insertCarRoadInfo(CarRoad carRoad);
 }

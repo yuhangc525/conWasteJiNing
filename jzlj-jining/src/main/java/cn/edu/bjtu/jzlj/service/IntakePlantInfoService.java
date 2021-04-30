@@ -34,6 +34,12 @@ public interface IntakePlantInfoService extends IService<IntakePlantInfo> {
     int updateReviewStatus(Integer reviewStatus, String intakePlantId);
 
     List<IntakePlantInfo> getIntakePlantInfoByINTakePlantID(String intakePlantId);
-    
-    
+
+    // 根据IntakePlantName查询数据
+    List<IntakePlantInfo> getInfoByIntakePlantName(String intakePlantName);
+
+    // 根据IntakePlantName插入或者更新数据，并返回id
+    String updateOrInsertIntake(IntakePlantInfo intakePlantInfo);
+
+    int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo);
 }

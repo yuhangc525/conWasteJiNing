@@ -24,13 +24,13 @@
         INSERT into car_alarm
         (id, terminal_id, latitude, longitude, handled, update_user, update_time)
         VALUES
-        (#{id},#{terminalId},#{latitude},#{longitude},#{handled},#{updateUser},#{updateTime})
+        (#{id},#{terminalId},#{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
     </insert>
 
     <update id="handleCarAlarm" parameterType="cn.edu.bjtu.jzlj.dao.CarAlarm">
         update car_alarm
         <set>
-            handled = #{handled},
+            handled = 1,
             update_user = #{updateUser},
             update_time = #{updateTime}
 

@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface IntakePlantInfoMapper extends BaseMapper<IntakePlantInfo> {
     List<IntakePlantInfo> getIntakePlantInfoByInputName(@Param("inputName") String inputName);
 
@@ -29,5 +31,7 @@ public interface IntakePlantInfoMapper extends BaseMapper<IntakePlantInfo> {
 
 
     List<IntakePlantInfo> getIntakePlantInfoByINTakePlantID(@Param("intakePlantId") String intakePlantId);
+
+    int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo);
 
 }

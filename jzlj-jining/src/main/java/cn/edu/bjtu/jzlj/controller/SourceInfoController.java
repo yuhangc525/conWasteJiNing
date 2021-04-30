@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.SourceInfo;
 //import cn.edu.bjtu.jzlj.dao.SourceInfoNew;
 import cn.edu.bjtu.jzlj.service.SourceInfoService;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.xml.transform.Source;
 
 
 /**
@@ -121,9 +123,9 @@ public class SourceInfoController {
      * @param
      * @return Resp
      */
-    @ApiOperation(value = "编辑用户", httpMethod = "PUT")
+    @ApiOperation(value = "编辑产生源", httpMethod = "PUT")
     @PutMapping("/putSource")
-    @ControllerEndpoint(operation = "编辑用户", exceptionMessage = "编辑失败")
+    @ControllerEndpoint(operation = "编辑产生源", exceptionMessage = "编辑失败")
     public Resp update(@RequestBody  SourceInfo sourceInfo){
         long startTime =  System.currentTimeMillis();
         try {
@@ -250,5 +252,28 @@ public class SourceInfoController {
         }
 //
 
+    }
+
+
+    @ApiOperation(value = "根据source_name判断插入或者更新数据，并返回source_id", httpMethod = "PUT")
+    @PutMapping("/updateOrInsertSource")
+    @ControllerEndpoint(operation = "更新或插入成功！", exceptionMessage = "操作失败")
+    public Resp updateOrInsertSource(@RequestBody SourceInfo sourceInfo) {
+        long startTime = System.currentTimeMillis();
+        try {
+            // 业务逻辑
+            String id = sourceInfoService.updateOrInsertSource(sourceInfo);
+            if(id == null){
+                throw new Exception("sourceName为空！Error！");
+            }
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("根据source_name判断插入或者更新数据，用时：" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("updateOrInsertSource成功", Resp.STRING, id);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("根据source_name判断插入或者更新数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
+            return Resp.getInstantiationError("updateOrInsertSource失败："+ e.getMessage(),Resp.LIST,null );
+        }
+//
     }
 }

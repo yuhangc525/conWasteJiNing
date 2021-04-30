@@ -3,6 +3,7 @@ package cn.edu.bjtu.jzlj.dao;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,13 +20,13 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("intake_plant_info_new")
+@TableName("intake_plant_info")
 public class IntakePlantInfo {
     private static final long serialVersionUID=1L;
 
     @TableId(value = "ID")
-    private String id;
     private String intakePlantId;
+    private String id;
     private String intakePlantName;
     private String intakePlantAddress;
     private Double intakePlantLong;
@@ -33,7 +34,8 @@ public class IntakePlantInfo {
     private String intakeLinkman;
     private String intakePhoneNo;
     private String inputName;
-    private String inputTime;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date inputTime;
     private String content;
     private Integer reviewStatus;
 

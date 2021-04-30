@@ -16,4 +16,6 @@ import java.util.List;
 public interface CarRoadService extends IService<CarRoad> {
 
     List<CarRoad> getRoadListByTerminalId(String terminalId);
+
+    Boolean insertCarRoadInfo(CarRoad carRoad);
 }

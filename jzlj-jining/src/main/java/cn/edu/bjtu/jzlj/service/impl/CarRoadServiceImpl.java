@@ -30,4 +30,11 @@ public class CarRoadServiceImpl extends ServiceImpl<CarRoadMapper, CarRoad> impl
         return roadList;
     }
 
+
+    @Override
+    public Boolean insertCarRoadInfo(CarRoad carRoad){
+         Boolean res = carRoadMapper.insertCarRoadInfo(carRoad);
+         return res;
+    }
+
 }

@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
+import cn.edu.bjtu.jzlj.controller.IntakePlantInfoController;
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.mapper.IntakePlantInfoMapper;
 import cn.edu.bjtu.jzlj.service.IntakePlantInfoService;
@@ -10,11 +11,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName: IntakePlantInfoService
@@ -26,6 +28,8 @@ import java.util.List;
 public class IntakePlantInfoServiceImpl extends ServiceImpl<IntakePlantInfoMapper, IntakePlantInfo> implements IntakePlantInfoService {
     @Autowired
     private IntakePlantInfoMapper intakePlantInfoMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntakePlantInfoController.class);
 
     /*分页查询数据*/
     @Override
@@ -75,5 +79,41 @@ public class IntakePlantInfoServiceImpl extends ServiceImpl<IntakePlantInfoMappe
     @Override
     public List<IntakePlantInfo> getIntakePlantInfoByINTakePlantID(String intakePlantId){
         return intakePlantInfoMapper.getIntakePlantInfoByINTakePlantID(intakePlantId);
-    };
+    }
+
+    @Override
+    public List<IntakePlantInfo> getInfoByIntakePlantName(String intakePlantName){
+        Map<String, Object> columnMap = new HashMap<>();
+        columnMap.put("intake_plant_name", intakePlantName);
+        return intakePlantInfoMapper.selectByMap(columnMap);
+    }
+
+    @Override
+    public String updateOrInsertIntake(IntakePlantInfo intakePlantInfo) {
+        List<IntakePlantInfo> list;
+        if(!"".equals(intakePlantInfo.getIntakePlantName())){
+            list = getInfoByIntakePlantName(intakePlantInfo.getIntakePlantName());
+        }else{
+            LOGGER.error("intakePlantName为空！Error！");
+            return null;
+        }
+        String id; // 记录的id
+        if(!list.isEmpty()){
+            // 若数据库中存在记录
+            id = list.get(0).getId();
+            intakePlantInfo.setId(id);
+            int row = intakePlantInfoMapper.updateById(intakePlantInfo);
+        }else{
+            // 若数据库中不存在记录
+            id = UUID.randomUUID().toString().replaceAll("-","");
+            intakePlantInfo.setId(id);
+            int row = intakePlantInfoMapper.insert(intakePlantInfo);
+        }
+        return id;
+    }
+
+    @Override
+    public int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo){
+        return intakePlantInfoMapper.updateInfoByApplyInfo(intakePlantInfo);
+    }
 }
