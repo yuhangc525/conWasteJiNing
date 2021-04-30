@@ -4,6 +4,8 @@ import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.vo.RoadInfoVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 
 /**
  * @Author: 田英杰
@@ -33,4 +35,12 @@ public interface RoadInfoService extends IService<RoadInfo> {
       * @throws:
       **/
     RoadInfo getRoadInfo(Integer roadId);
+
+    // 根据IntakePlantName查询数据
+    List<RoadInfo> getInfoByRoadName(String roadName);
+
+    // 根据IntakePlantName插入或者更新数据，并返回id
+    Integer updateOrInsertRoad(RoadInfo roadInfo);
+
+    List<RoadInfo> getRoadInfoByRoadId(String roadId);
 }

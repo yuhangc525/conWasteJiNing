@@ -30,7 +30,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("car_road")
+@TableName("car_route")
 public class CarRoad implements Serializable{
 
      private static final long serialVersionUID=1L;

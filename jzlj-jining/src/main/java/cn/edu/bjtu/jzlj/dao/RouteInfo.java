@@ -1,48 +1,32 @@
 package cn.edu.bjtu.jzlj.dao;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.List;
-
-
-import java.io.Serializable;
-
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotBlank;
+import java.util.Date;
+
 /**
- * @Author: 田英杰
- * @Description: 路线基本信息表实体类
- * @Date 2021/4/14 14:14
- * @Param  * @param null
- * @return
- * @throws:
- **/
+ * @author: zjwang
+ * @date: 2021/4/22 23:50
+ * @description:
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("route_info")
-public class RouteInfo implements Serializable{
+public class RouteInfo {
 
-    private static final long serialVersionUID=1L;
-    /**
-     * 路线表序号
-     */
-    private Integer route_id;
-
-    private String route_name;
-
-    private String route_design;
-
-    private String input_name;
-
-    private Date input_time;
-
+    @TableId(value = "route_id")
+    private int routeId;
+    private String routeName;
+    private String routeDesign;
+    private String lngLat;
+    private String inputName;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date inputTime;
     private String content;
 }

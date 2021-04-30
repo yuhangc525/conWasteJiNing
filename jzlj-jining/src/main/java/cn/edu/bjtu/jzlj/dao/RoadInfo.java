@@ -44,7 +44,7 @@ public class RoadInfo implements Serializable{
      private String roadAddress;
 
      private String inputName;
-
+     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
      private Date inputTime;
 
      private String content;

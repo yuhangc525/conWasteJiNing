@@ -38,4 +38,11 @@
     SELECT * from road_info where road_id = #{roadId, jdbcType=INTEGER}
     </select>
 
+    <select id="getRoadInfoByRoadId" resultType="cn.edu.bjtu.jzlj.dao.RoadInfo">
+        SELECT * FROM road_info WHERE 1=1
+        <if test="  roadId != null and roadId != '' ">
+            AND road_id = #{roadId}
+        </if>
+    </select>
+
 </mapper>

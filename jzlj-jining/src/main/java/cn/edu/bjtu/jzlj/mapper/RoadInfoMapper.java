@@ -3,11 +3,14 @@ package cn.edu.bjtu.jzlj.mapper;
 import cn.edu.bjtu.jzlj.dao.RoadInfo;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
 import org.springframework.stereotype.Repository;
-
-
-
+import cn.edu.bjtu.jzlj.dao.RoadInfo;
+import java.util.List;
+import cn.edu.bjtu.jzlj.dao.RoadInfo;
+import cn.edu.bjtu.jzlj.dao.RouteInfo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
  /**
   * @Author: 田英杰
   * @Description: 
@@ -38,4 +41,5 @@ public interface RoadInfoMapper extends BaseMapper<RoadInfo>{
     * @throws:
     **/
   RoadInfo getRoadInfo(Integer roadId);
+  List<RoadInfo> getRoadInfoByRoadId(@Param("roadId") String roadId);
 }

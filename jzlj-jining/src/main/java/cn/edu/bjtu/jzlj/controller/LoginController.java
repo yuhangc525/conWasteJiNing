@@ -42,9 +42,10 @@ import java.io.OutputStream;
 
 
 
-@CrossOrigin(origins= {"*"},allowCredentials = "true")
+
  @Api(description = "登录登出信息接口")
  @RestController
+ @CrossOrigin(origins= "*", allowCredentials = "true")
 public class LoginController {
      private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
@@ -60,57 +61,8 @@ public class LoginController {
        * @return
        * @throws:
        **/
-/*      @ApiOperation(value = "验证码", httpMethod = "GET")
-     @RequestMapping("/getVerifyCode")
-     public void getVerifyCode(HttpSession session, HttpServletResponse response) throws IOException {
-         // 生成默认的验证码图片
-         Object[] obj = VerifyUtil.newBuilder().build().createImage();
-         // obj[0]是验证码的字符串，放入session
-         session.setAttribute("verifyCode", obj[0]);
-         // obj[1]是验证码图片
-         BufferedImage image = (BufferedImage) obj[1];
-         OutputStream outputStream = response.getOutputStream();
-         // 设置响应类型
-         response.setContentType("image/png");
-         // IO输出图片
-         ImageIO.write(image, "png", outputStream);
-
-     }*/
-
-
-//    （验证码博客：
-//    https://blog.csdn.net/lrxmrlirixing/article/details/105736304?utm_medium=distribute.pc_relevant_download.none-task-blog-baidujs-1.nonecase&depth_1-utm_source=distribute.pc_relevant_download.none-task-blog-baidujs-1.nonecase）
-//      @ApiOperation(value = "验证码", httpMethod = "GET")
-//      @GetMapping("imageGeneration")
-      /*public void imageGeneration(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-          // 设置相应类型,告诉浏览器输出的内容为图片
-          response.setContentType("image/jpeg");
-          // 不缓存此内容
-          response.setHeader("Pragma", "No-cache");
-          response.setHeader("Cache-Control", "no-cache");
-          response.setDateHeader("Expire", 0);
-          try {
-
-              HttpSession session = request.getSession(true);
-              CaptchaUtil tool = new CaptchaUtil();
-//              VerifyUtil tool = new VerifyUtil();
-              StringBuffer code = new StringBuffer();
-              BufferedImage image = tool.genRandomCodeImage(code);
-              session.removeAttribute("verificationCode");
-              System.out.println(code);
-//              验证码存入session
-              session.setAttribute("verificationCode", code.toString());
-
-              // 将内存中的图片通过流动形式输出到客户端
-              ImageIO.write(image, "JPEG", response.getOutputStream());
-
-          } catch (Exception e) {
-              e.printStackTrace();
-          }
-
-      }*/
       @ApiOperation(value = "验证码", httpMethod = "GET")
-      @RequestMapping("getCode")
+      @RequestMapping("/getCode")
       public void getValidateCode(HttpServletResponse response,HttpServletRequest request) throws IOException {
           // 设置相应类型,告诉浏览器输出的内容为图片
           response.setContentType("image/jpeg");
