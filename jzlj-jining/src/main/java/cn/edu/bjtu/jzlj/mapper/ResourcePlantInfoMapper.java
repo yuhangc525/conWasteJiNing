@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ResourcePlantInfoMapper extends BaseMapper<ResourcePlantInfo> {
 
     IPage<ResourcePlantInfo> getListByPage(Page<ResourcePlantInfo> page, @Param("resourcePlantInfo") ResourcePlantInfo resourcePlantInfo);
@@ -20,7 +22,7 @@ public interface ResourcePlantInfoMapper extends BaseMapper<ResourcePlantInfo> {
 
     int updateinfo(ResourcePlantInfo resourcePlantInfo);
 
-    int deleteByRESOURCEId(@Param("resourcePlantId") Integer resourcePlantId);
+    int deleteByRESOURCEId(@Param("resourcePlantId") String resourcePlantId);
 
     List<ResourcePlantInfo> getResourcePlantInfoByInputName(@Param("inputName") String inputName);
 
@@ -28,6 +30,6 @@ public interface ResourcePlantInfoMapper extends BaseMapper<ResourcePlantInfo> {
                            @Param("resourcePlantId") Integer resourcePlantId);
 
 
-    List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(@Param("resourcePlantId") Integer resourcePlantId);
+    List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(@Param("resourcePlantId") String resourcePlantId);
 
 }

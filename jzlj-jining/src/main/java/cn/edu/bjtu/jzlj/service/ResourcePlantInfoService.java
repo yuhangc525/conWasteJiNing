@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 
+import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.ResourcePlantInfo;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -18,12 +19,14 @@ public interface ResourcePlantInfoService extends IService<ResourcePlantInfo> {
 
     int updateinfo(ResourcePlantInfo resourcePlantInfo);
 
-    int deleteByRESOURCEId(Integer resourcePlantId);
+    int deleteByRESOURCEId(String resourcePlantId);
 
     List<ResourcePlantInfo> getResourcePlantInfoByInputName(String inputName);
 
     int updateReviewStatus(Integer reviewStatus, Integer resourcePlantId);
 
-    List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(Integer resourcePlantId);
+    List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(String resourcePlantId);
 
+    /*新增*/
+    int saveData(ResourcePlantInfo resourcePlantInfo);
 }

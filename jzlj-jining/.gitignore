@@ -19,6 +19,7 @@ target/
 .idea
 *.iws
 *.iml
+<<<<<<< HEAD
 *.ipr
 .mvn
 mvnw*
@@ -47,4 +48,9 @@ log
 log/
 temp/
 target/
+out
+gen
+/log/
+/target/
+
 static/

@@ -4,6 +4,7 @@ import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.ResourcePlantInfo;
 import cn.edu.bjtu.jzlj.service.ResourcePlantInfoService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
+import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -122,8 +123,9 @@ public class ResourcePlantInfoController {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-            resourcePlantInfoService.insertinfo(resourcePlantInfo);
-//            resourcePlantInfoService.save(resourcePlantInfo);
+            resourcePlantInfo.setResourcePlantId(UuidTool.getUUID());
+//            resourcePlantInfoService.insertinfo(resourcePlantInfo);
+            resourcePlantInfoService.saveData(resourcePlantInfo);
             long endTime = System.currentTimeMillis();
             LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, null);
@@ -173,7 +175,7 @@ public class ResourcePlantInfoController {
     @ApiOperation(value = "普通用户删除数据",httpMethod = "DELETE")
     @DeleteMapping("/{delete}")
     @ControllerEndpoint(operation = "普通用户删除数据", exceptionMessage = "普通用户删除数据失败")
-    public Resp deleteByRESOURCEId(@RequestParam("resourcePlantId") Integer resourcePlantId){
+    public Resp deleteByRESOURCEId(@RequestParam("resourcePlantId") String resourcePlantId){
         long startTime = System.currentTimeMillis();
         try {
             resourcePlantInfoService.deleteByRESOURCEId(resourcePlantId);
@@ -227,7 +229,7 @@ public class ResourcePlantInfoController {
         long startTime = System.currentTimeMillis();
         try {
             JSONObject jsonObject = JSONObject.fromObject(resourcePlantInfo);
-            List<ResourcePlantInfo> resourcePlantInfoList = resourcePlantInfoService.getRESOURCEInfoByRESOURCEId(jsonObject.getInt("resourcePlantId"));
+            List<ResourcePlantInfo> resourcePlantInfoList = resourcePlantInfoService.getRESOURCEInfoByRESOURCEId(jsonObject.getString("resourcePlantId"));
             long endTime = System.currentTimeMillis();
             LOGGER.info("根据RESOURCE_PLANT_ID查询数据，用时：" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("查询成功", Resp.STRING, resourcePlantInfoList);
