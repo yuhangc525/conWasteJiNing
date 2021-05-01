@@ -42,4 +42,5 @@ public interface IntakePlantInfoService extends IService<IntakePlantInfo> {
     String updateOrInsertIntake(IntakePlantInfo intakePlantInfo);
 
     int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo);
+
 }

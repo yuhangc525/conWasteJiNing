@@ -69,10 +69,12 @@ public class THistoryPositionController {
                 LOGGER.info("车辆实时状态列表查询成功，用时："+ (endTime - startTime) +"ms");
                 if (result.size()>50){
 
+
                     int index=0;
                     while (index<result.size()){
                         finalResult.add(result.get(index));
                         index+=3;
+
                     }
                 }else{
                     finalResult=result;
@@ -90,6 +92,7 @@ public class THistoryPositionController {
                     while (index2<list.size()){
                         finalResult.add(list.get(index2));
                         index2+=3;
+
                     }
 
                 }
@@ -125,5 +128,5 @@ public class THistoryPositionController {
         }
         return dateList;
     }
-
 }
+

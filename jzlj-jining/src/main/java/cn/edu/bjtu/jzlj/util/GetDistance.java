@@ -23,15 +23,5 @@ public class GetDistance {
 		s = s * 1000;
 		return s;
 	}
-    
-//	public static void main(String[] args) {
-////		double distance = getDistance(34.2675560000, 108.9534750000, 34.2464320000, 108.9534750000);
-//		double distance = getDistance(0, 0, 34.2464320000, 108.9534750000);
-//		System.out.println(distance);
-//
-//		//    116.3861    39.9118
-//		//    116.3856    39.9211
-//		//    116.3956    39.9215
-//		//    116.3960    39.9121
-//	}
+
 }

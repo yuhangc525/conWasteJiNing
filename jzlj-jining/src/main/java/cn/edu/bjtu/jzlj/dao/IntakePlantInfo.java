@@ -24,7 +24,8 @@ import java.util.Date;
 public class IntakePlantInfo {
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "ID")
+
+    @TableId(value = "intake_plant_id")
     private String intakePlantId;
     private String id;
     private String intakePlantName;

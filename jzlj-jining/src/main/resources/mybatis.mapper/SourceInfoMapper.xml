@@ -27,8 +27,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        source_id,source_name,source_address,source_attrbute,qm_dept_no,source_type,waste_total,start_date,admin_unit,admin_legal_name,admin_phone_no,construction_unit,construction_legal_name,construction_phone_no,
-        source_long,sourceLat,input_name,input_time,review_status
+
+        source_id,source_name,source_address,source_attrbute,qm_dept_no,source_type,waste_total,start_date,admin_unit,admin_legal_name,admin_phone_no,construction_unit,construction_legal_name,construction_phone_no,source_long,source_lat,input_name,input_time,review_status
     </sql>
 
     <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SourceInfo"

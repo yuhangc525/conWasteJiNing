@@ -14,12 +14,14 @@ import java.util.List;
  */
 public interface RouteInfoService extends IService<RouteInfo> {
     // 根据IntakePlantName查询数据
-    List<RouteInfo> getInfoByRouteName(String routeName);
+
+    List<RouteInfo> getInfoByRouteDesign(String routeDesign);
 
     // 根据IntakePlantName插入或者更新数据，并返回id
     Integer updateOrInsertRoute(RouteInfo routeInfo);
 
     List<RouteInfo> getRouteInfoByRouteId(String routeId);
     RouteInfo getRoadInfo(Integer roadId);
+
     int updateData(RouteInfo routeInfo);
 }

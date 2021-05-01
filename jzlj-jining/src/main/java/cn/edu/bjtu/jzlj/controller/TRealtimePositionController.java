@@ -1,11 +1,12 @@
 package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
+
 import cn.edu.bjtu.jzlj.dao.TRealtimePosition;
 import cn.edu.bjtu.jzlj.service.TRealtimePositionService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import cn.edu.bjtu.jzlj.service.CarInfoService;
+
 import java.util.List;
 
 @Api(description = "车辆实时位置接口接口")

@@ -57,6 +57,7 @@
       #{oil,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{alarmflag,jdbcType=VARCHAR}, 
       #{acc,jdbcType=TINYINT}, #{position,jdbcType=TINYINT}, #{lonGcj02,jdbcType=DECIMAL}, 
       #{latGcj02,jdbcType=DECIMAL}, #{savetime,jdbcType=TIMESTAMP})
+
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.bjtu.jzlj.dao.THistoryPosition">
     insert into t_history_position
@@ -231,6 +232,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.edu.bjtu.jzlj.dao.THistoryPosition">
     update t_history_position
     set terminal_id = #{terminalId,jdbcType=VARCHAR},
+
       carno = #{carno,jdbcType=VARCHAR},
       lon = #{lon,jdbcType=DECIMAL},
       lat = #{lat,jdbcType=DECIMAL},
@@ -246,6 +248,7 @@
       lon_gcj02 = #{lonGcj02,jdbcType=DECIMAL},
       lat_gcj02 = #{latGcj02,jdbcType=DECIMAL},
       savetime = #{savetime,jdbcType=TIMESTAMP}
+
     where id = #{id,jdbcType=VARCHAR}
       and uptime = #{uptime,jdbcType=TIMESTAMP}
   </update>

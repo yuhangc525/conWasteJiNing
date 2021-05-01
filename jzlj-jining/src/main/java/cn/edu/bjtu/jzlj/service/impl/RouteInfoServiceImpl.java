@@ -1,8 +1,6 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
 import cn.edu.bjtu.jzlj.controller.IntakePlantInfoController;
-import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
-import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import cn.edu.bjtu.jzlj.mapper.RouteInfoMapper;
 
@@ -30,25 +28,23 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IntakePlantInfoController.class);
 
-    @Override
-    public RouteInfo getRoadInfo(Integer roadId) {
-        return routeInfoMapper.getRoadInfo(roadId);
-    }
+
 
     @Override
-    public List<RouteInfo> getInfoByRouteName(String routeName) {
+    public List<RouteInfo> getInfoByRouteDesign(String routeDesign) {
         Map<String, Object> columnMap = new HashMap<>();
-        columnMap.put("route_name", routeName);
+        columnMap.put("route_design", routeDesign);
         return routeInfoMapper.selectByMap(columnMap);
     }
 
     @Override
     public Integer updateOrInsertRoute(RouteInfo routeInfo) {
         List<RouteInfo> list;
-        if(!"".equals(routeInfo.getRouteName())){
-            list = getInfoByRouteName(routeInfo.getRouteName());
+
+        if(!"".equals(routeInfo.getRouteDesign())){
+            list = getInfoByRouteDesign(routeInfo.getRouteDesign());
         }else{
-            LOGGER.error("routeName为空！Error！");
+            LOGGER.error("routeDesign为空！Error！");
             return null;
         }
         int id; // 记录的id
@@ -60,7 +56,8 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
         }else{
             // 若数据库中不存在记录
             int row = routeInfoMapper.insert(routeInfo);
-            id = getInfoByRouteName(routeInfo.getRouteName()).get(0).getRouteId();
+
+            id = getInfoByRouteDesign(routeInfo.getRouteDesign()).get(0).getRouteId();
         }
         return id;
     }
@@ -68,6 +65,11 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
     @Override
     public List<RouteInfo> getRouteInfoByRouteId(String routeId){
         return routeInfoMapper.getRouteInfoByRouteId(routeId);
+    }
+
+    @Override
+    public RouteInfo getRoadInfo(Integer roadId) {
+        return null;
     }
 
     @Override

@@ -4,20 +4,36 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.CarCompany">
-        <id column="car_company_id" property="carCompanyID" />
+
+        <id column="car_company_id" property="carCompanyId" />
         <result column="car_company_name" property="carCompanyName" />
         <result column="contact" property="contact" />
         <result column="contact_number" property="contactNumber" />
         <result column="input_name" property="inputName" />
         <result column="input_time" property="inputTime" />
         <result column="review_status" property="reviewStatus" />
+        <result column="car_company_unitcode" property="carCompanyUnitcode" />
+        <result column="legal_name" property="legalName" />
+        <result column="legal_phone_no" property="legalPhoneNo" />
+        <result column="legal_cert_no" property="legalCertNo" />
+        <result column="agent_name" property="agentName" />
+        <result column="agent_phone_no" property="agentPhoneNo" />
+        <result column="agent_cert_no" property="agentCertNo" />
     </resultMap>
 
 
     <select id="getListByPage" resultType="cn.edu.bjtu.jzlj.dao.CarCompany">
         SELECT * FROM car_company WHERE 1=1
-        <if test = "inputName!=null and inputName !=''">
-            AND input_name = #{inputName}
+
+        <if test="_parameter.containsKey('carCompany') and carCompany!= null">
+            <if test="carCompany.carCompanyId != null and carCompany.carCompanyId != ''">
+                AND car_company_id = '${carCompany.carCompanyId}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('inputName')">
+            <if test = "inputName!=null and inputName !=''">
+                AND input_name = #{inputName}
+            </if>
         </if>
     </select>
 
@@ -29,7 +45,8 @@
     </select>
 
     <update id="changeReview" parameterType="Integer">
-        UPDATE car_company SET review_status = #{reviewStatus} WHERE car_company_id = #{carCompanyID}
+
+        UPDATE car_company SET review_status = #{reviewStatus} WHERE car_company_id = #{carCompanyId}
     </update>
 
 </mapper>

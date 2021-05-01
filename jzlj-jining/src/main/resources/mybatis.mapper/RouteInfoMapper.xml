@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.bjtu.jzlj.mapper.RouteInfoMapper">
-    <!--    根据id查询路段信息-->
-    <select id="getRoadInfo" resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
-    SELECT * from routed_info where routed_id = #{roadId, jdbcType=INTEGER}
-    </select>
 
+    <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.RouteInfo">
+        <id column="route_id" jdbcType="INTEGER" property="routeId" />
+        <result column="route_name" jdbcType="VARCHAR" property="routeName" />
+        <result column="route_design" jdbcType="VARCHAR" property="routeDesign" />
+        <result column="lng_lat" jdbcType="VARCHAR" property="lngLat" />
+        <result column="input_name" jdbcType="VARCHAR" property="inputName" />
+        <result column="input_time" jdbcType="TIMESTAMP" property="inputTime" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        route_id, route_name, route_design, lng_lat, input_name, input_time, content
+    </sql>
+
+    <select id="getRouteInfoByRouteId" resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
+        SELECT * FROM route_info WHERE 1=1
+        <if test="  routeId != null and routeId != '' ">
+            AND route_id = #{routeId}
+        </if>
+    </select>
 </mapper>

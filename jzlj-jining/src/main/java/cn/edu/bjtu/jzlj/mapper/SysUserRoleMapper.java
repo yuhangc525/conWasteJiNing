@@ -4,9 +4,7 @@ package cn.edu.bjtu.jzlj.mapper;
 import cn.edu.bjtu.jzlj.dao.SysUserRole;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sun.xml.internal.rngom.parse.host.Base;
+
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;

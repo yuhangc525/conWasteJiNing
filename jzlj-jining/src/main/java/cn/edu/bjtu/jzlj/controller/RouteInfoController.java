@@ -43,7 +43,7 @@ public class RouteInfoController {
     @ApiOperation(value = "根据route_name判断插入或者更新数据，并返回route_id", httpMethod = "PUT")
     @PutMapping("/updateOrInsertRoute")
     @ControllerEndpoint(operation = "更新或插入成功！", exceptionMessage = "操作失败")
-    public Resp updateOrInsertRoad(RouteInfo routeInfo) {
+    public Resp updateOrInsertRoad(@RequestBody RouteInfo routeInfo) {
         long startTime = System.currentTimeMillis();
         try {
             // 业务逻辑
@@ -84,24 +84,8 @@ public class RouteInfoController {
             LOGGER.error("根据routeId查询数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
             return Resp.getInstantiationError("根据routeId查询数据失败："+ e.getMessage(),Resp.LIST,null );
         }
+//
     }
-
-    @ApiOperation(value = "查询路段信息", httpMethod = "GET")
-    @GetMapping("/getRoadInfo")
-    public Resp getRoadInfo(RoadInfo roadInfo){
-        long time = System.currentTimeMillis();
-        try{
-
-            RouteInfo roadInfo1 = routeInfoService.getRoadInfo(roadInfo.getRoadId());
-            LOGGER.info("查询路段信息成功，用时：" + (System.currentTimeMillis() - time));
-            return Resp.getInstantiationSuccess("查询路段信息成功", Resp.SINGLE, roadInfo1.getLngLat());
-        } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.error("查询路段信息异常：" + e.getMessage() + ",用时：" + (System.currentTimeMillis() - time));
-            return Resp.getInstantiationError("查询路段信息异常", Resp.STRING, null);
-        }
-    }
-
 
     @ApiOperation(value = "路线信息更改", httpMethod = "PUT")
     @PutMapping("/putRouteInfo")

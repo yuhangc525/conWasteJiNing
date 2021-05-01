@@ -100,13 +100,15 @@ public class IntakePlantInfoServiceImpl extends ServiceImpl<IntakePlantInfoMappe
         String id; // 记录的id
         if(!list.isEmpty()){
             // 若数据库中存在记录
-            id = list.get(0).getId();
-            intakePlantInfo.setId(id);
+
+            id = list.get(0).getIntakePlantId();
+            intakePlantInfo.setIntakePlantId(id);
+
             int row = intakePlantInfoMapper.updateById(intakePlantInfo);
         }else{
             // 若数据库中不存在记录
             id = UUID.randomUUID().toString().replaceAll("-","");
-            intakePlantInfo.setId(id);
+            intakePlantInfo.setIntakePlantId(id);
             int row = intakePlantInfoMapper.insert(intakePlantInfo);
         }
         return id;
@@ -116,4 +118,5 @@ public class IntakePlantInfoServiceImpl extends ServiceImpl<IntakePlantInfoMappe
     public int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo){
         return intakePlantInfoMapper.updateInfoByApplyInfo(intakePlantInfo);
     }
+
 }

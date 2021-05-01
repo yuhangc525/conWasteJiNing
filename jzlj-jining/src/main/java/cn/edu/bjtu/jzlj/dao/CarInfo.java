@@ -3,6 +3,8 @@ package cn.edu.bjtu.jzlj.dao;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,7 +21,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("CAR_INFO")
+
+@TableName("car_info")
+
 public class CarInfo {
 
     /* 继承Model<T> 或者 实现 Serializable */
@@ -41,6 +45,7 @@ public class CarInfo {
     private String linkman;
     private String phoneNo;
     private String inputName;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date inputTime;
     private Integer reviewStatus;
 

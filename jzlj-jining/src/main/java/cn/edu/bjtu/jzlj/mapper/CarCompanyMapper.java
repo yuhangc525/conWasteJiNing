@@ -17,11 +17,13 @@ import java.util.List;
 @Repository
 public interface CarCompanyMapper extends BaseMapper<CarCompany> {
     /**列表查询分页**/
+    IPage<CarCompany> getListByPage(Page<CarCompany> page);
     IPage<CarCompany> getListByPage(Page<CarCompany> page, @Param("inputName") String inputName);
+    IPage<CarCompany> getListByPage(Page<CarCompany> page, @Param("carCompany") CarCompany carCompany);
 
     /*不分页查询*/
-    List<CarCompany> getAllList(@Param("ew") QueryWrapper<CarCompany> queryWrapper);
+    List<CarCompany> getAllList(@Param("ew") QueryWrapper<CarCompany> queryWrapper, @Param("carCompany") CarCompany carCompany);
 
     /**更改车辆公司审核状态**/
-    int changeReview(@Param("carCompanyID") Integer carCompanyID, @Param("reviewStatus") Integer reviewStatus);
+    int changeReview(@Param("carCompanyID") Integer carCompanyId, @Param("reviewStatus") Integer reviewStatus);
 }

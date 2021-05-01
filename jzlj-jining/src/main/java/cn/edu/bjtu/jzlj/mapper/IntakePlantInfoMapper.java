@@ -34,4 +34,5 @@ public interface IntakePlantInfoMapper extends BaseMapper<IntakePlantInfo> {
 
     int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo);
 
+
 }

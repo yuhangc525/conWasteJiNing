@@ -35,6 +35,7 @@
 
   </select>
 
+
   <select id="getPositionByTerminalId" resultType="cn.edu.bjtu.jzlj.dao.TRealtimePosition">
         SELECT * FROM t_realtime_position WHERE terminal_id=#{terminal_id}
     </select>

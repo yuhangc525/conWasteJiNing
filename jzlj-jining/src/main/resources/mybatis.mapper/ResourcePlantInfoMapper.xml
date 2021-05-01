@@ -9,6 +9,7 @@
                     <result column="resource_plant_address" property="resourcePlantAddress" />
                     <result column="resource_plant_long" property="resourcePlantLong" />
                     <result column="resource_plant_lat" property="resourcePlantLat" />
+
                     <result column="legal_person" property="legalPerson" />
                     <result column="responsible_person" property="responsiblePerson" />
                     <result column="resource_plant_type" property="resourcePlantType" />

@@ -52,12 +52,6 @@
         </if>
     </select>
 
-    <!--insert into INTAKE_PLANT_INFO_NEW(INTAKE_PLANT_ID, INTAKE_PLANT_NAME, INTAKE_PLANT_ADDRESS, " +
-            "INTAKE_PLANT_LONG, INTAKE_PLANT_LAT, INPUT_NAME, INPUT_TIME, CONTENT, " +
-            "REVIEW_STATUS)" +
-            "values(#{INTAKE_PLANT_ID},#{INTAKE_PLANT_NAME},#{INTAKE_PLANT_ADDRESS},#{INTAKE_PLANT_LONG}," +
-            "#{INTAKE_PLANT_LAT},#{INPUT_NAME},#{INPUT_TIME},#{CONTENT}," +
-            "#{REVIEW_STATUS})-->
     <insert id="insertinfo">
         INSERT INTO intake_plant_info
       (id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
@@ -76,11 +70,6 @@
       #{reviewStatus, jdbcType=INTEGER})
     </insert>
 
-    <!--update INTAKE_PLANT_INFO_NEW set INTAKE_PLANT_NAME = #{INTAKE_PLANT_NAME}," +
-                "INTAKE_PLANT_ADDRESS = #{INTAKE_PLANT_ADDRESS}," +
-                "INTAKE_PLANT_LONG = #{INTAKE_PLANT_LONG},INTAKE_PLANT_LAT = #{INTAKE_PLANT_LAT},INPUT_NAME = #{INPUT_NAME}," +
-                "INPUT_TIME = #{INPUT_TIME},CONTENT = #{CONTENT},REVIEW_STATUS = #{REVIEW_STATUS} " +
-                "where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
     <update id="updateinfo">
         UPDATE intake_plant_info
         <set>
@@ -98,7 +87,6 @@
         WHERE intake_plant_id = #{intakePlantId};
     </update>
 
-    <!--    delete from INTAKE_PLANT_INFO_NEW where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
     <delete id="deleteByINTAKE_PLANT_ID">
         DELETE FROM intake_plant_info WHERE 1=1
         <if test="  intakePlantId != null and intakePlantId != '' ">
@@ -106,7 +94,6 @@
         </if>
     </delete>
 
-    <!--update INTAKE_PLANT_INFO_NEW set REVIEW_STATUS = #{REVIEW_STATUS} where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
     <update id="updateReviewStatus" parameterType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
         UPDATE intake_plant_info
         <set>
@@ -115,7 +102,7 @@
         WHERE intake_plant_id = #{intakePlantId};
     </update>
 
-    <!--select * from INTAKE_PLANT_INFO_NEW where INTAKE_PLANT_ID = #{INTAKE_PLANT_ID}-->
+
     <select id="getIntakePlantInfoByINTakePlantID" resultType="cn.edu.bjtu.jzlj.dao.IntakePlantInfo">
         SELECT * FROM intake_plant_info WHERE 1=1
         <if test="  intakePlantId != null and intakePlantId != '' ">

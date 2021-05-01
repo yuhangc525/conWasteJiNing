@@ -11,5 +11,5 @@ import java.util.List;
 public interface THistoryPositionMapper extends BaseMapper<THistoryPosition> {
 
     List<THistoryPosition> getHistoryPoint(String sTime, String eTime, String terminalId, String tableName);
-//    List<THistoryPosition> getAll();
+
 }

@@ -348,7 +348,6 @@ public class CarInfoController {
                 LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
                 return Resp.getInstantiationSuccess("分页查看", Resp.LIST, carCompanyList);
             } else {
-                // 非分页
                 List<CarInfo> carCompanyList = carInfoService.getAllList(queryRequest, terminalId);
                 long endTime = System.currentTimeMillis();
                 LOGGER.info("车辆公司查询成功，用时" + (endTime - startTime) + "ms");
@@ -363,3 +362,4 @@ public class CarInfoController {
 
 
 }
+
