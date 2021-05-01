@@ -18,8 +18,8 @@
         <result column="construction_unit" property="constructionUnit"/>
         <result column="construction_legal_name" property="constructionLegalName"/>
         <result column="construction_phone_no" property="constructionPhoneNo"/>
-        <result column="lng" property="lng"/>
-        <result column="lat" property="lat"/>
+        <result column="source_long" property="sourceLong"/>
+        <result column="source_lat" property="sourceLat"/>
         <result column="input_name" property="inputName"/>
         <result column="input_time" property="inputTime"/>
         <result column="review_status" property="reviewStatus"/>
@@ -27,7 +27,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        source_id,source_name,source_address,source_attrbute,qm_dept_no,source_type,waste_total,start_date,admin_unit,admin_legal_name,admin_phone_no,construction_unit,construction_legal_name,construction_phone_no,lng,lat,input_name,input_time,review_status
+        source_id,source_name,source_address,source_attrbute,qm_dept_no,source_type,waste_total,start_date,admin_unit,admin_legal_name,admin_phone_no,construction_unit,construction_legal_name,construction_phone_no,
+        source_long,sourceLat,input_name,input_time,review_status
     </sql>
 
     <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SourceInfo"

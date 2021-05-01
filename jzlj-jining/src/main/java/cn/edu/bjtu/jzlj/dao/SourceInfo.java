@@ -39,8 +39,8 @@ public class SourceInfo implements Serializable{
     private String  constructionUnit;
     private String constructionLegalName;
     private String constructionPhoneNo;
-    private Double lng;
-    private Double lat;
+    private Double sourceLong;
+    private Double sourceLat;
     private String inputName;
     @JsonFormat( timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date inputTime;
