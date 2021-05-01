@@ -23,12 +23,12 @@ import java.util.Date;
 public class ResourcePlantInfo {
     private static final long serialVersionUID=1L;
 
-    @TableId(value = "resource_plant_id", type = IdType.AUTO)
+    @TableId(value = "resource_plant_id")
     private String resourcePlantId;
     private String resourcePlantName;
     private String resourcePlantAddress;
-    private Float resourceLong;
-    private Float resourceLat;
+    private Float resourcePlantLong;
+    private Float resourcePlantLat;
     private String legalPerson;
     private String responsiblePerson;
     private String resourcePlantType;

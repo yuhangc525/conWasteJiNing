@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
+import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.ResourcePlantInfo;
 import cn.edu.bjtu.jzlj.mapper.ResourcePlantInfoMapper;
 import cn.edu.bjtu.jzlj.service.ResourcePlantInfoService;
@@ -59,7 +60,7 @@ public class ResourcePlantInfoServiceImpl extends ServiceImpl<ResourcePlantInfoM
     }
 
     @Override
-    public int deleteByRESOURCEId(Integer resourcePlantId){
+    public int deleteByRESOURCEId(String resourcePlantId){
         return resourcePlantInfoMapper.deleteByRESOURCEId(resourcePlantId);
     };
 
@@ -75,7 +76,13 @@ public class ResourcePlantInfoServiceImpl extends ServiceImpl<ResourcePlantInfoM
     }
 
     @Override
-    public List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(Integer resourcePlantId){
+    public List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(String  resourcePlantId){
         return resourcePlantInfoMapper.getRESOURCEInfoByRESOURCEId(resourcePlantId);
     };
+
+    @Override
+    public int saveData(ResourcePlantInfo resourcePlantInfo) {
+        return resourcePlantInfoMapper.insert(resourcePlantInfo);
+    }
+
 }
