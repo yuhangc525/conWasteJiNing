@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.ResourcePlantInfoMapper">
+
+        <!-- 通用查询映射结果 -->
+        <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+                    <id column="resource_plant_id" property="resourcePlantId" />
+                    <result column="resource_plant_name" property="resourcePlantName" />
+                    <result column="resource_plant_address" property="resourcePlantAddress" />
+                    <result column="resource_plant_long" property="resourceLong" />
+                    <result column="resource_plant_lat" property="resourceLat" />
+                    <result column="legal_person" property="legalPerson" />
+                    <result column="responsible_person" property="responsiblePerson" />
+                    <result column="resource_plant_type" property="resourcePlantType" />
+                    <result column="daily_acceptance" property="dailyAcceptance" />
+                    <result column="daily_output" property="dailyOutput" />
+                    <result column="input_name" property="inputName" />
+                    <result column="input_time" property="inputTime" />
+                    <result column="content" property="content" />
+<!--                    <result column="REVIEW_STATUS" property="reviewStatus" />-->
+        </resultMap>
+
+        <!-- 通用查询结果列 -->
+        <sql id="Base_Column_List">
+            resource_plant_id, resource_plant_name, resource_plant_address,resource_plant_long,resource_plant_lat, legal_person, responsible_person,resource_plant_type,daily_acceptance,daily_output,input_name,input_time,content,REVIEW_STATUS
+        </sql>
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+        SELECT * FROM resource_plant_info WHERE 1=1
+        <if test="resourcePlantInfo.resourcePlantId != null and resourcePlantInfo.resourcePlantId != ''">
+            AND id = '${resourcePlantInfo.resourcePlantId}'
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+        SELECT * FROM resource_plant_info WHERE 1=1
+        <if test="_parameter.containsKey('resourcePlantInfo') and resourcePlantInfo!= null">
+            <if test="resourcePlantInfo.resourcePlantId != null and resourcePlantInfo.resourcePlantId != ''">
+                AND id = '${resourcePlantInfo.resourcePlantId}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+        ${ew.customSqlSegment}
+        </if>
+    </select>
+
+    <!--insert into RESOURCE_PLANT_INFO_NEW(RESOURCE_PLANT_NAME, RESOURCE_PLANT_ADDRESS, LEGAL_PERSON, " +
+            "RESPONSIBLE_PERSON, RESOURCE_PLANT_TYPE, DAILY_ACCEPTANCE, DAILY_OUTPUT, " +
+            "INPUT_NAME, INPUT_TIME, CONTENT, REVIEW_STATUS)" +
+            "values(#{RESOURCE_PLANT_NAME},#{RESOURCE_PLANT_ADDRESS},#{LEGAL_PERSON},#{RESPONSIBLE_PERSON}," +
+            "#{RESOURCE_PLANT_TYPE},#{DAILY_ACCEPTANCE},#{DAILY_OUTPUT}," +
+            "#{INPUT_NAME},#{INPUT_TIME},#{CONTENT},#{REVIEW_STATUS})-->
+<!--    <insert id="insertinfo">-->
+<!--        INSERT INTO resource_plant_info-->
+<!--      ( resource_plant_id, resource_plant_name, resource_plant_address,resource_plant_long,resource_plant_lat, legal_person, responsible_person,resource_plant_type,daily_acceptance,daily_output,input_name,input_time,content)-->
+<!--      VALUES-->
+<!--      (#{resourcePlantId, jdbcType=VARCHAR},-->
+<!--      #{resourcePlantName, jdbcType=VARCHAR},-->
+<!--      #{resourcePlantAddress, jdbcType=VARCHAR},-->
+<!--      #{resourceLong, jdbcType=FLOAT},-->
+<!--      #{resourceLat, jdbcType=FLOAT},-->
+<!--      #{legalPerson, jdbcType=VARCHAR},-->
+<!--      #{responsiblePerson, jdbcType=VARCHAR},-->
+<!--      #{resourcePlantType, jdbcType=VARCHAR},-->
+<!--      #{dailyAcceptance, jdbcType=VARCHAR},-->
+<!--      #{dailyOutput, jdbcType=VARCHAR},-->
+<!--      #{inputName, jdbcType=VARCHAR},-->
+<!--      #{inputTime, jdbcType=VARCHAR},-->
+<!--      #{content, jdbcType=VARCHAR},-->
+<!--    </insert>-->
+
+    <insert id="insertinfo">
+            INSERT INTO
+            resource_plant_info
+            (resource_plant_id, resource_plant_name, resource_plant_address, resource_plant_long, resource_plant_lat,
+            legal_person, responsible_person, resource_plant_type, daily_acceptance, daily_output, input_name, input_time, content)
+            VALUES
+            (
+            'resourcePlantId',
+            'resourcePlantName',
+            'resourcePlantAddress',
+            'resourceLong',
+            'resourceLat',
+            'legalPerson',
+            'responsiblePerson',
+            'resourcePlantType',
+            'dailyAcceptance',
+            'dailyOutput',
+            'inputName',
+            'inputTime',
+            'content'
+
+            )
+    </insert>
+
+
+
+    <!--update RESOURCE_PLANT_INFO_NEW set RESOURCE_PLANT_NAME = #{RESOURCE_PLANT_NAME}," +
+            "RESOURCE_PLANT_ADDRESS = #{RESOURCE_PLANT_ADDRESS}, LEGAL_PERSON = #{LEGAL_PERSON}," +
+            "RESPONSIBLE_PERSON = #{RESPONSIBLE_PERSON},RESOURCE_PLANT_TYPE = #{RESOURCE_PLANT_TYPE},DAILY_ACCEPTANCE = #{DAILY_ACCEPTANCE}," +
+            "DAILY_OUTPUT = #{DAILY_OUTPUT}," +
+            "INPUT_NAME = #{INPUT_NAME},INPUT_TIME = #{INPUT_TIME},CONTENT = #{CONTENT},REVIEW_STATUS = #{REVIEW_STATUS} " +
+            "where RESOURCE_PLANT_ID = #{RESOURCE_PLANT_ID}-->
+    <update id="updateinfo">
+        UPDATE resource_plant_info
+        <set>
+            resource_plant_name = #{resourcePlantName},
+            resource_plant_address = #{resourcePlantAddress},
+            resource_plant_long = #{resourceLong},
+            resource_plant_lat = #{resourceLat},
+            legal_person = #{legalPerson},
+            responsible_person = #{responsiblePerson},
+            resource_plant_type = #{resourcePlantType},
+            daily_acceptance = #{dailyAcceptance},
+            daily_output = #{dailyOutput},
+            input_name = #{inputName},
+            input_time = #{inputTime},
+            content = #{content},
+        </set>
+        WHERE resource_plant_id = #{resourcePlantId};
+    </update>
+
+    <!--    delete from RESOURCE_PLANT_INFO_NEW where RESOURCE_PLANT_ID = #{RESOURCE_PLANT_ID}-->
+    <delete id="deleteByRESOURCEId">
+        DELETE FROM resource_plant_info WHERE 1=1
+        <if test="  resourcePlantId != null and resourcePlantId != '' ">
+            AND resource_plant_id = #{resourcePlantId}
+        </if>
+    </delete>
+
+    <!--select * from RESOURCE_PLANT_INFO_NEW where INPUT_NAME = #{INPUT_NAME}-->
+    <select id="getResourcePlantInfoByInputName" resultType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+        SELECT * FROM resource_plant_info WHERE 1=1
+        <if test="  inputName != null and inputName != '' ">
+            AND input_name = #{inputName}
+        </if>
+    </select>
+
+    <!--update RESOURCE_PLANT_INFO_NEW set REVIEW_STATUS = #{REVIEW_STATUS} where RESOURCE_PLANT_ID = #{RESOURCE_PLANT_ID}-->
+    <update id="updateReviewStatus" parameterType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+        UPDATE resource_plant_info
+        <set>
+            REVIEW_STATUS = #{reviewStatus},
+        </set>
+        WHERE resource_plant_id = #{resourcePlantId};
+    </update>
+
+    <!--select * from RESOURCE_PLANT_INFO_NEW where RESOURCE_PLANT_ID = #{RESOURCE_PLANT_ID}-->
+    <select id="getRESOURCEInfoByRESOURCEId" resultType="cn.edu.bjtu.jzlj.dao.ResourcePlantInfo">
+        SELECT * FROM resource_plant_info WHERE 1=1
+        <if test="  resourcePlantId != null and resourcePlantId != '' ">
+            AND resource_plant_id = #{resourcePlantId}
+        </if>
+    </select>
+
+</mapper>

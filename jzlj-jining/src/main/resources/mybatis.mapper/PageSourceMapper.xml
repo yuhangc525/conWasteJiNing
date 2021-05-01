@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.PageSourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="pagesourceRM_all" type="cn.edu.bjtu.jzlj.dao.PageSource">
+        <id jdbcType="VARCHAR" column="id" property="id" />
+        <result jdbcType="VARCHAR" column="source" property="source" />
+        <result jdbcType="VARCHAR" column="sourcedesc" property="sourcedesc" />
+        <result jdbcType="VARCHAR" column="bygroup" property="bygroup" />
+    </resultMap>
+
+<!--    根据角色id获取资源列表-->
+<!--    <if test="id != null and id != ''">-->
+    <select id="getPSourceListByRoleId" resultType="cn.edu.bjtu.jzlj.dao.PageSource">
+        SELECT sp.id, sp.source, sp.sourcedesc, sp.bygroup
+        FROM sys_pagesource sp
+        LEFT JOIN sys_role_pagesource srp ON sp.id = srp.psource_id
+        LEFT JOIN sys_role sr ON srp.role_id = sr.id
+        WHERE 1=1
+        <if test="id != null and id != ''">
+            AND sr.id = #{id}
+        </if>
+
+    </select>
+
+
+
+<!--    添加页面资源-->
+    <insert id="addPageSource" parameterType="cn.edu.bjtu.jzlj.dao.PageSource">
+      INSERT INTO
+      sys_pagesource
+      (id,source,sourcedesc,bygroup)
+      VALUES
+      (
+      #{id, jdbcType=VARCHAR},
+      #{source, jdbcType=VARCHAR},
+      #{sourcedesc, jdbcType=VARCHAR},
+      #{bygroup, jdbcType=VARCHAR})
+    </insert>
+
+</mapper>

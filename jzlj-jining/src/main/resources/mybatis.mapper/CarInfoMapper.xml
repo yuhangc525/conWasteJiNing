@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.CarInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.CarInfo">
+        <id column="car_id" property="carID" />
+        <result column="load_capacity" property="loadCapacity" />
+        <result column="car_long" property="carLong" />
+        <result column="car_high" property="carHigh" />
+        <result column="car_width" property="carWidth" />
+        <result column="car_typE" property="carType" />
+        <result column="driver_name" property="driverName" />
+        <result column="motorcade_id" property="motorcadeId" />
+        <result column="company" property="company" />
+        <result column="car_no" property="carNo" />
+        <result column="from_ip" property="fromIp" />
+        <result column="status" property="status" />
+        <result column="linkman" property="linkman" />
+        <result column="phone_no" property="phoneNo" />
+        <result column="input_name" property="inputName" />
+        <result column="input_time" property="inputTime" />
+        <result column="reviews_status" property="reviewsStatus" />
+    </resultMap>
+
+    <select id="getTerminalIdByCarNo" resultType="String">
+        SELECT terminal_id FROM `car_info` WHERE car_no=#{carNo}
+    </select>
+
+    <select id="getListByPage"  resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
+        SELECT * FROM car_info WHERE 1=1
+        <if test = "_parameter.containsKey('inputName') and inputName!= null">
+            AND input_name = #{inputName}
+        </if>
+        <if test = "_parameter.containsKey('company') and company!= null">
+            AND company = #{company}
+        </if>
+        <if test = "_parameter.containsKey('terminalId') and terminalId != null">
+            AND terminal_id = #{terminalId}
+        </if>
+    </select>
+
+    <select id="getNum"  resultType="Integer">
+        SELECT COUNT(*) FROM car_info WHERE 1=1
+        <if test = "_parameter.containsKey('inputName') and inputName!= null">
+            AND input_name = #{inputName}
+        </if>
+    </select>
+
+    <select id="getAllList"  resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
+        SELECT * FROM car_info
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
+
+    <update id="changeReview" parameterType="Integer">
+        UPDATE car_info SET review_status = #{reviewStatus} WHERE car_id = #{carId}
+    </update>
+
+</mapper>

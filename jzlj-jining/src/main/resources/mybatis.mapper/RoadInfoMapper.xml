@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.RoadInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.bjtu.jzlj.dao.RoadInfo">
+    <id column="road_id" jdbcType="INTEGER" property="roadId" />
+    <result column="road_name" jdbcType="VARCHAR" property="roadName" />
+    <result column="road_address" jdbcType="VARCHAR" property="roadAddress" />
+    <result column="input_name" jdbcType="VARCHAR" property="inputName" />
+    <result column="input_time" jdbcType="TIMESTAMP" property="inputTime" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    road_id, road_name, road_address, input_name, input_time, content
+  </sql>
+
+  <select id="getRoadInfoByRoadId" resultType="cn.edu.bjtu.jzlj.dao.RoadInfo">
+    SELECT * FROM road_info WHERE 1=1
+    <if test="  roadId != null and roadId != '' ">
+      AND road_id = #{roadId}
+    </if>
+  </select>
+
+
+</mapper>

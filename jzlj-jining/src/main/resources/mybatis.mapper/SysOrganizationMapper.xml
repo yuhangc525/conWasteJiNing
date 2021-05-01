@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.SysOrganizationMapper">
+
+<!--    通用查询结果映射-->
+    <resultMap id="organizationRM_all" type="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        <id jdbcType="VARCHAR" column="id" property="id" />
+        <result jdbcType="VARCHAR" column="organization_name" property="organizationName" />
+        <result jdbcType="VARCHAR" column="parent_account" property="parentAccount" />
+        <result jdbcType="VARCHAR" column="social_credit_code" property="socialCreditCode" />
+        <result jdbcType="VARCHAR" property="mobile" column="mobile"/>
+        <result jdbcType="VARCHAR" property="address" column="address"/>
+        <result jdbcType="TINYINT" property="status" column="status"/>
+        <result jdbcType="VARCHAR" property="create_user" column="createUser"/>
+        <result jdbcType="TIMESTAMP" property="create_time" column="createTime"/>
+        <result jdbcType="VARCHAR" property="update_user" column="updateUser"/>
+        <result jdbcType="TIMESTAMP" property="update_time" column="updateTime"/>
+        <result jdbcType="VARCHAR" property="remark" column="remark"/>
+    </resultMap>
+
+
+<!--    新建组织-->
+    <insert id="createOrganization">
+        INSERT INTO
+        sys_organization
+        (id, organization_name, parent_account, social_credit_code,
+        mobile, address, status, create_user, create_time, update_user,
+        update_time, remark)
+        VALUES
+        (#{id, jdbcType=VARCHAR},
+      #{organizationName, jdbcType=VARCHAR},
+      #{parentAccount, jdbcType=VARCHAR},
+      #{socialCreditCode, jdbcType=VARCHAR},
+      #{mobile, jdbcType=VARCHAR},
+      #{address, jdbcType=VARCHAR},
+      #{status, jdbcType=INTEGER},
+      #{createUser, jdbcType=VARCHAR},
+      #{createTime, jdbcType=TIMESTAMP},
+      #{updateUser, jdbcType=VARCHAR},
+      #{updateTime, jdbcType=TIMESTAMP},
+      #{remark, jdbcType=VARCHAR})
+    </insert>
+
+
+<!--    分页查询组织-->
+    <select id="getOrgListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization"
+            resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        SELECT * FROM sys_organization WHERE 1=1
+        <if test="sysOrganization.organizationName != null and sysOrganization.organizationName != ''">
+            AND organization_name = '${sysOrganization.organizationName}'
+        </if>
+    </select>
+
+    <!--    用户列表不分页查询-->
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization"
+            resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        SELECT * FROM sys_organization WHERE 1=1
+        <if test="_parameter.containsKey('sysOrganization') and sysOrganization!= null">
+            <if test="sysOrganization.organization_name != null and sysOrganization.organization_name != ''">
+                AND organization_name = '${sysOrganization.organization_name}'
+            </if>N
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
+
+
+<!--    通过id查询组织-->
+<!--    <if test="_parameter != null and _parameter != ''">-->
+    <select id="getOrganizationById" resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        SELECT * FROM sys_organization
+        <where>
+            1 = 1
+            <if test="orgId != null and orgId != ''">
+                AND id = #{orgId}
+            </if>
+        </where>
+
+    </select>
+
+<!--    通过id编辑组织-->
+    <update id="updateOrgById" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        UPDATE sys_organization
+        <set>
+            organization_name = #{organization_name},
+            parent_account = #{parent_account},
+            social_credit_code = #{social_credit_code},
+            mobile = #{mobile},
+            address = #{address},
+            status = #{status},
+            create_user = #{create_user},
+            create_time = #{create_time},
+            update_user = #{update_user},
+            update_time = #{update_time},
+            remark = #{remark},
+        </set>
+        WHERE id = #{id};
+    </update>
+
+
+<!--    根据id删除组织，逻辑删除-->
+<!--    <update id="deleteOrgById">-->
+<!--        UPDATE sys_organization SET-->
+<!--      status = 0, update_user = #{update_user}, update_time = #{update_time}-->
+<!--      WHERE 1=1 and id = #{orgId}-->
+<!--    </update>-->
+
+    <delete id="deleteOrgById"  parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+                delete from sys_organization where id = #{orgId}
+    </delete>
+
+<!--    get请求测试根据ID删除一条记录-->
+    <delete id="deleteOrgById_get"  parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+                delete from sys_organization where id = #{orgId}
+    </delete>
+
+    <!--    根据多个id删除多个组织，逻辑删除-->
+<!--    <update id="deleteMOrgById">-->
+<!--        UPDATE sys_organization SET-->
+<!--        status = 0, update_user = #{update_user}, update_time = #{update_time}-->
+<!--        WHERE id in-->
+<!--        <foreach collection="id" close=")" open="(" index="index" separator="," item="id">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </update>-->
+    <delete id="deleteMOrgById"  parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        delete from
+        sys_organization
+        where
+        id IN
+        <foreach collection="id" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMOrgById_get"  parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
+        delete from
+        sys_organization
+        where
+        id IN
+        <foreach collection="id" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>
