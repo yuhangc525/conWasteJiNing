@@ -3,6 +3,8 @@ package cn.edu.bjtu.jzlj.service;
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.dao.RouteInfo;
+import cn.edu.bjtu.jzlj.util.QueryRequest;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -25,4 +27,10 @@ public interface RouteInfoService extends IService<RouteInfo> {
     RouteInfo getOneRouteInfoByRouteId(Integer routeId);
 
     int updateData(RouteInfo routeInfo);
+
+    // 分页查询
+    IPage<RouteInfo> getListByPage(QueryRequest queryRequest, RouteInfo routeInfo);
+
+    // 部分也拆寻
+    List<RouteInfo> getAllList(QueryRequest queryRequest, RouteInfo routeInfo);
 }

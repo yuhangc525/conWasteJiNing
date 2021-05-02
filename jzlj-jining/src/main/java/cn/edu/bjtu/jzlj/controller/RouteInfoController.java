@@ -7,7 +7,9 @@ import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
 import cn.edu.bjtu.jzlj.service.RouteInfoService;
+import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONObject;
@@ -107,6 +109,50 @@ public class RouteInfoController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("修改失败，原因："+ e.getMessage() +"，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationError("修改失败：" + e.getMessage(), null, null);
+        }
+    }
+
+    /*
+     * @Author zjwang
+     * @Description // 路线信息查询分页Or不分页
+     * @Date 16:19 2021/5/2
+     * @ParamTypes [cn.edu.bjtu.jzlj.util.QueryRequest, cn.edu.bjtu.jzlj.dao.RouteInfo]
+     * @return cn.edu.bjtu.jzlj.util.results.Resp
+     **/
+    @ApiOperation(value = "路线信息查询", httpMethod = "GET")
+    @GetMapping("/listRoute")
+    @ControllerEndpoint(operation = "路线信息查询", exceptionMessage = "路线信息查询失败")
+    public Resp getListByPage(QueryRequest queryRequest, RouteInfo routeInfo){
+        //查询列表数据
+        long startTime = System.currentTimeMillis();
+        if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1) {
+            return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+        }
+        try {
+
+            /*分页查询*/
+            if(queryRequest.isPageFlag())
+            {
+                if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+                {
+                    return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+                }
+                IPage<RouteInfo> routeInfoList = routeInfoService.getListByPage(queryRequest, routeInfo);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("分页查看", Resp.LIST, routeInfoList);
+            }
+            else
+            {
+                List<RouteInfo> sysUserList = routeInfoService.getAllList(queryRequest, routeInfo);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("路线信息查询成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("路线信息查询", Resp.LIST, sysUserList);
+            }
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("分页列举失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
         }
     }
 

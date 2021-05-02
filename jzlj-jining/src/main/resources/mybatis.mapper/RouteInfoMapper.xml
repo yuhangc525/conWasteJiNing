@@ -24,11 +24,35 @@
     </select>
 
 
-<!--    根据route id获取一条路线的信息-->
+    <!--    根据route id获取一条路线的信息-->
     <select id="getOneRouteInfoByRouteId" resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
         SELECT * FROM route_info WHERE 1=1
         <if test="  routeId != null and routeId != '' ">
             AND route_id = #{routeId}
+        </if>
+    </select>
+
+
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.RouteInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
+        SELECT * FROM route_info WHERE 1=1
+        <if test="_parameter.containsKey('routeInfo') and routeInfo!= null">
+            <if test="routeInfo.routeId != null and routeInfo.routeId != ''">
+                AND route_id = '${routeInfo.routeId}'
+            </if>
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.RouteInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
+        SELECT * FROM route_info WHERE 1=1
+        <if test="_parameter.containsKey('routeInfo') and routeInfo!= null">
+            <if test="routeInfo.routeId != null and routeInfo.routeId != ''">
+                AND route_id = '${routeInfo.routeId}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
         </if>
     </select>
 

@@ -5,6 +5,12 @@ import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import cn.edu.bjtu.jzlj.mapper.RouteInfoMapper;
 
 import cn.edu.bjtu.jzlj.service.RouteInfoService;
+import cn.edu.bjtu.jzlj.util.CommonUtil;
+import cn.edu.bjtu.jzlj.util.QueryRequest;
+import cn.edu.bjtu.jzlj.util.SortUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,5 +82,20 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
     @Override
     public int updateData(RouteInfo routeInfo) {
         return routeInfoMapper.updateById(routeInfo);
+    }
+
+    @Override
+    public IPage<RouteInfo> getListByPage(QueryRequest queryRequest, RouteInfo routeInfo) {
+        Page<RouteInfo> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
+        SortUtil.handlePageSort(queryRequest, page, "routeId", CommonUtil.ORDER_ASC, true);
+        IPage<RouteInfo> list = routeInfoMapper.getListByPage(page, routeInfo);
+        return list;
+    }
+
+    @Override
+    public List<RouteInfo> getAllList(QueryRequest queryRequest, RouteInfo routeInfo) {
+        QueryWrapper<RouteInfo> queryWrapper = new QueryWrapper<>();
+        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "routeId", CommonUtil.ORDER_ASC, true);
+        return routeInfoMapper.getAllList(queryWrapper, routeInfo);
     }
 }
