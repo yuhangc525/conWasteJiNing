@@ -21,7 +21,8 @@ public interface RouteInfoService extends IService<RouteInfo> {
     Integer updateOrInsertRoute(RouteInfo routeInfo);
 
     List<RouteInfo> getRouteInfoByRouteId(String routeId);
-    RouteInfo getRoadInfo(Integer roadId);
+
+    RouteInfo getOneRouteInfoByRouteId(Integer routeId);
 
     int updateData(RouteInfo routeInfo);
 }

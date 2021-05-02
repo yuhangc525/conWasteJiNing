@@ -1,13 +1,12 @@
 package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.dao.CarAlarm;
-import cn.edu.bjtu.jzlj.dao.CarRoad;
+import cn.edu.bjtu.jzlj.dao.CarRoute;
 import cn.edu.bjtu.jzlj.dao.PointEntity;
 
 //import com.alibaba.fastjson.JSONArray;
-import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.service.CarAlarmService;
-import cn.edu.bjtu.jzlj.service.CarRoadService;
+import cn.edu.bjtu.jzlj.service.CarRouteService;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
 import cn.edu.bjtu.jzlj.util.GetDistance;
 import cn.edu.bjtu.jzlj.util.Gps;
@@ -20,19 +19,13 @@ import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-import net.sf.json.JsonConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -51,7 +44,7 @@ public class vehicleOffsetAlarmController {
     private RoadInfoService roadInfoService;
 
     @Autowired
-    private CarRoadService carRoadService;
+    private CarRouteService carRouteService;
 
     @Autowired
     private CarAlarmService carAlarmService;
@@ -140,13 +133,13 @@ public class vehicleOffsetAlarmController {
 
     @ApiOperation(value = "根据车辆终端id获取路线id列表", httpMethod = "POST")
     @PostMapping("/getRoadList")
-    public List<CarRoad> getRoadListByTerminalId(String terminalId) {
+    public List<CarRoute> getRoadListByTerminalId(String terminalId) {
 
-        List<CarRoad> roadList = carRoadService.getRoadListByTerminalId(terminalId);
+        List<CarRoute> roadList = carRouteService.getRouteListByTerminalId(terminalId);
         if (roadList.size() == 0){
             System.out.println("没有对应路线");
         }
-        for (CarRoad roadId : roadList){
+        for (CarRoute roadId : roadList){
             System.out.println("路线id：" + roadId);
 
         }
@@ -156,20 +149,20 @@ public class vehicleOffsetAlarmController {
 
     @ApiOperation(value = "增加车辆--路线对应关系信息", httpMethod = "POST")
     @PostMapping("/insertCarRoadInfo")
-    public Resp insertCarRoadInfo(@RequestBody CarRoad carRoad){
+    public Resp insertCarRoadInfo(@RequestBody CarRoute carRoute){
         long startTime = System.currentTimeMillis();
-        if (null == carRoad) {
+        if (null == carRoute) {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-            carRoadService.insertCarRoadInfo(carRoad);
+            carRouteService.insertCarRouteInfo(carRoute);
             long endTime = System.currentTimeMillis();
             LOGGER.info("增加车辆--路线对应关系信息成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("增加车辆--路线对应关系信息成功", Resp.STRING, null);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
             LOGGER.error("增加车辆--路线对应关系信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
-            return Resp.getInstantiationError("增加车辆--路线对应关系信息异常，原因：" + e.getMessage(), Resp.SINGLE, carRoad);
+            return Resp.getInstantiationError("增加车辆--路线对应关系信息异常，原因：" + e.getMessage(), Resp.SINGLE, carRoute);
         }
     }
 

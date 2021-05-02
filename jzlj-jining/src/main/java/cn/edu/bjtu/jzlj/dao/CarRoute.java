@@ -31,7 +31,7 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("car_route")
-public class CarRoad implements Serializable{
+public class CarRoute implements Serializable{
 
      private static final long serialVersionUID=1L;
 
@@ -46,5 +46,5 @@ public class CarRoad implements Serializable{
      /**
       * 路线id
       */
-     private Integer roadId;
+     private Integer routeId;
 }

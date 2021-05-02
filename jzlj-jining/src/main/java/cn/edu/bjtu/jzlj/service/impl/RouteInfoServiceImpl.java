@@ -68,8 +68,9 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
     }
 
     @Override
-    public RouteInfo getRoadInfo(Integer roadId) {
-        return null;
+    public RouteInfo getOneRouteInfoByRouteId(Integer routeId) {
+        RouteInfo routeInfo = routeInfoMapper.getOneRouteInfoByRouteId(routeId);
+        return  routeInfo;
     }
 
     @Override

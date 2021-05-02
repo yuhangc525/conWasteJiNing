@@ -1,13 +1,13 @@
 package cn.edu.bjtu.jzlj.mapper;
 
-import cn.edu.bjtu.jzlj.dao.CarRoad;
+import cn.edu.bjtu.jzlj.dao.CarRoute;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface CarRoadMapper extends BaseMapper<CarRoad>{
+public interface CarRouteMapper extends BaseMapper<CarRoute>{
 
 
      /**
@@ -18,7 +18,7 @@ public interface CarRoadMapper extends BaseMapper<CarRoad>{
       * @return
       * @throws:
       **/
-    List<CarRoad> getRoadListByTerminalId(String terminalId);
+    List<CarRoute> getRouteListByTerminalId(String terminalId);
 
      /**
       * @Author: 田英杰
@@ -28,5 +28,5 @@ public interface CarRoadMapper extends BaseMapper<CarRoad>{
       * @return
       * @throws:
       **/
-    Boolean insertCarRoadInfo(CarRoad carRoad);
+    Boolean insertCarRouteInfo(CarRoute carRoute);
 }

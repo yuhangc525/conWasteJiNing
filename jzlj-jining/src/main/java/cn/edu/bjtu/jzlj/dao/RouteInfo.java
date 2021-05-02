@@ -21,7 +21,7 @@ import java.util.Date;
 public class RouteInfo {
 
     @TableId(value = "route_id")
-    private int routeId;
+    private Integer routeId;
     private String routeName;
     private String routeDesign;
     private String lngLat;

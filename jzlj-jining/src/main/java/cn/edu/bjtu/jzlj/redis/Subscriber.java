@@ -1,30 +1,22 @@
 package cn.edu.bjtu.jzlj.redis;
 
-import cn.edu.bjtu.jzlj.controller.SysUserController;
 import cn.edu.bjtu.jzlj.dao.*;
-import cn.edu.bjtu.jzlj.mapper.CarRoadMapper;
 import cn.edu.bjtu.jzlj.service.CarAlarmService;
-import cn.edu.bjtu.jzlj.service.CarRoadService;
+import cn.edu.bjtu.jzlj.service.CarRouteService;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
+import cn.edu.bjtu.jzlj.service.RouteInfoService;
 import cn.edu.bjtu.jzlj.util.GetDistance;
-import cn.edu.bjtu.jzlj.util.Gps;
-import cn.edu.bjtu.jzlj.util.PositionTransformationUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPubSub;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 @Component
@@ -32,11 +24,11 @@ import java.util.List;
 public class Subscriber extends JedisPubSub {
     private static final Logger LOGGER = LoggerFactory.getLogger(Subscriber.class);
 
-    private static CarRoadService carRoadService;
+    private static CarRouteService carRouteService;
 
     @Resource
-    public void setCarRoadService(CarRoadService carRoadService) {
-        Subscriber.carRoadService = carRoadService;
+    public void setCarRoadService(CarRouteService carRouteService) {
+        Subscriber.carRouteService = carRouteService;
     }
 
 
@@ -52,6 +44,13 @@ public class Subscriber extends JedisPubSub {
     @Resource
     public void setRoadInfoService(RoadInfoService roadInfoService) {
         Subscriber.roadInfoService = roadInfoService;
+    }
+
+    private static RouteInfoService routeInfoService;
+
+    @Resource
+    public void setRouteInfoService(RouteInfoService routeInfoService) {
+        Subscriber.routeInfoService = routeInfoService;
     }
 
     private static RedisConfig redisConfig;
@@ -70,13 +69,17 @@ public class Subscriber extends JedisPubSub {
     //收到消息会调用
     public void onMessage(String channel, String message) {
 //        System.out.println(String.format("receive redis published message, channel %s, message %s", channel, message));
-        giveAnAlarm(message);
+        try {
+            giveAnAlarm(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     };
 
 
 
-    public void giveAnAlarm (String message){
+    public void giveAnAlarm (String message) throws Exception {
 
         // 将字符串转换成json格式
         JSONObject carRealTime_msg = JSONObject.parseObject(message);
@@ -113,9 +116,9 @@ public class Subscriber extends JedisPubSub {
             PointEntity pointEntity = new PointEntity();
 
             //获取车辆相应的路线列表
-            List<CarRoad> roadList = carRoadService.getRoadListByTerminalId("14268527702");;
+            List<CarRoute> routeList = carRouteService.getRouteListByTerminalId("14268527702");;
 
-            if (roadList.size() == 0 || roadList == null){
+            if (routeList.size() == 0 || routeList == null){
                 LOGGER.info("车辆终端id为: " + terminalId + "的车辆没有对应的路线！");
 //                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
             } else {
@@ -124,11 +127,14 @@ public class Subscriber extends JedisPubSub {
                 pointEntity.setPointLatitude(lat);
                 //onRoad  记录车辆是否偏移了路线，0表示偏移了，大于0说明没有偏移
                 int onRoad = 0;
-                for (CarRoad roadId : roadList ) {
-                    int oneRoadId = roadId.getRoadId();
+                for (CarRoute routeId : routeList ) {
+                    int oneRoadId = routeId.getRouteId();
                     //获取路线信息
-                    RoadInfo roadInfo = roadInfoService.getRoadInfo(oneRoadId);
-                    String roadAddress = roadInfo.getRoadAddress();
+                    RouteInfo routeInfo = routeInfoService.getOneRouteInfoByRouteId(oneRoadId);
+                    if (routeInfo == null) {
+                        throw new Exception("路线id为：" + oneRoadId + "的路线不存在");
+                    }
+                    String roadAddress = routeInfo.getLngLat();
                     onRoad += pointIfOffsetRoad(roadAddress, pointEntity);
                 };
                 //onRoad > 0 说明车辆没有偏移路线
@@ -179,7 +185,7 @@ public class Subscriber extends JedisPubSub {
 
                     String curOffsetState = "offset";
                     String  lastOffsetState = (String) redisConfig.get(terminalIdKey);
-                    if (lastOffsetState != null && (!"NoOffset".equals(lastOffsetState) || !"offset".equals(lastOffsetState))){
+                    if (lastOffsetState != null && !"NoOffset".equals(lastOffsetState) && !"offset".equals(lastOffsetState)){
                         redisConfig.remove(terminalIdKey);
                     }
                     System.out.println("车辆："+ terminalId +"上一次的状态是：" + lastOffsetState);
@@ -287,7 +293,7 @@ public class Subscriber extends JedisPubSub {
 
     /**
      * 判断车辆是否偏移
-     * @param s
+     * @param s 路线的gps信息
      * @param pointEntity
      * @return
      */

@@ -22,4 +22,15 @@
             AND route_id = #{routeId}
         </if>
     </select>
+
+
+<!--    根据route id获取一条路线的信息-->
+    <select id="getOneRouteInfoByRouteId" resultType="cn.edu.bjtu.jzlj.dao.RouteInfo">
+        SELECT * FROM route_info WHERE 1=1
+        <if test="  routeId != null and routeId != '' ">
+            AND route_id = #{routeId}
+        </if>
+    </select>
+
+
 </mapper>

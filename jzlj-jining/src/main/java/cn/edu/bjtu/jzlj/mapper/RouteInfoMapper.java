@@ -20,4 +20,7 @@ public interface RouteInfoMapper extends BaseMapper<RouteInfo> {
 
     List<RouteInfo> getRouteInfoByRouteId(@Param("routeId") String routeId);
 
+
+    RouteInfo getOneRouteInfoByRouteId(Integer routeId);
+
 }

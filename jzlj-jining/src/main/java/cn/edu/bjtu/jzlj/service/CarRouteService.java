@@ -1,6 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 
-import cn.edu.bjtu.jzlj.dao.CarRoad;
+import cn.edu.bjtu.jzlj.dao.CarRoute;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
  * @return
  * @throws:
  **/
-public interface CarRoadService extends IService<CarRoad> {
+public interface CarRouteService extends IService<CarRoute> {
 
-    List<CarRoad> getRoadListByTerminalId(String terminalId);
+    List<CarRoute> getRouteListByTerminalId(String terminalId);
 
-    Boolean insertCarRoadInfo(CarRoad carRoad);
+    Boolean insertCarRouteInfo(CarRoute carRoute);
 }
