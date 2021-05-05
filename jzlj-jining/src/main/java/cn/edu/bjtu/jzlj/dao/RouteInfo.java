@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Transient;
 
 import java.util.Date;
 
@@ -24,6 +25,8 @@ public class RouteInfo {
     private Integer routeId;
     private String routeName;
     private String routeDesign;
+    @Transient
+    private String routeConvertedDesign;
     private String lngLat;
     private String inputName;
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

@@ -33,4 +33,10 @@ public interface RouteInfoService extends IService<RouteInfo> {
 
     // 部分也拆寻
     List<RouteInfo> getAllList(QueryRequest queryRequest, RouteInfo routeInfo);
+
+    // 转换的routeInfo分页查询
+    List<RouteInfo> getConvertedListByPage(QueryRequest queryRequest, RouteInfo routeInfo);
+
+    // 转换的routeInfo不分页拆寻
+    List<RouteInfo> getConvertedAllList(QueryRequest queryRequest, RouteInfo routeInfo);
 }

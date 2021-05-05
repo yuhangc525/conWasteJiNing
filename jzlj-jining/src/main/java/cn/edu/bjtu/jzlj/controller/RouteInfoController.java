@@ -156,4 +156,42 @@ public class RouteInfoController {
         }
     }
 
+    @ApiOperation(value = "转换的路线信息查询, 会根据routeDesign查询roadName并返回", httpMethod = "GET")
+    @GetMapping("/listConvertedRoute")
+    @ControllerEndpoint(operation = "转换的路线信息查询", exceptionMessage = "转换的路线信息查询失败")
+    public Resp getConvertedListByPage(QueryRequest queryRequest, RouteInfo routeInfo){
+        //查询列表数据
+        long startTime = System.currentTimeMillis();
+        if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1) {
+            return Resp.getInstantiationError("转换的分页查看失败，分页页数或分页大小不合法", null, null);
+        }
+        try {
+
+            /*分页查询*/
+            if(queryRequest.isPageFlag())
+            {
+                if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+                {
+                    return Resp.getInstantiationError("转换的分页查看失败，分页页数或分页大小不合法", null, null);
+                }
+                List<RouteInfo> routeInfoList = routeInfoService.getConvertedListByPage(queryRequest, routeInfo);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("转换的分页列举成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("转换的分页查看", Resp.LIST, routeInfoList);
+            }
+            else
+            {
+                List<RouteInfo> sysUserList = routeInfoService.getConvertedAllList(queryRequest, routeInfo);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("转换的路线信息查询成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("转换的路线信息查询", Resp.LIST, sysUserList);
+            }
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("转换的分页列举失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+
 }
