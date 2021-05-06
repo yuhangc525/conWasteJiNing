@@ -62,6 +62,7 @@ public class PageSourceController {
 //                return Resp.getInstantiationError("新增页面权限信息异常", Resp.STRING, null);
 //            }
             pageSource.setId(UuidTool.getUUID());
+            System.out.println("====" + pageSource.getId());
             pageSourceService.save(pageSource);
             long endTime = System.currentTimeMillis();
             LOGGER.info("新增页面权限信息成功，用时" + (endTime - startTime) + "ms");

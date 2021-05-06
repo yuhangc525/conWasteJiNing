@@ -54,3 +54,10 @@ gen
 /target/
 
 static/
+
+application.yml
+application-dev.yml
+application-prod.yml
+application-test.yml
+logback-spring.xml
+
