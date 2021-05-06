@@ -112,7 +112,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
       * @return
       * @throws:
       **/
-    void updateUserOrganizationByUREntity(@Param("sysOrganizationUser")SysOrganizationUser sysOrganizationUser);
+    void updateUserOrganizationByUOEntity(@Param("sysOrganizationUser")SysOrganizationUser sysOrganizationUser);
 
 
      /**

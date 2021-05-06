@@ -174,8 +174,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 throw new DuplicateKeyException("用户名或手机号已被占用");
             }
             if (!StringUtils.isEmpty(sysUser.getRoleId())) {
-                if (null == sysUserRoleMapper.selectById(sysUser.getId())) {
-
+                if (null == sysUserRoleMapper.selectUserRoleByUserId(sysUser.getId())) {
                     sysUserRoleMapper.insert(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
     //                sysUserRoleMapper.insert(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
                 } else {
@@ -187,7 +186,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     sysOrganizationUserMapper.insert(new SysOrganizationUser(sysUser.getId(), sysUser.getOrgId()));
     //                sysOrganizationUserMapper.insert(new SysOrganizationUser(sysUser.getId(), sysUser.getOrgId()));
                 } else {
-                    sysOrganizationUserMapper.updateById(new SysOrganizationUser(sysUser.getId(), sysUser.getOrgId()));
+                    sysUserMapper.updateUserOrganizationByUOEntity(new SysOrganizationUser(sysUser.getId(), sysUser.getOrgId()));
 
                 }
             }

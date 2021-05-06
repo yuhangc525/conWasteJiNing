@@ -188,7 +188,7 @@
 
 
     <!--更新 UserOrganization by UserId : userId不能为空，orgId可以为空-->
-    <update id="updateUserOrganizationByUREntity" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganizationUser">
+    <update id="updateUserOrganizationByUOEntity" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganizationUser">
       update sys_organization_user
       set orgid = #{sysOrganizationUser.orgid}
       where userid = #{sysOrganizationUser.userid}

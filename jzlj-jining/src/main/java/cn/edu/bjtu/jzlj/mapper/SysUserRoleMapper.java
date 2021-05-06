@@ -27,5 +27,7 @@ public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 //    void insert(@Param("role_id") String role_id, @Param("user_id") String user_id);
     String insert_role(@Param("sysUserRole") SysUserRole sysUserRole);
 
+    SysUserRole selectUserRoleByUserId(@Param("userId") String userId);
+
 
 }

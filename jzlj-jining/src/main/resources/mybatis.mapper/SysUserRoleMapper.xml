@@ -13,5 +13,10 @@
     </resultMap>
 
 
+    <select id="selectUserRoleByUserId">
+        select * from sys_user_role where user_id = #{userId}
+    </select>
+
+
 
 </mapper>
