@@ -2,11 +2,8 @@ package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.ApplyInfo;
-import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.service.ApplyInfoService;
-import cn.edu.bjtu.jzlj.service.IntakePlantInfoService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
-import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
@@ -63,14 +60,14 @@ public class ApplyInfoController {
                 {
                     return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
                 }
-                IPage<ApplyInfo> applyInfoList = applyInfoService.getListByPage(queryRequest, applyInfo);
+                IPage<ApplyInfo> applyInfoList = applyInfoService.getListByPage(queryRequest, applyInfo, false);
                 long endTime = System.currentTimeMillis();
                 LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
                 return Resp.getInstantiationSuccess("分页查看", Resp.LIST, applyInfoList);
             }
             else
             {
-                List<ApplyInfo> applyInfoList = applyInfoService.getAllList(queryRequest,applyInfo);
+                List<ApplyInfo> applyInfoList = applyInfoService.getAllList(queryRequest,applyInfo, false);
                 long endTime = System.currentTimeMillis();
                 LOGGER.info("消纳场列表查询成功，用时" + (endTime - startTime) + "ms");
                 return Resp.getInstantiationSuccess("消纳场列表查询查看", Resp.LIST, applyInfoList);
@@ -189,6 +186,46 @@ public class ApplyInfoController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("普通用户更新数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
             return Resp.getInstantiationError("普通用户更新数据失败："+ e.getMessage(),Resp.LIST,null );
+        }
+    }
+
+    @ApiOperation(value = "查询审核单列表, 多表查询", httpMethod = "GET")
+    @GetMapping("/selectAllCompletely")
+    @ControllerEndpoint(operation = "查询审核单列表, 多表查询", exceptionMessage = "审核单列表多表查询查询失败")
+    public Resp getListByPageCompletely(QueryRequest queryRequest, ApplyInfo applyInfo){
+        //查询列表数据
+        long startTime = System.currentTimeMillis();
+        if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+        {
+            return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+        }
+        try
+        {
+            /*分页查询*/
+            if(queryRequest.isPageFlag())
+            {
+                if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+                {
+                    return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+                }
+                IPage<ApplyInfo> applyInfoList = applyInfoService.getListByPage(queryRequest, applyInfo, true);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("分页查看", Resp.LIST, applyInfoList);
+            }
+            else
+            {
+                List<ApplyInfo> applyInfoList = applyInfoService.getAllList(queryRequest, applyInfo, true);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("消纳场列表查询成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("消纳场列表查询查看", Resp.LIST, applyInfoList);
+            }
+        }
+        catch (Exception e)
+        {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("分页列举失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
         }
     }
 

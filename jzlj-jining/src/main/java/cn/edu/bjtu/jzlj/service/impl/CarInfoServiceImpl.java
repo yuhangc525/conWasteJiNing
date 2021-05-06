@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,8 +106,8 @@ public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> impl
     }
 
     @Override
-    public int changeReview(Integer carId, Integer reviewStatus) {
-        return carInfoMapper.changeReview(carId,reviewStatus);
+    public int changeReview(String carId, Integer reviewStatus) {
+        return carInfoMapper.changeReview(carId, reviewStatus);
     }
 
     @Override

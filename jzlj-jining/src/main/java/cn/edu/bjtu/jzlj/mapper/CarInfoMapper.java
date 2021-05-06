@@ -22,7 +22,7 @@ public interface CarInfoMapper extends BaseMapper<CarInfo> {
     List<CarInfo> getAllList(@Param("ew") QueryWrapper<CarInfo> queryWrapper );
 
     /* 改变审核状态 */
-    int changeReview(@Param("carId") Integer carId, @Param("reviewStatus") Integer reviewStatus);
+    int changeReview(@Param("carId") String carId, @Param("reviewStatus") Integer reviewStatus);
 
     /* 根据InputName查询数据条数 */
     int getNum(@Param("inputName") String inputName);

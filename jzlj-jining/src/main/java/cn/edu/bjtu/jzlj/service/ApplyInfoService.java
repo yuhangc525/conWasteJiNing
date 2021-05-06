@@ -1,7 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 
 import cn.edu.bjtu.jzlj.dao.ApplyInfo;
-import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,10 +17,10 @@ import java.util.List;
  **/
 public interface ApplyInfoService extends IService<ApplyInfo> {
     /* 分页查询*/
-    IPage<ApplyInfo> getListByPage(QueryRequest queryRequest, ApplyInfo applyInfo);
+    IPage<ApplyInfo> getListByPage(QueryRequest queryRequest, ApplyInfo applyInfo, boolean isMore);
 
     /*查询全部数据，不分页*/
-    List<ApplyInfo> getAllList(QueryRequest queryRequest, ApplyInfo applyInfo);
+    List<ApplyInfo> getAllList(QueryRequest queryRequest, ApplyInfo applyInfo, boolean isMore);
 
     int insertinfo(ApplyInfo applyInfo);
 

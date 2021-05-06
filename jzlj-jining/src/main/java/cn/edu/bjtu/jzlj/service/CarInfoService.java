@@ -5,6 +5,8 @@ import cn.edu.bjtu.jzlj.dao.CarInfo;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.swagger.models.auth.In;
+
 import java.util.List;
 
 public interface CarInfoService extends IService<CarInfo> {
@@ -33,7 +35,7 @@ public interface CarInfoService extends IService<CarInfo> {
     int batchDelete(List<String> ids);
 
     /*根据车辆公司ID修改审核状态*/
-    int changeReview(Integer carId, Integer reviewStatus);
+    int changeReview(String carId, Integer reviewStatus);
 
     String getTerminalIdByCarNo(String carNo);
 }

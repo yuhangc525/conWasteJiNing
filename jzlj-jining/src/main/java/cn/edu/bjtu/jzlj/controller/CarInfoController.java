@@ -9,6 +9,8 @@ import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,16 +282,16 @@ public class CarInfoController {
     @ApiOperation(value = "车辆信息审核状态", httpMethod = "PUT")
     @PutMapping("/changeReview")
     @ControllerEndpoint(operation = "修改车辆信息审核状态", exceptionMessage = "修改车辆信息审核状态失败")
-    public Resp changeReview(@RequestBody Map<String, Integer> data) {
+    public Resp changeReview(@RequestParam("carId") String carId, @RequestParam("reviewStatus")Integer reviewStatus) {
         long startTime = System.currentTimeMillis();
         try {
             //更新
-            if (carInfoService.getById(data.get("CAR_ID").intValue()) == null) {
+            if (carInfoService.getById(carId) == null) {
                 long endTime = System.currentTimeMillis();
                 LOGGER.error("修改失败，原因：修改不存在，用时" + (endTime - startTime) + "ms");
                 return Resp.getInstantiationError("修改失败，原因：修改的id不存在，", null, null);
             }
-            carInfoService.changeReview(data.get("CAR_ID"), data.get("REVIEW_STATUS"));
+            carInfoService.changeReview(carId, reviewStatus);
             long endTime = System.currentTimeMillis();
             LOGGER.info("修改成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("修改成功", null, null);
