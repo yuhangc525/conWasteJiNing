@@ -8,6 +8,7 @@ import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 
 import cn.edu.bjtu.jzlj.dao.PageSource;
 
+import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 
 import io.swagger.annotations.Api;
@@ -55,11 +56,12 @@ public class PageSourceController {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-            PageSource currentPageSource = pageSourceService.getById(pageSource.getId());
-            if(currentPageSource != null){
-                LOGGER.error("新增资源主键(id)重复，用时：" + (System.currentTimeMillis() - startTime) + "ms");
-                return Resp.getInstantiationError("新增页面权限信息异常", Resp.STRING, null);
-            }
+//            PageSource currentPageSource = pageSourceService.getById(pageSource.getId());
+//            if(currentPageSource != null){
+//                LOGGER.error("新增资源主键(id)重复，用时：" + (System.currentTimeMillis() - startTime) + "ms");
+//                return Resp.getInstantiationError("新增页面权限信息异常", Resp.STRING, null);
+//            }
+            pageSource.setId(UuidTool.getUUID());
             pageSourceService.save(pageSource);
             long endTime = System.currentTimeMillis();
             LOGGER.info("新增页面权限信息成功，用时" + (endTime - startTime) + "ms");
