@@ -27,7 +27,15 @@
 <!--    用户列表分页查询-->
     <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SysUser"
             resultType="cn.edu.bjtu.jzlj.dao.SysUser">
-        SELECT * FROM sys_user WHERE 1=1
+        select u.id, u.username, u.password, u.mobile, u.organization,u.status,
+        u.create_user,u.create_time,u.update_user,u.update_time,u.remark, r.id as roleId, r.role_name, o.id as orgId, o.organization_name
+        from sys_user u
+        LEFT JOIN sys_user_role ur on ur.user_id=u.id
+        LEFT JOIN sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        AND u.status != 2;
         <if test="sysUser.username != null and sysUser.username != ''">
             AND username = '${sysUser.username}'
         </if>
@@ -36,7 +44,16 @@
 <!--    用户列表不分页查询-->
     <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SysUser"
             resultType="cn.edu.bjtu.jzlj.dao.SysUser">
-        SELECT * FROM sys_user WHERE 1=1
+--         SELECT * FROM sys_user WHERE 1=1
+        select u.id, u.username, u.password, u.mobile, u.organization,u.status,
+        u.create_user,u.create_time,u.update_user,u.update_time,u.remark, r.id as roleId, r.role_name, o.id as orgId, o.organization_name
+        from sys_user u
+        LEFT JOIN sys_user_role ur on ur.user_id=u.id
+        LEFT JOIN sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        AND u.status != 2
         <if test="_parameter.containsKey('sysUser') and sysUser!= null">
             <if test="sysUser.username != null and sysUser.username != ''">
                 AND username = '${sysUser.username}'
@@ -59,7 +76,14 @@
         LEFT JOIN sys_organization o ON ou.orgid=o.id
         where 1=1
         AND u.status != 2;
-        <if test="vo.userName != null and vo.userName != ''">and username like '%${vo.userName}%'</if>
+        <if test="_parameter.containsKey('sysUser') and sysUser!= null">
+            <if test="sysUser.username != null and sysUser.username != ''">
+                AND username = '${sysUser.username}';
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
     </select>
 
 <!--    创建新的用户-->

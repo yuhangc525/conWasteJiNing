@@ -18,7 +18,7 @@ public class JzljApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext run = SpringApplication.run(JzljApplication.class, args);
-		run.getBean(Receiver.class).receiver();
+//		run.getBean(Receiver.class).receiver();
 
 	}
 
