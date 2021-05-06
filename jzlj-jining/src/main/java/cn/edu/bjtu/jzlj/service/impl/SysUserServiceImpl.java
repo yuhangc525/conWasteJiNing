@@ -179,7 +179,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                     sysUserRoleMapper.insert(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
     //                sysUserRoleMapper.insert(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
                 } else {
-                    sysUserRoleMapper.updateById(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
+                    sysUserMapper.updateUserRoleByUREntity(new SysUserRole(sysUser.getId(), sysUser.getRoleId()));
                 }
             }
             if (!StringUtils.isEmpty(sysUser.getOrgId())) {
