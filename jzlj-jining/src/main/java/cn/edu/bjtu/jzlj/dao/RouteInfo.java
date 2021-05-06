@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.dao;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,6 +27,7 @@ public class RouteInfo {
     private String routeName;
     private String routeDesign;
     @Transient
+    @TableField(exist = false)
     private String routeConvertedDesign;
     private String lngLat;
     private String inputName;

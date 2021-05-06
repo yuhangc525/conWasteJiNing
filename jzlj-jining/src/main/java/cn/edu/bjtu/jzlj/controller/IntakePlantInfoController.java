@@ -96,7 +96,7 @@ public class IntakePlantInfoController {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-            intakePlantInfo.setId(UuidTool.getUUID());
+            intakePlantInfo.setIntakePlantId(UuidTool.getUUID());
             intakePlantInfoService.insertinfo(intakePlantInfo);
             long endTime = System.currentTimeMillis();
             LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");

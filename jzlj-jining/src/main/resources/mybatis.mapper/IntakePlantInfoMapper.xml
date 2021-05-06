@@ -54,9 +54,10 @@
 
     <insert id="insertinfo">
         INSERT INTO intake_plant_info
-      (id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
+      (intake_plant_id ,id, intake_plant_name, intake_plant_address, intake_plant_long,intake_plant_lat,intake_linkman,intake_phone_no,input_name,input_time,content,review_status)
       VALUES
       (
+      #{intakePlantId, jdbcType=VARCHAR},
       #{id, jdbcType=VARCHAR},
       #{intakePlantName, jdbcType=VARCHAR},
       #{intakePlantAddress, jdbcType=VARCHAR},
