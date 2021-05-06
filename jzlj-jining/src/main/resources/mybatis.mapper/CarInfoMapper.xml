@@ -54,7 +54,7 @@
         </if>
     </select>
 
-    <update id="changeReview" parameterType="Integer">
+    <update id="changeReview">
         UPDATE car_info SET review_status = #{reviewStatus} WHERE car_id = #{carId}
     </update>
 

@@ -140,4 +140,43 @@
             AND apply_id = #{applyId}
         </if>
     </select>
+
+    <select id="getListByPageMore" parameterType="cn.edu.bjtu.jzlj.dao.ApplyInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.ApplyInfo">
+        SELECT a.apply_id, a.apply_no, a.apply_date, a.car_company_id, a.tran_start_time1, a.tran_end_time1, a.tran_end_time2, a.tran_start_time2, a.route_id, a.source_id, a.intake_plant_id1, a.intake_plant_id2, a.intake_plant_id3, a.disposal_start_date, a.disposal_end_date, a.disposal_scale, a.input_name, a.input_time, a.content, c.car_company_name, r.route_name, s.source_name, i1.intake_plant_name intake_plant_name1
+        FROM apply_info a
+
+                 LEFT OUTER JOIN car_company c
+                                 ON a.car_company_id = c.car_company_id
+
+                 LEFT OUTER JOIN route_info r
+                                 ON a.route_id = r.route_id
+
+                 LEFT OUTER JOIN source_info s
+                                 ON a.source_id = s.source_id
+
+                 LEFT OUTER JOIN intake_plant_info i1
+                                 ON a.intake_plant_id1 = i1.intake_plant_id
+
+    </select>
+
+    <select id="getAllListMore" parameterType="cn.edu.bjtu.jzlj.dao.ApplyInfo"
+            resultType="cn.edu.bjtu.jzlj.dao.ApplyInfo">
+        SELECT a.apply_id, a.apply_no, a.apply_date, a.car_company_id, a.tran_start_time1, a.tran_end_time1, a.tran_end_time2, a.tran_start_time2, a.route_id, a.source_id, a.intake_plant_id1, a.intake_plant_id2, a.intake_plant_id3, a.disposal_start_date, a.disposal_end_date, a.disposal_scale, a.input_name, a.input_time, a.content, c.car_company_name, r.route_name, s.source_name, i1.intake_plant_name intake_plant_name1
+        FROM apply_info a
+
+                 LEFT OUTER JOIN car_company c
+                                 ON a.car_company_id = c.car_company_id
+
+                 LEFT OUTER JOIN route_info r
+                                 ON a.route_id = r.route_id
+
+                 LEFT OUTER JOIN source_info s
+                                 ON a.source_id = s.source_id
+
+                 LEFT OUTER JOIN intake_plant_info i1
+                                 ON a.intake_plant_id1 = i1.intake_plant_id
+
+    </select>
+
 </mapper>

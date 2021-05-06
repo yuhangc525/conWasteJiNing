@@ -28,4 +28,9 @@ public interface ApplyInfoMapper extends BaseMapper<ApplyInfo> {
 
     List<ApplyInfo> getApplyInfoByApplyId(@Param("applyId") String applyId);
 
+    /* 多表查询，获取有意义字段 */
+    IPage<ApplyInfo> getListByPageMore(Page<ApplyInfo> page, ApplyInfo applyInfo);
+
+    /* 多表查询，获取有意义字段 */
+    List<ApplyInfo> getAllListMore(QueryWrapper<ApplyInfo> queryWrapper, ApplyInfo applyInfo);
 }

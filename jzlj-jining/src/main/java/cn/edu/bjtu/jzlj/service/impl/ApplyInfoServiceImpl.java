@@ -1,11 +1,8 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
 import cn.edu.bjtu.jzlj.dao.ApplyInfo;
-import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.mapper.ApplyInfoMapper;
-import cn.edu.bjtu.jzlj.mapper.IntakePlantInfoMapper;
 import cn.edu.bjtu.jzlj.service.ApplyInfoService;
-import cn.edu.bjtu.jzlj.service.IntakePlantInfoService;
 import cn.edu.bjtu.jzlj.util.CommonUtil;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.SortUtil;
@@ -31,21 +28,35 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoMapper, ApplyInfo
 
     /*分页查询数据*/
     @Override
-    public IPage<ApplyInfo> getListByPage(QueryRequest queryRequest, ApplyInfo applyInfo)
+    public IPage<ApplyInfo> getListByPage(QueryRequest queryRequest, ApplyInfo applyInfo, boolean isMore)
     {
         Page<ApplyInfo> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
         SortUtil.handlePageSort(queryRequest, page, "applyId", CommonUtil.ORDER_ASC, true);
-        IPage<ApplyInfo> list = applyInfoMapper.getListByPage(page, applyInfo);
+        IPage<ApplyInfo> list = null;
+        // 若需要额外信息，则进行多表查询
+        if(isMore){
+            list = applyInfoMapper.getListByPageMore(page, applyInfo);
+        }else{
+            list = applyInfoMapper.getListByPage(page, applyInfo);
+        }
+
         return list;
     }
 
     /*查询全部数据，不分页*/
     @Override
-    public List<ApplyInfo> getAllList(QueryRequest queryRequest, ApplyInfo applyInfo)
+    public List<ApplyInfo> getAllList(QueryRequest queryRequest, ApplyInfo applyInfo, boolean isMore)
     {
         QueryWrapper<ApplyInfo> queryWrapper = new QueryWrapper<>();
         SortUtil.handleWrapperSort(queryRequest, queryWrapper, "applyId", CommonUtil.ORDER_ASC, true);
-        return applyInfoMapper.getAllList(queryWrapper, applyInfo);
+        List<ApplyInfo> list = null;
+        // 若需要额外信息，则进行多表查询
+        if(isMore){
+            list = applyInfoMapper.getAllListMore(queryWrapper, applyInfo);
+        }else{
+            list = applyInfoMapper.getAllList(queryWrapper, applyInfo);
+        }
+        return list;
     }
 
     @Override
@@ -68,5 +79,6 @@ public class ApplyInfoServiceImpl extends ServiceImpl<ApplyInfoMapper, ApplyInfo
     @Override
     public List<ApplyInfo> getApplyInfoByApplyId(String applyId){
         return applyInfoMapper.getApplyInfoByApplyId(applyId);
-    };
+    }
+
 }
