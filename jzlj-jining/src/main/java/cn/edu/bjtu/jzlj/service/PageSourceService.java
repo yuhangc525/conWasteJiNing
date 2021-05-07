@@ -35,5 +35,15 @@ public interface PageSourceService extends IService<PageSource> {
       **/
      List<PageSource> getPSourceListByRoleId(String id) throws Exception;
 
+     void updatepageSource(PageSource pageSource) throws Exception;
+
+     void deletePageSourceById(String id) throws Exception;
+
+     IPage<PageSource> getPageSourceListByRoleId(String roleid, Integer pageNo, Integer pageSize);
+
+     IPage<PageSource> getNoPageSourceListByRoleId(String roleid, Integer pageNo, Integer pageSize);
+
+     void deleteMpagesource(List<String> id) throws Exception;
+
 
 }

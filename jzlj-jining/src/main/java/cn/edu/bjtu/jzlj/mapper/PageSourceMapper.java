@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLTransactionRollbackException;
@@ -35,4 +36,19 @@ public interface PageSourceMapper extends BaseMapper<PageSource> {
       * @throws:
       **/
     List<PageSource> getPSourceListByRoleId(@Param("id") String id);
+
+
+    @Select("select count(1) from sys_role_pagesource where psource_id = #{psourceId}")
+    public Integer selectCountforRolepage(@Param("psourceId") String psourceId);
+
+
+    List<PageSource> getPageSourceListByRoleId(@Param("roleid")String roleid, Page<PageSource> pageBean);
+
+    List<PageSource> getNoPageSourceListByRoleId(@Param("roleid")String roleid, Page<PageSource> pageBean);
+
+    Integer selectManypagesource(@Param("id")List<String> id);
+
+    void deleteManypagesource(@Param("id")List<String> id);
+
+
 }

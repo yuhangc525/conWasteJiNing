@@ -28,17 +28,17 @@ public class PageSource implements Serializable {
      */
     private String bygroup;
 
-//    public PageSource(){
-//        super();
-//    }
-//    public PageSource(String id, String source, String sourcedesc, String bygroup){
-//        super();
-//        this.id = id;
-//        this.source = source;
-//        this.bygroup = bygroup;
-//        this.sourcedesc = sourcedesc;
-//
-//    }
+    public PageSource(){
+        super();
+    }
+    public PageSource(String id, String source, String sourcedesc, String bygroup){
+        super();
+        this.id = id;
+        this.source = source;
+        this.bygroup = bygroup;
+        this.sourcedesc = sourcedesc;
+
+    }
 
 
 //    public String getId() {

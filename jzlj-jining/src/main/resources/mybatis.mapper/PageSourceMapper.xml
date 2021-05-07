@@ -38,5 +38,59 @@
       #{sourcedesc, jdbcType=VARCHAR},
       #{bygroup, jdbcType=VARCHAR})
     </insert>
+    
+    <update id="updatepageSource" parameterType="cn.edu.bjtu.jzlj.dao.PageSource">
+        update sys_pagesource set source = #{source}, sourcedesc = #{sourcedesc}, bygroup = #{bugroup}
+        where id = #{id}
+    </update>
+
+    <!-- 根据角色id查询拥有的页面资源分页接口 -->
+    <select id="getPageSourceListByRoleId" resultType="cn.edu.bjtu.jzlj.dao.PageSource">
+		select * from sys_pagesource where id in (
+			select
+				psource_id
+			from
+				sys_role sr
+			inner join
+				sys_role_pagesource srp
+			on
+				sr.id = srp.role_id
+			where
+				sr.id = #{roleid}
+		)
+	</select>
+
+    <!-- 根据角色id查询没有的页面资源分页接口 -->
+    <select id="getNoPageSourceListByRoleId" resultType="cn.edu.bjtu.jzlj.dao.PageSource">
+		select * from sys_pagesource where id not in (
+			select
+				psource_id
+			from
+				sys_role sr
+			inner join
+				sys_role_pagesource srp
+			on
+				sr.id = srp.role_id
+			where
+				sr.id = #{roleid} ORDER BY source
+		)
+	</select>
+
+
+    <select id="selectManypagesource" resultType="Integer">
+        select count(distinct psource_id) from sys_role_pagesource where psource_id in
+        <foreach collection="id" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+    </select>
+
+    <delete id="deleteManypagesource">
+        delete  from sys_pagesource where id in
+        <foreach collection="id" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 
 </mapper>
