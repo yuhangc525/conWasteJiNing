@@ -92,5 +92,25 @@
         </foreach>
     </delete>
 
+    <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.PageSource"
+            resultType="cn.edu.bjtu.jzlj.dao.PageSource">
+        SELECT * FROM sys_pagesource WHERE 1=1
+        <if test="pageSource.id != null and pageSource.id != ''">
+            AND id = '${pageSource.id}'
+        </if>
+    </select>
+
+    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.PageSource"
+            resultType="cn.edu.bjtu.jzlj.dao.PageSource">
+        SELECT * FROM sys_pagesource WHERE 1=1
+        <if test="_parameter.containsKey('pageSource') and pageSource!= null">
+            <if test="pageSource.id != null and pageSource.id != ''">
+                AND id = '${pageSource.id}'
+            </if>
+        </if>
+        <if test="_parameter.containsKey('ew') and ew!= null">
+            ${ew.customSqlSegment}
+        </if>
+    </select>
 
 </mapper>

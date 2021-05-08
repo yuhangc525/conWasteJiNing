@@ -62,7 +62,6 @@ public class CarCompanyServiceImpl extends ServiceImpl<CarCompanyMapper, CarComp
     }
 
     @Override
-
     public IPage<CarCompany> getListByPage(QueryRequest queryRequest, CarCompany carCompany) {
         Page<CarCompany> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
         SortUtil.handlePageSort(queryRequest, page, "carCompanyId", CommonUtil.ORDER_ASC, true);

@@ -3,8 +3,10 @@ package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 
+import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 
+import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import org.springframework.util.StringUtils;
@@ -172,6 +174,49 @@ public class PageSourceController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("根据多个id删除多个页面权限失败，原因：" + e.getMessage() +",用时:" + (endTime - startTime));
             return Resp.getInstantiationError("根据多个id删除多个页面权限失败",Resp.STRING,null);
+        }
+    }
+
+    @ApiOperation(value = "权限查询", httpMethod = "GET")
+    @GetMapping("/listPageSourceByPage")
+    @ControllerEndpoint(operation = "权限查询", exceptionMessage = "权限列表查询失败")
+    public Resp getListByPage(QueryRequest queryRequest, PageSource pageSource){
+
+
+        //查询列表数据
+        long startTime = System.currentTimeMillis();
+        if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+        {
+            return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+        }
+        try
+        {
+            /*分页查询*/
+            if(queryRequest.isPageFlag())
+            {
+                if (queryRequest.getPageNo() < 1 || queryRequest.getPageNo() < 1)
+                {
+                    return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
+                }
+
+                IPage<PageSource> pageSourceList = pageSourceService.getListByPage(queryRequest, pageSource);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("分页查看", Resp.LIST, pageSourceList);
+            }
+            else
+            {
+                List<PageSource> pageSourceList = pageSourceService.getAllList(queryRequest, pageSource);
+                long endTime = System.currentTimeMillis();
+                LOGGER.info("车辆公司查询成功，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationSuccess("车辆公司查询查看", Resp.LIST, pageSourceList);
+            }
+        }
+        catch (Exception e)
+        {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("分页列举失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
         }
     }
 

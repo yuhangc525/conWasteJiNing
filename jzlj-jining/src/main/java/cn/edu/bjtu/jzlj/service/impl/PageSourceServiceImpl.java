@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.mapper.PageSourceMapper;
@@ -126,7 +127,24 @@ public class PageSourceServiceImpl extends ServiceImpl<PageSourceMapper, PageSou
     }
 
 
+    /*分页查询数据*/
+    @Override
+    public IPage<PageSource> getListByPage(QueryRequest queryRequest, PageSource pageSource)
+    {
+        Page<PageSource> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
+        SortUtil.handlePageSort(queryRequest, page, "id", CommonUtil.ORDER_ASC, true);
+        IPage<PageSource> list = pageSourceMapper.getListByPage(page, pageSource);
+        return list;
+    }
 
+    /*查询全部数据，不分页*/
+    @Override
+    public List<PageSource> getAllList(QueryRequest queryRequest, PageSource pageSource)
+    {
+        QueryWrapper<PageSource> queryWrapper = new QueryWrapper<>();
+        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "id", CommonUtil.ORDER_ASC, true);
+        return pageSourceMapper.getAllList(queryWrapper, pageSource);
+    }
 
 
 

@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.mapper;
 
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.vo.UserSearchVo;
@@ -50,5 +51,9 @@ public interface PageSourceMapper extends BaseMapper<PageSource> {
 
     void deleteManypagesource(@Param("id")List<String> id);
 
+    IPage<PageSource> getListByPage(Page<PageSource> page, @Param("pageSource") PageSource pageSource);
+
+    /*不分页查询*/
+    List<PageSource> getAllList(@Param("ew") QueryWrapper<PageSource> queryWrapper, @Param("pageSource") PageSource pageSource);
 
 }
