@@ -13,7 +13,7 @@
     </resultMap>
 
 
-    <select id="selectUserRoleByUserId">
+    <select id="selectUserRoleByUserId" resultType="cn.edu.bjtu.jzlj.dao.SysUserRole">
         select * from sys_user_role where user_id = #{userId}
     </select>
 

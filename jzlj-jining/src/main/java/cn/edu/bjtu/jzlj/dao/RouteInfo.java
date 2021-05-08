@@ -27,7 +27,7 @@ public class RouteInfo {
     private Integer routeId;
     private String routeName;
     private String routeDesign;
-    @Transient
+//    @Transient
     @TableField(exist = false)
     private String routeConvertedDesign;
     private String lngLat;

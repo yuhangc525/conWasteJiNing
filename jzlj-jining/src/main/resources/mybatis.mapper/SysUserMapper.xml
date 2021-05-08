@@ -182,8 +182,8 @@
 
     <!--更新 UserRole by UserId : userId不能为空，roleId可以为空-->
     <update id="updateUserRoleByUREntity" parameterType="cn.edu.bjtu.jzlj.dao.SysUserRole">
-      update sys_user_role set role_id = #{SysUserRole.roleId}
-      where user_id = #{SysUserRole.userId}
+      update sys_user_role set role_id = #{sysUserRole.roleId}
+      where user_id = #{sysUserRole.userId}
     </update>
 
 
