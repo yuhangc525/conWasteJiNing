@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
 import cn.edu.bjtu.jzlj.controller.IntakePlantInfoController;
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import cn.edu.bjtu.jzlj.mapper.RouteInfoMapper;
@@ -141,4 +142,16 @@ public class RouteInfoServiceImpl extends ServiceImpl<RouteInfoMapper, RouteInfo
         }
         return resultData;
     }
+
+    @Override
+    public int deleteByRouteId(String routeId){
+        return routeInfoMapper.deleteByRouteId(routeId);
+    };
+
+    @Override
+    public int updateinfo(RouteInfo routeInfo){
+        return routeInfoMapper.updateinfo(routeInfo);
+    }
+
+
 }

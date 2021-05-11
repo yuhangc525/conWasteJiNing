@@ -56,4 +56,6 @@ public interface PageSourceMapper extends BaseMapper<PageSource> {
     /*不分页查询*/
     List<PageSource> getAllList(@Param("ew") QueryWrapper<PageSource> queryWrapper, @Param("pageSource") PageSource pageSource);
 
+
+    int insertPsource(PageSource pageSource);
 }

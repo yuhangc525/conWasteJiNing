@@ -6,6 +6,9 @@ import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 
+import cn.edu.bjtu.jzlj.dao.SysRolePageSource;
+import cn.edu.bjtu.jzlj.mapper.PageSourceMapper;
+import cn.edu.bjtu.jzlj.mapper.SysRolePageSourceMapper;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
@@ -39,6 +42,8 @@ public class PageSourceController {
 
     @Autowired
     private PageSourceService pageSourceService;
+    @Autowired
+    private SysRolePageSourceMapper sysRolePageSourceMapper;
 
 
      /**
@@ -217,6 +222,28 @@ public class PageSourceController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("分页列举失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
+        }
+
+    }
+
+    @ApiOperation(value = "Psource插入数据", httpMethod = "POST")
+    @PostMapping("/insertPsource")
+    @ControllerEndpoint(operation = "新增", exceptionMessage = "新增失败")
+    public Resp insertPsource(@RequestBody PageSource pageSource){
+        long startTime = System.currentTimeMillis();
+        if (null == pageSource) {
+            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
+        }
+        try {
+//            pageSourceService.insertPsource(pageSource);
+            sysRolePageSourceMapper.insert(new SysRolePageSource(pageSource.getId(), pageSource.getRoleId()));
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("创建失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("创建异常，原因：" + e.getMessage(), Resp.SINGLE, pageSource);
         }
     }
 

@@ -155,4 +155,10 @@ public class PageSourceServiceImpl extends ServiceImpl<PageSourceMapper, PageSou
         }
         return true;
     }
+
+    @Override
+    public int insertPsource(PageSource pageSource){
+        return pageSourceMapper.insertPsource(pageSource);
+    }
+
 }

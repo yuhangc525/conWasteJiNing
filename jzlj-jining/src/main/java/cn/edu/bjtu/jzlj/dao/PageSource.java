@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.dao;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -27,6 +28,9 @@ public class PageSource implements Serializable {
      * 页面分组
      */
     private String bygroup;
+
+    @TableField(exist = false)
+    private String roleId;
 
     public PageSource(){
         super();

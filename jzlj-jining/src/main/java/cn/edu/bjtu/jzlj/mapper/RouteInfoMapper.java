@@ -7,6 +7,7 @@ import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -31,4 +32,8 @@ public interface RouteInfoMapper extends BaseMapper<RouteInfo> {
 
     // 不分页查询
     List<RouteInfo> getAllList(QueryWrapper<RouteInfo> queryWrapper, RouteInfo routeInfo);
+
+    int deleteByRouteId(@Param("routeId") String routeId);
+
+    int updateinfo(RouteInfo routeInfo);
 }

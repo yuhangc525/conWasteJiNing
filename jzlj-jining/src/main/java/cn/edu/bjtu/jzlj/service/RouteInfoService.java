@@ -5,6 +5,7 @@ import cn.edu.bjtu.jzlj.dao.RoadInfo;
 import cn.edu.bjtu.jzlj.dao.RouteInfo;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -39,4 +40,8 @@ public interface RouteInfoService extends IService<RouteInfo> {
 
     // 转换的routeInfo不分页拆寻
     List<RouteInfo> getConvertedAllList(QueryRequest queryRequest, RouteInfo routeInfo);
+
+    int deleteByRouteId(String routeId);
+
+    int updateinfo(RouteInfo routeInfo);
 }

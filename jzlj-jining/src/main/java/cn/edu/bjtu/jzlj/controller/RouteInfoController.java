@@ -193,5 +193,43 @@ public class RouteInfoController {
         }
     }
 
+    @ApiOperation(value = "删除路线数据",httpMethod = "DELETE")
+    @DeleteMapping("/{delete}")
+    @ControllerEndpoint(operation = "删除路线数据", exceptionMessage = "删除路线数据失败")
+    public Resp deleteByRouteId(@RequestParam("routeId") String routeId){
+        long startTime = System.currentTimeMillis();
+        try {
+            routeInfoService.deleteByRouteId(routeId);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("批量删除成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("批量删除成功", Resp.LIST, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("批量删除失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("批量删除失败:"+e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+    @ApiOperation(value = "更新路线数据", httpMethod = "PUT")
+    @PutMapping("/updateData")
+    @ControllerEndpoint(operation = "更新路线数据", exceptionMessage = "更新失败")
+    public Resp updateinfo(@RequestBody RouteInfo routeInfo) {
+        long startTime = System.currentTimeMillis();
+        try {
+            if(routeInfo.getRouteId() == null){
+                long endTime = System.currentTimeMillis();
+                LOGGER.error("修改失败，原因：修改不存在，用时" + (endTime - startTime) + "ms");
+                return Resp.getInstantiationError("修改失败，原因：修改的id不存在，", null, null);
+            }
+            routeInfoService.updateinfo(routeInfo);
+            long endTime =  System.currentTimeMillis();
+            LOGGER.info("修改成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("修改成功", null, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("普通用户更新数据失败，原因：", e.getMessage()+ "，用时" +(endTime - startTime) + "ms");
+            return Resp.getInstantiationError("普通用户更新数据失败："+ e.getMessage(),Resp.LIST,null );
+        }
+    }
 
 }

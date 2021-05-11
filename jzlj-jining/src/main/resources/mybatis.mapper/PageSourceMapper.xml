@@ -113,4 +113,13 @@
         </if>
     </select>
 
+
+    <insert id="insertPsource">
+        INSERT INTO sys_role_pagesource
+      (role_id ,psource_id)
+      VALUES
+      (
+      #{roleId, jdbcType=VARCHAR},
+      #{id, jdbcType=VARCHAR},
+    </insert>
 </mapper>

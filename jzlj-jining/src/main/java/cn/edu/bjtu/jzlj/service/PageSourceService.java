@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.service;
 
 import cn.edu.bjtu.jzlj.dao.CarCompany;
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
@@ -48,4 +49,6 @@ public interface PageSourceService extends IService<PageSource> {
 
      IPage<PageSource> getListByPage(QueryRequest queryRequest, PageSource pageSource );
      List<PageSource> getAllList(QueryRequest queryRequest, PageSource pageSource);
+
+     int insertPsource(PageSource pageSource);
 }

@@ -56,5 +56,20 @@
         </if>
     </select>
 
+    <delete id="deleteByRouteId">
+        DELETE FROM route_info WHERE 1=1
+        <if test="  routeId != null and routeId != '' ">
+            AND route_id = #{routeId}
+        </if>
+    </delete>
 
+    <update id="updateinfo">
+        UPDATE route_info
+        <set>
+            route_name = #{routeName},
+            route_design = #{routeDesign},
+            content = #{content},
+        </set>
+        WHERE route_id = #{routeId};
+    </update>
 </mapper>
