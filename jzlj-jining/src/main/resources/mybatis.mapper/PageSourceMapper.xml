@@ -126,4 +126,16 @@
     <delete id="deleteByPageSource">
         delete from sys_role_pagesource where role_id = #{roleid}
     </delete>
+
+
+    <!--    通过id编辑组织-->
+    <update id="updatePS" parameterType="cn.edu.bjtu.jzlj.dao.PageSource">
+        UPDATE sys_pagesource
+        <set>
+            source = #{source},
+            sourcedesc = #{sourcedesc},
+            bygroup = #{bygroup},
+        </set>
+        WHERE id = #{id};
+    </update>
 </mapper>

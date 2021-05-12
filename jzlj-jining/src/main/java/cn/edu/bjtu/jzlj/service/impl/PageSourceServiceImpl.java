@@ -2,6 +2,7 @@ package cn.edu.bjtu.jzlj.service.impl;
 
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.PageSource;
+import cn.edu.bjtu.jzlj.dao.SysOrganization;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.mapper.PageSourceMapper;
 import cn.edu.bjtu.jzlj.mapper.SysUserMapper;
@@ -182,5 +183,11 @@ public class PageSourceServiceImpl extends ServiceImpl<PageSourceMapper, PageSou
         pageSourceMapper.deleteByPageSource(pageSource);
 
 
+    }
+
+
+    @Override
+    public int updateSP (PageSource pageSource) {
+        return pageSourceMapper.updatePS(pageSource);
     }
 }

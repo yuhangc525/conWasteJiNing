@@ -1,9 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 
-import cn.edu.bjtu.jzlj.dao.CarCompany;
-import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
-import cn.edu.bjtu.jzlj.dao.PageSource;
-import cn.edu.bjtu.jzlj.dao.SysUser;
+import cn.edu.bjtu.jzlj.dao.*;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -53,4 +50,7 @@ public interface PageSourceService extends IService<PageSource> {
      int insertPsource(PageSource pageSource);
 
      void deletePageSource(PageSource pageSource) throws Exception;
+
+     int updateSP (PageSource pageSource);
+
 }

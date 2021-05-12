@@ -271,4 +271,20 @@ public class PageSourceController {
         }
     }
 
+    @ApiOperation(value = "根据id修改信息", httpMethod = "PUT")
+    @PutMapping("/updateSP")
+    @ControllerEndpoint(operation = "修改信息", exceptionMessage = "修改失败")
+    public Resp updateOrgById(@RequestBody PageSource pageSource) {
+        long startTime = System.currentTimeMillis();
+        try {
+            pageSourceService.updateSP(pageSource);
+//            SysOrganization sysOrganization1 = sysOrganizationService.updateOrgById(sysOrganization);
+            LOGGER.info("修改组织成功，用时：" + (System.currentTimeMillis() - startTime) + "ms");
+            return Resp.getInstantiationSuccess("修改组织成功", Resp.STRING, pageSource);
+        } catch (Exception e) {
+            LOGGER.error("修改组织失败，原因：", e.getMessage()+ "，用时" +(System.currentTimeMillis() - startTime) + "ms");
+            return Resp.getInstantiationError("修改失败："+ e.getMessage(),Resp.LIST,null );
+        }
+    }
+
 }

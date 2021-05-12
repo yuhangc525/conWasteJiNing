@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
+import cn.edu.bjtu.jzlj.dao.SysOrganization;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.vo.UserSearchVo;
@@ -60,4 +61,7 @@ public interface PageSourceMapper extends BaseMapper<PageSource> {
     int insertPsource(PageSource pageSource);
 
     void deleteByPageSource(PageSource pageSource);
+
+    int updatePS(PageSource pageSource);
+
 }
