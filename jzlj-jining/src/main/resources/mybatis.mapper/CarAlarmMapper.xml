@@ -40,5 +40,20 @@
 
 
 
+    <update id="handleMCarAlarm">
+        update car_alarm
+        <set>
+            handled = 1,
+            update_user = #{updateUser},
+            update_time = #{updateTime}
+        </set>
+        where id in
+        <foreach collection="id" item="id" index="" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+
 
 </mapper>

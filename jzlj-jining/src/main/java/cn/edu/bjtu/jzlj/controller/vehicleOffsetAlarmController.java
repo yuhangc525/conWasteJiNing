@@ -2,6 +2,7 @@ package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.dao.CarAlarm;
 import cn.edu.bjtu.jzlj.dao.CarRoute;
+import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.dao.PointEntity;
 
 //import com.alibaba.fastjson.JSONArray;
@@ -16,6 +17,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 //import net.sf.json.JSONObject;
 //import net.sf.json.JSONArray;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 
@@ -201,13 +205,14 @@ public class vehicleOffsetAlarmController {
       **/
     @ApiOperation(value = "获取未处理的报警信息", httpMethod = "GET")
     @GetMapping("/getAllUnHandle")
-    public Resp getAllUnHandle(){
+    public Resp getAllUnHandle(@RequestParam(defaultValue = "1") Integer pageNo,
+                               @RequestParam(defaultValue = "10")Integer pageSize){
         long startTime = System.currentTimeMillis();
         try {
-            List<CarAlarm> list = carAlarmService.getAllUnHandle();
+            IPage<CarAlarm> carAlarmIPage = carAlarmService.getAllUnHandle(pageNo,pageSize);
             long endTime = System.currentTimeMillis();
             LOGGER.info("获取未处理的车辆报警信息成功，用时" + (endTime - startTime) + "ms");
-            return Resp.getInstantiationSuccess("获取未处理的车辆报警信息成功", Resp.STRING, list);
+            return Resp.getInstantiationSuccess("获取未处理的车辆报警信息成功", Resp.LIST, carAlarmIPage);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
             LOGGER.error("获取未处理的车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
@@ -243,6 +248,30 @@ public class vehicleOffsetAlarmController {
             return Resp.getInstantiationError("处理车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE, carAlarm);
         }
 
+    }
+
+
+
+    @ApiOperation(value = "根据多个id处理报警信息", httpMethod = "GET")
+    @GetMapping("/handleMCarAlarm")
+    @ResponseBody
+//    @RequestParam(value = "updateTime") Date updateTime
+    public Resp  handleMCarAlarm(@RequestParam(value = "CarAlarmId") List<Integer> id,
+                                 @RequestParam(value = "updateUser") String updateUser
+                                 ){
+        long startTime = System.currentTimeMillis();
+        try {
+            Date updateTime = new Date();
+            carAlarmService.handleMCarAlarm(id, updateUser, updateTime);
+            long endTime =System.currentTimeMillis();
+            LOGGER.info("根据多个id处理报警信息成功，用时：" + (endTime - startTime));
+            return Resp.getInstantiationSuccess("根据多个id处理报警信息成功",Resp.STRING,null);
+        } catch (Exception e){
+            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("根据多个id处理报警信息失败，原因：" + e.getMessage() +",用时:" + (endTime - startTime));
+            return Resp.getInstantiationError("根据多个id处理报警信息失败",Resp.STRING,null);
+        }
     }
 
 
