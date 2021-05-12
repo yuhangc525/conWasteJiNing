@@ -58,4 +58,6 @@ public interface PageSourceMapper extends BaseMapper<PageSource> {
 
 
     int insertPsource(PageSource pageSource);
+
+    void deleteByPageSource(PageSource pageSource);
 }

@@ -6,9 +6,11 @@ import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 
+import cn.edu.bjtu.jzlj.dao.SysOrganization;
 import cn.edu.bjtu.jzlj.dao.SysRolePageSource;
 import cn.edu.bjtu.jzlj.mapper.PageSourceMapper;
 import cn.edu.bjtu.jzlj.mapper.SysRolePageSourceMapper;
+import cn.edu.bjtu.jzlj.service.SysRolePageSourceService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.UuidTool;
 import cn.edu.bjtu.jzlj.util.results.Resp;
@@ -44,6 +46,8 @@ public class PageSourceController {
     private PageSourceService pageSourceService;
     @Autowired
     private SysRolePageSourceMapper sysRolePageSourceMapper;
+//    @Autowired
+//    private SysRolePageSourceService sysRolePageSourceService;
 
 
      /**
@@ -85,7 +89,8 @@ public class PageSourceController {
     @ApiOperation(value = "编辑页面资源", httpMethod = "PUT")
     @PutMapping("/updatepageSource")
 //    @RequiresPermissions(value = ShiroPsPageSourceManager.pagesourceManager_edit)
-    public Resp updatepageSource(@RequestBody PageSource pageSource) {
+    @ControllerEndpoint(operation = "修改信息成功", exceptionMessage = "修改失败")
+    public Resp updatepageSource(PageSource pageSource) {
         long startTime = System.currentTimeMillis();
         try {
             pageSourceService.updatepageSource(pageSource);
@@ -235,8 +240,9 @@ public class PageSourceController {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-//            pageSourceService.insertPsource(pageSource);
-            sysRolePageSourceMapper.insert(new SysRolePageSource(pageSource.getId(), pageSource.getRoleId()));
+            sysRolePageSourceMapper.insertPsource(new SysRolePageSource(pageSource.getRoleId(), pageSource.getId()));
+//            sysRolePageSourceService.insertPsource(new SysRolePageSource(pageSource.getRoleId(), pageSource.getId()));
+//            sysRolePageSourceMapper.insert(new SysRolePageSource(pageSource.getRoleId(), pageSource.getId()));
             long endTime = System.currentTimeMillis();
             LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, null);
@@ -244,6 +250,24 @@ public class PageSourceController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("创建失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationError("创建异常，原因：" + e.getMessage(), Resp.SINGLE, pageSource);
+        }
+    }
+
+
+    @ApiOperation(value = "根据页面Id删除页面", httpMethod = "DELETE")
+    @DeleteMapping("/deleteRolePageSource")
+    public Resp deleteRolePageSource(@RequestBody PageSource pageSource) {
+        long startTime = System.currentTimeMillis();
+        try {
+            sysRolePageSourceMapper.deleteByPageSource(new SysRolePageSource(pageSource.getRoleId(), pageSource.getId()));
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("删除成功，用时:" + (endTime - startTime));
+            return Resp.getInstantiationSuccess("删除成功",Resp.SINGLE,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("删除失败，原因：" + e.getMessage() +",用时:" + (endTime - startTime));
+            return Resp.getInstantiationError("删除失败",Resp.SINGLE,null);
         }
     }
 

@@ -40,7 +40,7 @@
     </insert>
     
     <update id="updatepageSource" parameterType="cn.edu.bjtu.jzlj.dao.PageSource">
-        update sys_pagesource set source = #{source}, sourcedesc = #{sourcedesc}, bygroup = #{bugroup}
+        update sys_pagesource set source = #{source}, sourcedesc = #{sourcedesc}, bygroup = #{bygroup}
         where id = #{id}
     </update>
 
@@ -122,4 +122,8 @@
       #{roleId, jdbcType=VARCHAR},
       #{id, jdbcType=VARCHAR},
     </insert>
+
+    <delete id="deleteByPageSource">
+        delete from sys_role_pagesource where role_id = #{roleid}
+    </delete>
 </mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.bjtu.jzlj.mapper.SysRolePageSourceMapper">
+
+    <delete id="deleteByPageSource">
+        delete from sys_role_pagesource where role_id = #{roleId} and psource_id = #{PsourceId}
+    </delete>
+
+<!--    <insert id="insertPsource">-->
+<!--        INSERT INTO sys_role_pagesource-->
+<!--      (role_id ,psource_id)-->
+<!--      VALUES-->
+<!--      (-->
+<!--      #{roleId, jdbcType=VARCHAR},-->
+<!--      #{id, jdbcType=VARCHAR},-->
+<!--    </insert>-->
+
+    <insert id="insertPsource">
+        INSERT INTO sys_role_pagesource
+      VALUES
+      <foreach collection="PsourceIds" item="PsourceId" separator=",">
+      (
+      #{roleId},
+      #{PsourceId},
+      </foreach>
+    </insert>
+
+    <delete id="delByRoleIdJoinPsourceIdList">
+        DELETE FROM sys_role_pagesource WHERE role_id = #{roleId} and
+        psource_id IN(
+        <foreach collection="pSourceIdList" item="pSourceId" separator=",">
+            #{pSourceId}
+        </foreach>
+        )
+    </delete>
+
+    <!--删除对应roleID下所有的关联关系-->
+    <delete id="delByRoleId">
+        DELETE FROM sys_role_pagesource WHERE role_id = #{roleId}
+    </delete>
+
+    <!--为指定角色批量关联-->
+    <insert id="addByyRoleIdJoinPsourceIdList">
+        INSERT INTO sys_role_pagesource
+        VALUES
+        <foreach collection="pSourceIdList" item="pSourceId" separator=",">
+            (#{roleId},#{pSourceId})
+        </foreach>
+    </insert>
+</mapper>

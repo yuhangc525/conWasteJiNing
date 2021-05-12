@@ -158,7 +158,29 @@ public class PageSourceServiceImpl extends ServiceImpl<PageSourceMapper, PageSou
 
     @Override
     public int insertPsource(PageSource pageSource){
-        return pageSourceMapper.insertPsource(pageSource);
+//        List list = null;
+//        list.add(pageSource.getId());
+//        PageSource pageSource1;
+//        for(int i=0; i<pageSource.getId().length(); i++){
+//            pageSource.getId().
+//        }
+        int id = 0;
+        String[] splitId = pageSource.getId().split(",");
+        for(int i=0; i<pageSource.getId().length(); i++){
+            PageSource ps = new PageSource();
+            ps.setId(splitId[i]);
+            ps.setRoleId(pageSource.getRoleId());
+            pageSourceMapper.insertPsource(ps);
+        }
+        return id;
+//        return pageSourceMapper.insertPsource(pageSource);
     }
 
+    @Override
+    public void deletePageSource(PageSource pageSource) throws Exception {
+
+        pageSourceMapper.deleteByPageSource(pageSource);
+
+
+    }
 }

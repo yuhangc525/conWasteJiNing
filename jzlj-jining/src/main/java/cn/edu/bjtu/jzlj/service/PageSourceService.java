@@ -51,4 +51,6 @@ public interface PageSourceService extends IService<PageSource> {
      List<PageSource> getAllList(QueryRequest queryRequest, PageSource pageSource);
 
      int insertPsource(PageSource pageSource);
+
+     void deletePageSource(PageSource pageSource) throws Exception;
 }
