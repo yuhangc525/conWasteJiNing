@@ -116,4 +116,10 @@ public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> impl
     }
 
 
+    @Override
+    public String getCarNoByTerminalId(String TerminalId) {
+        return carInfoMapper.getCarNoByTerminalId(TerminalId);
+    }
+
+
 }

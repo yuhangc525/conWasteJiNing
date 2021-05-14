@@ -27,6 +27,10 @@
         SELECT terminal_id FROM `car_info` WHERE car_no=#{carNo}
     </select>
 
+    <select id="getCarNoByTerminalId" resultType="String">
+        SELECT car_no FROM `car_info` WHERE terminal_id=#{terminalId}
+    </select>
+
     <select id="getListByPage"  resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
         SELECT * FROM car_info WHERE 1=1
         <if test = "_parameter.containsKey('inputName') and inputName!= null">

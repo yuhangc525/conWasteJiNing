@@ -29,4 +29,6 @@ public interface CarInfoMapper extends BaseMapper<CarInfo> {
 
 
     String getTerminalIdByCarNo(String carNo);
+
+    String getCarNoByTerminalId(String terminalId);
 }
