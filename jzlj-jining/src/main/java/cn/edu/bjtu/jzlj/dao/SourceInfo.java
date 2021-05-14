@@ -32,6 +32,7 @@ public class SourceInfo implements Serializable{
     private String qmDeptNo;
     private String sourceType;
     private Float wasteTotal;
+    @JsonFormat( timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startDate;
     private String adminUnit;
     private String adminLegalName;
