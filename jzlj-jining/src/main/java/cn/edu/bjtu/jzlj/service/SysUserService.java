@@ -170,4 +170,8 @@ public interface SysUserService extends IService<SysUser> {
       * @throws:
       **/
     void resetPW(String id, String password, String updateUser, Date updateTime) throws Exception;
+
+    SysUser findUserByUname(String uname) throws Exception;
+
+    void updatePwd(SysUser sysUser, String oldPwd, String newPwd, String updateUser, Date updateTime) throws Exception;
 }

@@ -97,6 +97,7 @@ public class Subscriber extends JedisPubSub {
 
 //            String terminalIdKey = "14268527765" + "-key";
             String terminalIdKey = terminalId + "-key";
+            String terminalRouteKey = terminalId + "-route";
 
             //获取车辆的经纬度坐标
             double lat = carRealTime_msg.getDouble("lat");
@@ -107,7 +108,7 @@ public class Subscriber extends JedisPubSub {
             PointEntity pointEntity = new PointEntity();
 
             //获取车辆相应的路线列表
-//            14268527702 这两车对应‘路线B’
+//            14268527702 这车对应‘路线B’
             List<CarRoute> routeList = carRouteService.getRouteListByTerminalId("14268527702");;
 
             if (routeList.size() == 0 || routeList == null){
@@ -119,7 +120,8 @@ public class Subscriber extends JedisPubSub {
                 pointEntity.setPointLatitude(lat);
                 //onRoad  记录车辆是否偏移了路线，0表示偏移了，大于0说明没有偏移
                 int onRoad = 0;
-                int offsetRouteId = -1;
+                int onRouteId = -1;
+                int offRouteId = -1;
                 for (CarRoute routeId : routeList ) {
                     int oneRoadId = routeId.getRouteId();
                     //获取路线信息
@@ -129,8 +131,16 @@ public class Subscriber extends JedisPubSub {
                     }
                     String roadAddress = routeInfo.getLngLat();
                     onRoad += pointIfOffsetRoad(roadAddress, pointEntity);
+                    //车在路线上，记录下路线的id,跳出循环
+//                    if (onRoad > 0) {
+//                        onRouteId = oneRoadId;
+//                        redisConfig.set(terminalRouteKey, onRouteId);
+//                        System.out.println("存入当前所在路线上的路线id");
+//                        break;
+//                    }
+                    //偏移了路线，记下路线
                     if (onRoad == 0) {
-                        offsetRouteId = oneRoadId;
+                       offRouteId = oneRoadId;
                     }
                 };
                 //onRoad > 0 说明车辆没有偏移路线
@@ -156,16 +166,21 @@ public class Subscriber extends JedisPubSub {
                     }
                     System.out.println("车辆："+ terminalId +"上一次的状态是：" + lastOffsetState);
                     System.out.println("车辆："+ terminalId +"这一次的状态是：" + curOffsetState);
-                    //车辆由不偏变成偏，报警
-                    if (lastOffsetState != null && "NoOffset".equals(lastOffsetState) && "offset".equals(curOffsetState)){
+                    //车辆由不偏变成偏，报警，拿出存在redis里面的onRouteId
+//                    int offsetRouteId =(int) redisConfig.get(terminalRouteKey);
+//                    System.out.println("oooooooooooooo" + offsetRouteId);
+
+                    if (lastOffsetState != null &&
+                            "NoOffset".equals(lastOffsetState) &&
+                            "offset".equals(curOffsetState)){
                         System.out.println("车辆报警!!!");
 
                         CarAlarm carAlarm = new CarAlarm();
                         carAlarm.setHandled(0);
                         System.out.println("carNNNNNNNNN" + carNo);
                         carAlarm.setCarNo(carNo);
-                        System.out.println("idDDDDDDDDDD" + offsetRouteId);
-                        carAlarm.setRouteId(offsetRouteId);
+                        System.out.println("idDDDDDDDDDD" + offRouteId);
+                        carAlarm.setRouteId(offRouteId);
                         carAlarm.setLatitude(lat);
                         carAlarm.setLongitude(lon);
                         carAlarm.setTerminalId(terminalId);

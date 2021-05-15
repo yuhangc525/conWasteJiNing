@@ -647,7 +647,8 @@ public class SysUserController {
                 return Resp.getInstantiationError("当前用户被删除", Resp.STRING, null);
             }
 //            ？？？重置密码是否检验旧密码？？？
-            sysUserService.resetPW(sysUser.getId(), password, getUpdateUserInfo(), new Date());
+            String md5Pwd = ShiroUtils.getMd5Pwd(password);
+            sysUserService.resetPW(sysUser.getId(), md5Pwd, getUpdateUserInfo(), new Date());
             LOGGER.info("密码重置成功，用时：" + (System.currentTimeMillis() - startTime) + "ms");
             return Resp.getInstantiationSuccess("密码重置成功", Resp.STRING, null);
         } catch (Exception e) {
@@ -656,6 +657,54 @@ public class SysUserController {
             return Resp.getInstantiationError("密码重置失败", Resp.STRING, null);
         }
     }
+
+
+
+
+    @ApiOperation(value = "修改密码", httpMethod = "GET")
+    @GetMapping("/updatePwd/{uname}/{oldPwd}/{newPwd}")
+    public Resp updatePwd(@PathVariable String uname, @PathVariable String oldPwd, @PathVariable String newPwd) {
+        long time = System.currentTimeMillis();
+        //查询当前用户
+        if (uname == null || "".equals(uname)) {
+            LOGGER.error("用户信息获取失败，用时：" + (System.currentTimeMillis() - time));
+            return Resp.getInstantiationError("用户信息获取失败", Resp.STRING, null);
+        }
+        try {
+
+            //查询当前用户
+            SysUser sysUser = sysUserService.findUserByUname(uname);
+
+
+            //当前用户是否存在
+            if (sysUser == null) {
+                LOGGER.error("当前用户不存在，用时：" + (System.currentTimeMillis() - time));
+                return Resp.getInstantiationError("当前用户不存在", Resp.STRING, null);
+            }
+
+            //判断前端传输的新旧密码是否合法
+            if (oldPwd == null || "".equals(oldPwd) || newPwd == null || "".equals(newPwd)) {
+                LOGGER.error("用户信息获取失败，用时：" + (System.currentTimeMillis() - time));
+                return Resp.getInstantiationError("用户信息获取失败", Resp.STRING, null);
+            }
+
+            //匹配密码的正则表达式
+            String pattern = "\\S{6,}";
+            if (!newPwd.matches(pattern)) {
+                LOGGER.error("密码应为6为以上任意字符，用时：" + (System.currentTimeMillis() - time));
+                return Resp.getInstantiationError("密码应为6为以上任意字符", Resp.STRING, null);
+            }
+            sysUserService.updatePwd(sysUser, oldPwd, newPwd, getUpdateUserInfo(), new Date());
+            LOGGER.info("密码修改成功，用时：" + (System.currentTimeMillis() - time));
+            return Resp.getInstantiationSuccess("密码修改成功", Resp.STRING, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error("密码修改失败，异常：" + e.getMessage() + ",用时：" + (System.currentTimeMillis() - time));
+            return Resp.getInstantiationError("密码修改失败", Resp.STRING, null);
+        }
+    }
+
+
 
 
 
