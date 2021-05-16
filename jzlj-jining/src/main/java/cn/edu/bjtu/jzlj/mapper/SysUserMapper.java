@@ -206,6 +206,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
       **/
     void resetPW(@Param("id") String id, @Param("password") String password, @Param("updateUser") String update_user, @Param("updateTime") Date update_time);
 
+    void updatePwd(@Param("password")String md5Pwd, @Param("id")String id,@Param("updateUser") String updateUser,@Param("updateTime") Date updateTime);
 
+    SysUser findUserByUname(String uname);
 }
 

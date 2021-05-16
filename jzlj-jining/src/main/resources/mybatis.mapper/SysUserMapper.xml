@@ -124,6 +124,22 @@
 
     </select>
 
+
+    <!--根据Uname查询用户-->
+    <select id="findUserByUname" resultType="cn.edu.bjtu.jzlj.dao.SysUser">
+        select u.id,u.username,u.password,u.mobile,u.organization,
+        u.status,u.create_user,u.create_time,u.update_user,u.update_time,u.remark,r.id
+        as roleId,r.role_name,o.id AS orgId,o.organization_name
+        from sys_user u
+        left join sys_user_role ur on ur.user_id=u.id
+        left join sys_role r on ur.role_id=r.id
+        LEFT JOIN sys_organization_user ou ON ou.userid=u.id
+        LEFT JOIN sys_organization o ON ou.orgid=o.id
+        where 1=1
+        <if test="_parameter != null and _parameter != ''">and u.username = #{uname}</if>
+        AND u.status != 2
+    </select>
+
 <!--    <update id="updateUserById" parameterType="cn.edu.bjtu.jzlj.dao.SysUser">-->
 <!--        UPDATE sys_user-->
 <!--        <set>-->
@@ -286,6 +302,12 @@
     <update id="resetPW">
       UPDATE sys_user
       SET password = #{password},update_user = #{updateUser}, update_time = #{updateTime}
+      WHERE id = #{id}
+    </update>
+
+    <update id="updatePwd">
+      UPDATE sys_user SET password = #{password},
+      update_user = #{updateUser},update_time = #{updateTime}
       WHERE id = #{id}
     </update>
 

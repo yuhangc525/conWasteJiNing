@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
+import cn.edu.bjtu.jzlj.config.shiro.ShiroUtils;
 import cn.edu.bjtu.jzlj.dao.SysUser;
 import cn.edu.bjtu.jzlj.dao.SysUserRole;
 import cn.edu.bjtu.jzlj.dao.SysOrganizationUser;
@@ -347,6 +348,44 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
             sysUserMapper.resetPW(id, password, updateUser, updateTime);
         }
+
+
+    @Override
+    public void updatePwd(SysUser user, String oldPwd, String newPwd, String updateUser, Date updateTime) throws Exception {
+        if (user == null || oldPwd == null || "".equals(oldPwd) || newPwd == null || "".equals(newPwd)) {
+            throw new Exception("用户信息获取失败");
+        }
+
+        // 判断原密码是否与数据库中密码相同
+        if (!user.getPassword().equals(ShiroUtils.getMd5Pwd(oldPwd))) {
+            throw new Exception("旧密码输入有误");
+        }
+
+        // 判断修改后的密码时候与原密码相同
+        if (user.getPassword().equals(ShiroUtils.getMd5Pwd(newPwd))) {
+            throw new Exception("新旧密码一致");
+        }
+
+        // 新密码加密后修改密码
+        sysUserMapper.updatePwd(ShiroUtils.getMd5Pwd(newPwd), user.getId(), updateUser, updateTime);
+    }
+
+
+    @Override
+    public SysUser findUserByUname(String uname) throws Exception {
+        if (uname == null || "".equals(uname)) {
+            throw new Exception("用户信息获取失败");
+        }
+        SysUser user = sysUserMapper.findUserByUname(uname);
+        // 当前用户名无效
+        if (user == null) {
+            throw new Exception("该用户不存在");
+        }
+        return user;
+    }
+
+
+
 
 
          /**

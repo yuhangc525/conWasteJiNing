@@ -31,6 +31,10 @@ public class CarAlarm implements Serializable{
 
     private String terminalId;
 
+    private String carNo;
+
+    private Integer routeId;
+
     private Double latitude;
 
     private Double longitude;

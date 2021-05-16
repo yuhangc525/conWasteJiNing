@@ -38,4 +38,6 @@ public interface CarInfoService extends IService<CarInfo> {
     int changeReview(String carId, Integer reviewStatus);
 
     String getTerminalIdByCarNo(String carNo);
+
+    String getCarNoByTerminalId(String TerminalId);
 }

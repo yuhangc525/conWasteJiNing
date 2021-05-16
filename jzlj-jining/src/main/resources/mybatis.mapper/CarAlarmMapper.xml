@@ -22,9 +22,9 @@
 
     <insert id="insertCarAlarmInfo">
         INSERT into car_alarm
-        (id, terminal_id, latitude, longitude, handled, update_user, update_time)
+        (id, terminal_id, car_no, route_id, latitude, longitude, handled, update_user, update_time)
         VALUES
-        (#{id},#{terminalId},#{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
+        (#{id},#{terminalId}, #{carNo}, #{routeId},  #{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
     </insert>
 
     <update id="handleCarAlarm" parameterType="cn.edu.bjtu.jzlj.dao.CarAlarm">
