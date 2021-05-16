@@ -17,7 +17,10 @@
 
     <!--    根据terminal_id查询路线列表-->
     <select id="getAllUnHandle" resultType="cn.edu.bjtu.jzlj.dao.CarAlarm">
-    SELECT * FROM car_alarm WHERE handled = 0
+        SELECT ca.* , c.car_no
+        FROM car_alarm ca left join car_info c
+        on ca.terminal_id = c.terminal_id
+        WHERE ca.handled = 0
     </select>
 
     <insert id="insertCarAlarmInfo">
