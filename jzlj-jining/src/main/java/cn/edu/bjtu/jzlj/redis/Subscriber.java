@@ -109,7 +109,7 @@ public class Subscriber extends JedisPubSub {
 
             //获取车辆相应的路线列表
 //            14268527702 这车对应‘路线B’
-            List<CarRoute> routeList = carRouteService.getRouteListByTerminalId("14268527702");;
+            List<CarRoute> routeList = carRouteService.getRouteListByTerminalId(terminalId);
 
             if (routeList.size() == 0 || routeList == null){
                 LOGGER.info("车辆终端id为: " + terminalId + "的车辆没有对应的路线！");
@@ -131,10 +131,10 @@ public class Subscriber extends JedisPubSub {
                     }
                     String roadAddress = routeInfo.getLngLat();
                     onRoad += pointIfOffsetRoad(roadAddress, pointEntity);
-                    //车在路线上，记录下路线的id,跳出循环
+//                    车在路线上，记录下路线的id,跳出循环
 //                    if (onRoad > 0) {
 //                        onRouteId = oneRoadId;
-//                        redisConfig.set(terminalRouteKey, onRouteId);
+//                        redisConfig.set(terminalIdKey, "NoOffset" + "-" + onRouteId);
 //                        System.out.println("存入当前所在路线上的路线id");
 //                        break;
 //                    }
@@ -146,7 +146,6 @@ public class Subscriber extends JedisPubSub {
                 //onRoad > 0 说明车辆没有偏移路线
                 if (onRoad > 0){
                     System.out.println("车辆没有偏移路线");
-
 
                     String lastOffsetState = (String) redisConfig.get(terminalIdKey);
                     if (lastOffsetState != null && (!"NoOffset".equals(lastOffsetState) || !"offset".equals(lastOffsetState))){
@@ -160,15 +159,15 @@ public class Subscriber extends JedisPubSub {
                     System.out.println("车辆偏移le路线");
 
                     String curOffsetState = "offset";
-                    String  lastOffsetState = (String) redisConfig.get(terminalIdKey);
+                    String  lastOffsetState  = (String) redisConfig.get(terminalIdKey);
                     if (lastOffsetState != null && !"NoOffset".equals(lastOffsetState) && !"offset".equals(lastOffsetState)){
                         redisConfig.remove(terminalIdKey);
                     }
                     System.out.println("车辆："+ terminalId +"上一次的状态是：" + lastOffsetState);
                     System.out.println("车辆："+ terminalId +"这一次的状态是：" + curOffsetState);
                     //车辆由不偏变成偏，报警，拿出存在redis里面的onRouteId
-//                    int offsetRouteId =(int) redisConfig.get(terminalRouteKey);
-//                    System.out.println("oooooooooooooo" + offsetRouteId);
+
+                    System.out.println("oooooooooooooo" + offRouteId);
 
                     if (lastOffsetState != null &&
                             "NoOffset".equals(lastOffsetState) &&
@@ -177,7 +176,7 @@ public class Subscriber extends JedisPubSub {
 
                         CarAlarm carAlarm = new CarAlarm();
                         carAlarm.setHandled(0);
-                        System.out.println("carNNNNNNNNN" + carNo);
+//                        System.out.println("carNNNNNNNNN" + carNo);
                         carAlarm.setCarNo(carNo);
                         System.out.println("idDDDDDDDDDD" + offRouteId);
                         carAlarm.setRouteId(offRouteId);
@@ -190,8 +189,6 @@ public class Subscriber extends JedisPubSub {
 
                     }
                     redisConfig.set(terminalIdKey, curOffsetState);
-
-
 
 
                 }
@@ -228,7 +225,7 @@ public class Subscriber extends JedisPubSub {
     public int pointIfOffsetRoad(String s, PointEntity pointEntity) {
         try{
             //设定’圆的半径‘，超过说明暂时偏离了路线
-            double setMAx = 200;
+            double setMAx = 150;
 
 //            s = this.s;
             if (s == null){
@@ -246,12 +243,6 @@ public class Subscriber extends JedisPubSub {
                 double wgs84lat = ((BigDecimal)((JSONArray)pointSet.get(i)).get(1)).doubleValue();
                 double wgs84lng = ((BigDecimal)((JSONArray)pointSet.get(i)).get(0)).doubleValue();
 
-                //路径点的百度坐标转化为gcj02坐标（车辆位置时gcj02坐标）
-//                Gps roadPoint = PositionTransformationUtil.bd09_To_Gcj02(BDlat,BDlng);
-//                roadPoint.getWgLat(), roadPoint.getWgLon()
-//                System.out.println(i + "点经度：" + roadPoint.getWgLon());
-//                System.out.println(i + "点纬度：" + roadPoint.getWgLat());
-                //计算车辆位置点和路径上点的距离
                 double res = GetDistance.getDistance(pointEntity.getPointLatitude(), pointEntity.getPointLongitude(), wgs84lat, wgs84lng);
 //                System.out.println("距离" + i + " : " + res);
                 //有一个点满足在半径之内就算没有偏移

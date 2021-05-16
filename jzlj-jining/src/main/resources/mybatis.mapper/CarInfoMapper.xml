@@ -28,7 +28,7 @@
     </select>
 
     <select id="getCarNoByTerminalId" resultType="String">
-        SELECT car_no FROM `car_info` WHERE terminal_id=#{terminalId}
+        SELECT car_no FROM `car_info` WHERE terminal_id=#{terminalId} LIMIT 1
     </select>
 
     <select id="getListByPage"  resultType="cn.edu.bjtu.jzlj.dao.CarInfo">

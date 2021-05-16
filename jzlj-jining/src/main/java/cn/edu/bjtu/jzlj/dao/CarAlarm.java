@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.dao;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class CarAlarm implements Serializable{
 
     private String terminalId;
 
+    @TableField(exist = false)
     private String carNo;
 
     private Integer routeId;
