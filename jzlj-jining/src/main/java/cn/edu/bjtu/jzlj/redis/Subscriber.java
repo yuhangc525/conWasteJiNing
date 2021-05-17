@@ -71,7 +71,7 @@ public class Subscriber extends JedisPubSub {
     public void onMessage(String channel, String message) {
 //        System.out.println(String.format("receive redis published message, channel %s, message %s", channel, message));
         try {
-            giveAnAlarm(message);
+            giveAnAlarm1(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,7 +90,6 @@ public class Subscriber extends JedisPubSub {
         if (acc == 1 && position == 1){
             System.out.println(message);
             String terminalId = carRealTime_msg.getString("terminalId");
-            String carNo = carInfoService.getCarNoByTerminalId(terminalId);
             Long updateTime = carRealTime_msg.getLong("uptime");
             Date date = new Date();
             date.setTime(updateTime);
@@ -176,8 +175,6 @@ public class Subscriber extends JedisPubSub {
 
                         CarAlarm carAlarm = new CarAlarm();
                         carAlarm.setHandled(0);
-//                        System.out.println("carNNNNNNNNN" + carNo);
-                        carAlarm.setCarNo(carNo);
                         System.out.println("idDDDDDDDDDD" + offRouteId);
                         carAlarm.setRouteId(offRouteId);
                         carAlarm.setLatitude(lat);
@@ -199,6 +196,115 @@ public class Subscriber extends JedisPubSub {
 
     }
 
+
+
+
+
+
+    public void giveAnAlarm1 (String message) throws Exception {
+
+        // 将字符串转换成json格式
+        JSONObject carRealTime_msg = JSONObject.parseObject(message);
+        Integer acc =  carRealTime_msg.getInteger("acc");
+        Integer position = carRealTime_msg.getInteger("position");
+        //只处理处于开火状态的车辆
+        if (acc == 1 && position == 1){
+            System.out.println(message);
+            String terminalId = carRealTime_msg.getString("terminalId");
+            Long updateTime = carRealTime_msg.getLong("uptime");
+            Date date = new Date();
+            date.setTime(updateTime);
+
+            String terminalIdKey = terminalId + "-key";
+            String terminalRouteKey = terminalId + "-route";
+
+            //获取车辆的经纬度坐标
+            double lat = carRealTime_msg.getDouble("lat");
+            double lon = carRealTime_msg.getDouble("lon");
+
+            PointEntity pointEntity = new PointEntity();
+
+            //获取车辆相应的路线列表
+//            14268527702 这车对应‘路线B’
+            /**
+             * 注意这里：为了让所有车辆都有路线，设置了根据确定的terminalId（14268527702）查询路线
+             * 上传到服务器时要改回来。
+             */
+            List<CarRoute> routeList = carRouteService.getRouteListByTerminalId(terminalId);
+
+            if (routeList.size() == 0 || routeList == null){
+                LOGGER.info("车辆终端id为: " + terminalId + "的车辆没有对应的路线！");
+//                System.out.println("车辆终端id为：" + terminalId + "的车辆没有对应的路线！");
+            } else {
+                //车辆实时位置点信息
+                pointEntity.setPointLongitude(lon);
+                pointEntity.setPointLatitude(lat);
+                //onRoad  记录车辆是否偏移了路线，0表示偏移了，大于0说明没有偏移
+                int onRoad = 0;
+
+                for (CarRoute routeId : routeList ) {
+                    int oneRoadId = routeId.getRouteId();
+                    //获取路线信息
+                    RouteInfo routeInfo = routeInfoService.getOneRouteInfoByRouteId(oneRoadId);
+                    if (routeInfo == null) {
+                        throw new Exception("路线id为：" + oneRoadId + "的路线不存在");
+                    }
+                    String roadAddress = routeInfo.getLngLat();
+                    onRoad += pointIfOffsetRoad(roadAddress, pointEntity);
+//                    车在路线上，记录下路线的id,跳出循环
+                    if (onRoad > 0) {
+                        redisConfig.set(terminalRouteKey, "" + oneRoadId);
+                        System.out.println("存入当前所在路线上的路线id");
+                        break;
+                    }
+                    //偏移了路线，记下路线
+//                    if (onRoad == 0) {
+//                        offRouteId = oneRoadId;
+//                    }
+                };
+                //onRoad > 0 说明车辆没有偏移路线
+                if (onRoad > 0){
+                    System.out.println("车辆没有偏移路线");
+                    LOGGER.info("终端id为 " + terminalId + "的车辆没有偏移所属路线。");
+                    String curOffsetState = "NoOffset";
+                    redisConfig.set(terminalIdKey, curOffsetState);
+
+                }else {
+                    System.out.println("车辆偏移le路线");
+                    LOGGER.info("终端id为 " + terminalId + "的车辆偏移了所属路线。");
+                    String curOffsetState = "offset";
+                    String  lastOffsetState  = (String) redisConfig.get(terminalIdKey);
+                    System.out.println("车辆："+ terminalId +"上一次的状态是：" + lastOffsetState);
+                    System.out.println("车辆："+ terminalId +"这一次的状态是：" + curOffsetState);
+                    //车辆由不偏变成偏，报警，拿出存在redis里面的onRouteId
+                    if (lastOffsetState != null &&
+                            "NoOffset".equals(lastOffsetState) &&
+                            "offset".equals(curOffsetState)){
+                        System.out.println("车辆报警!!!");
+
+                        int lastOnRouteId = (int) redisConfig.get(terminalRouteKey);
+
+                        CarAlarm carAlarm = new CarAlarm();
+                        carAlarm.setHandled(0);
+                        System.out.println("idDDDDDDDDDD" + lastOnRouteId);
+                        carAlarm.setRouteId(lastOnRouteId);
+                        carAlarm.setLatitude(lat);
+                        carAlarm.setLongitude(lon);
+                        carAlarm.setTerminalId(terminalId);
+                        carAlarm.setUpdateTime(date);
+
+                        carAlarmService.insertCarAlarmInfo(carAlarm);
+
+                    }
+                    redisConfig.set(terminalIdKey, curOffsetState);
+
+                }
+            }
+
+
+        }
+
+    }
 
 
 
