@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.tools.jconsole.CreateMBeanDialog;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -224,7 +225,34 @@ public class vehicleOffsetAlarmController {
 
      /**
       * @Author: 田英杰
-      * @Description: 处理报警信息，也就是改变handle的状态
+      * @Description: 获取处理完毕的报警信息
+      * @Date 2021/5/17 14:40
+      * @Param  * @param null
+      * @return
+      * @throws:
+      **/
+    @ApiOperation(value = "获取已处理的报警信息", httpMethod = "GET")
+    @GetMapping("/getAllHandled")
+    public Resp getAllHandled(@RequestParam(defaultValue = "1") Integer pageNo,
+                               @RequestParam(defaultValue = "10")Integer pageSize){
+        long startTime = System.currentTimeMillis();
+        try {
+            IPage<CarAlarm> carAlarmIPage = carAlarmService.getAllHandled(pageNo,pageSize);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("获取已处理的车辆报警信息成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("获取已处理的车辆报警信息成功", Resp.LIST, carAlarmIPage);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("获取已处理的车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("获取已处理的车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE,null);
+        }
+
+    }
+
+
+     /**
+      * @Author: 田英杰
+      * @Description: 处理报警信息，也就是改变handle的状态，同时修改status（正常报警还是误报）和备注信息
       * @Date 2021/4/29 17:14
       * @Param  * @param null
       * @return
@@ -232,20 +260,21 @@ public class vehicleOffsetAlarmController {
       **/
     @ApiOperation(value = "处理报警信息", httpMethod = "POST")
     @PostMapping("/handleCarAlarm")
-    public Resp handleCarAlarm(CarAlarm carAlarm){
+    public Resp handleCarAlarm(@RequestParam(value = "CarAlarmId") Integer id,
+                               @RequestParam(value = "updateUser") String updateUser,
+                               @RequestParam(value = "status") Integer status,
+                               @RequestParam(value = "remarks") String remarks){
         long startTime = System.currentTimeMillis();
-        if (null == carAlarm) {
-            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
-        }
+        Date updateTime = new Date();
         try {
-            carAlarmService.handleCarAlarm(carAlarm);
+            carAlarmService.handleCarAlarm(id, updateUser, updateTime, status, remarks);
             long endTime = System.currentTimeMillis();
             LOGGER.info("处理车辆报警信息成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("处理车辆报警信息成功", Resp.STRING, null);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
             LOGGER.error("处理车辆报警信息失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
-            return Resp.getInstantiationError("处理车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE, carAlarm);
+            return Resp.getInstantiationError("处理车辆报警信息异常，原因：" + e.getMessage(), Resp.SINGLE, null);
         }
 
     }
@@ -257,12 +286,14 @@ public class vehicleOffsetAlarmController {
     @ResponseBody
 //    @RequestParam(value = "updateTime") Date updateTime
     public Resp  handleMCarAlarm(@RequestParam(value = "CarAlarmId") List<Integer> id,
-                                 @RequestParam(value = "updateUser") String updateUser
+                                 @RequestParam(value = "updateUser") String updateUser,
+                                 @RequestParam(value = "status") Integer status,
+                                 @RequestParam(value = "remarks") String remarks
                                  ){
         long startTime = System.currentTimeMillis();
         try {
             Date updateTime = new Date();
-            carAlarmService.handleMCarAlarm(id, updateUser, updateTime);
+            carAlarmService.handleMCarAlarm(id, updateUser, updateTime, status, remarks);
             long endTime =System.currentTimeMillis();
             LOGGER.info("根据多个id处理报警信息成功，用时：" + (endTime - startTime));
             return Resp.getInstantiationSuccess("根据多个id处理报警信息成功",Resp.STRING,null);

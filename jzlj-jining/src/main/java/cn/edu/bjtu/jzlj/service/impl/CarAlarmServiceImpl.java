@@ -35,18 +35,31 @@ public class CarAlarmServiceImpl extends ServiceImpl<CarAlarmMapper, CarAlarm> i
         return pageBean;
     }
 
-
     @Override
-    public int handleCarAlarm(CarAlarm carAlarm){
-        int a = carAlarmMapper.handleCarAlarm(carAlarm);
-        return a;
+    public IPage<CarAlarm> getAllHandled(Integer pageNo, Integer pageSize){
+        Page<CarAlarm> pageBean = new Page<>(pageNo, pageSize);
+        List<CarAlarm> carAlarmList = carAlarmMapper.getAllHandled(pageBean);
+        pageBean.setRecords(carAlarmList);
+        return pageBean;
     }
 
+
     @Override
-    public void handleMCarAlarm(List<Integer> id, String updateUser, Date updateTime) throws Exception {
+    public void handleCarAlarm(Integer id, String updateUser, Date updateTime,
+                               Integer status, String remarks) throws Exception {
         if (null == id){
             throw new Exception("报警信息主键为空");
         }
-        carAlarmMapper.handleMCarAlarm(id, updateUser, updateTime);
+        carAlarmMapper.handleCarAlarm(id, updateUser, updateTime, status,remarks);
+
+    }
+
+    @Override
+    public void handleMCarAlarm(List<Integer> id, String updateUser, Date updateTime,
+                                Integer status, String remarks) throws Exception {
+        if (null == id){
+            throw new Exception("报警信息主键为空");
+        }
+        carAlarmMapper.handleMCarAlarm(id, updateUser, updateTime, status,remarks);
     }
 }
