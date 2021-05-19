@@ -43,6 +43,10 @@ public class CarAlarm implements Serializable{
 
     private Integer handled;
 
+    private Integer status;
+
+    private String remarks;
+
     private String updateUser;
 
     private Date updateTime;

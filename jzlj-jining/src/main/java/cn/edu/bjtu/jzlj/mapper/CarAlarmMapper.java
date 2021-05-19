@@ -28,9 +28,19 @@ public interface CarAlarmMapper extends BaseMapper<CarAlarm> {
 
     List<CarAlarm> getAllUnHandle (Page<CarAlarm> pageBean);
 
-    int handleCarAlarm(CarAlarm carAlarm);
+    List<CarAlarm> getAllHandled (Page<CarAlarm> pageBean);
 
-    void handleMCarAlarm(@Param("id") List<Integer> id, @Param("updateUser") String updateUser, @Param("updateTime") Date updateTime);
+    void handleCarAlarm(@Param("id") Integer id,
+                        @Param("updateUser") String updateUser,
+                        @Param("updateTime") Date updateTime,
+                        @Param("status") Integer status,
+                        @Param("remarks") String remarks);
+
+    void handleMCarAlarm(@Param("id") List<Integer> id,
+                         @Param("updateUser") String updateUser,
+                         @Param("updateTime") Date updateTime,
+                         @Param("status") Integer status,
+                         @Param("remarks") String remarks);
 
 
 }

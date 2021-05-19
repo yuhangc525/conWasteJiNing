@@ -14,7 +14,10 @@ public interface CarAlarmService extends IService<CarAlarm> {
 
     IPage<CarAlarm> getAllUnHandle(Integer pageNo, Integer pageSize);
 
-    int handleCarAlarm(CarAlarm carAlarm);
+    IPage<CarAlarm> getAllHandled(Integer pageNo, Integer pageSize);
 
-    void handleMCarAlarm(List<Integer> id, String updateUser, Date updateTime) throws Exception;
+    void handleCarAlarm(Integer id, String updateUser, Date updateTime,
+                        Integer status, String remarks) throws Exception;
+
+    void handleMCarAlarm(List<Integer> id, String updateUser, Date updateTime,Integer status, String remarks) throws Exception;
 }

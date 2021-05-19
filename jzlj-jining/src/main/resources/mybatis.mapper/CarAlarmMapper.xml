@@ -14,15 +14,22 @@
     </resultMap>
 
 
-
-    <!--    根据terminal_id查询路线列表-->
+    <!-- 查询未处理的报警信息-->
     <select id="getAllUnHandle" resultType="cn.edu.bjtu.jzlj.dao.CarAlarm">
         SELECT ca.* , c.car_no
         FROM car_alarm ca left join car_info c
         on ca.terminal_id = c.terminal_id
         WHERE ca.handled = 0
     </select>
+    <!--    查询已处理的报警信息-->
+    <select id="getAllHandled" resultType="cn.edu.bjtu.jzlj.dao.CarAlarm">
+        SELECT ca.* , c.car_no
+        FROM car_alarm ca left join car_info c
+        on ca.terminal_id = c.terminal_id
+        WHERE ca.handled = 1
+    </select>
 
+<!--    新增报警信息-->
     <insert id="insertCarAlarmInfo">
         INSERT into car_alarm
         (id, terminal_id, car_no, route_id, latitude, longitude, handled, update_user, update_time)
@@ -30,10 +37,13 @@
         (#{id},#{terminalId}, #{carNo}, #{routeId},  #{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
     </insert>
 
-    <update id="handleCarAlarm" parameterType="cn.edu.bjtu.jzlj.dao.CarAlarm">
+<!--    处理报警信息-->
+    <update id="handleCarAlarm">
         update car_alarm
         <set>
             handled = 1,
+            status = #{status},
+            remarks = #{remarks},
             update_user = #{updateUser},
             update_time = #{updateTime}
 
@@ -42,11 +52,12 @@
     </update>
 
 
-
     <update id="handleMCarAlarm">
         update car_alarm
         <set>
             handled = 1,
+            status = #{status},
+            remarks = #{remarks},
             update_user = #{updateUser},
             update_time = #{updateTime}
         </set>
@@ -55,8 +66,6 @@
             #{id}
         </foreach>
     </update>
-
-
 
 
 </mapper>
