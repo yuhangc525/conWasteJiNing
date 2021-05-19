@@ -36,8 +36,8 @@
     <select id="getListByPage" parameterType="cn.edu.bjtu.jzlj.dao.Role"
             resultType="cn.edu.bjtu.jzlj.dao.Role">
         SELECT * FROM sys_role WHERE 1=1
-        <if test="role.roleName != null and role.roleName != ''">
-            AND role_name = '${role.roleName}'
+        <if test="role.id != null and role.id != ''">
+            AND id = '${role.id}'
         </if>
     </select>
 
@@ -46,8 +46,8 @@
             resultType="cn.edu.bjtu.jzlj.dao.Role">
         SELECT * FROM sys_role WHERE 1=1
         <if test="_parameter.containsKey('role') and role != null">
-            <if test="role.roleName != null and role.roleName != ''">
-                AND role_name = '${role.roleName}'
+            <if test="role.id != null and role.id != ''">
+                AND id = '${role.id}'
             </if>
         </if>
         <if test="_parameter.containsKey('ew') and ew!= null">

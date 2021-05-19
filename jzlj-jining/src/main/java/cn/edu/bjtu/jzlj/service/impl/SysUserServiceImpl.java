@@ -51,7 +51,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         public IPage<SysUser> getListByPage(QueryRequest queryRequest, SysUser sysUser)
         {
                 Page<SysUser> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
-                SortUtil.handlePageSort(queryRequest, page, "username", CommonUtil.ORDER_ASC, false);
+                SortUtil.handlePageSort(queryRequest, page, "id", CommonUtil.ORDER_ASC, false);
                 IPage<SysUser> list = sysUserMapper.getListByPage(page, sysUser);
                 return list;
         }
@@ -61,7 +61,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         public List<SysUser> getAllList(QueryRequest queryRequest, SysUser sysUser)
         {
                 QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-                SortUtil.handleWrapperSort(queryRequest, queryWrapper, "username", CommonUtil.ORDER_ASC, true);
+                SortUtil.handleWrapperSort(queryRequest, queryWrapper, "id", CommonUtil.ORDER_ASC, true);
                 return sysUserMapper.getAllList(queryWrapper, sysUser);
         }
 

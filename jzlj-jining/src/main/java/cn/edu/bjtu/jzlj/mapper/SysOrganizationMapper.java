@@ -75,7 +75,7 @@ public interface SysOrganizationMapper extends BaseMapper<SysOrganization> {
       * @return
       * @throws:
       **/
-    SysOrganization updateOrgById (@Param("sysOrganization") SysOrganization sysOrganization);
+    int updateOrgById (SysOrganization sysOrganization);
 
 
      /**

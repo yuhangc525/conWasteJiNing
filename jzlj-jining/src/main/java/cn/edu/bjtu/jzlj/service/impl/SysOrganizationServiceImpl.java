@@ -48,7 +48,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
     public IPage<SysOrganization> getOrgListByPage(QueryRequest queryRequest, SysOrganization sysOrganization)
     {
         Page<SysOrganization> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
-        SortUtil.handlePageSort(queryRequest, page, "organizationName", CommonUtil.ORDER_ASC, true);
+        SortUtil.handlePageSort(queryRequest, page, "id", CommonUtil.ORDER_ASC, true);
         IPage<SysOrganization> list = sysOrganizationMapper.getOrgListByPage(page, sysOrganization);
         return list;
     }
@@ -66,7 +66,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
     public List<SysOrganization> getAllList(QueryRequest queryRequest, SysOrganization sysOrganization)
     {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "organization_name", CommonUtil.ORDER_ASC, true);
+        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "id", CommonUtil.ORDER_ASC, true);
         return sysOrganizationMapper.getAllList(queryWrapper, sysOrganization);
     }
 
@@ -115,7 +115,7 @@ public class SysOrganizationServiceImpl extends ServiceImpl<SysOrganizationMappe
       * @throws:
       **/
     @Override
-    public SysOrganization updateOrgById (SysOrganization sysOrganization) {
+    public int updateOrgById (SysOrganization sysOrganization) {
 //        SysOrganization sysOrganization1 = sysOrganizationMapper.getOrganizationById(sysOrganization.getId());
 //        if (sysOrganization1 == null) {
 //            throw new Exception("要修改的组织不存在");

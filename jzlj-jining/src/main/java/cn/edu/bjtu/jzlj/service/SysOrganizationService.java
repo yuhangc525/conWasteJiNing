@@ -72,7 +72,7 @@ public interface SysOrganizationService extends IService<SysOrganization> {
       * @return
       * @throws:
       **/
-    SysOrganization updateOrgById (SysOrganization sysOrganization);
+    int updateOrgById (SysOrganization sysOrganization);
 
 
      /**

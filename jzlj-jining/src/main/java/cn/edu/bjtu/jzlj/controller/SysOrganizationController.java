@@ -63,10 +63,10 @@ public class SysOrganizationController {
                 {
                     return Resp.getInstantiationError("分页查看失败，分页页数或分页大小不合法", null, null);
                 }
-                IPage<SysOrganization> SysOrganizationList = sysOrganizationService.getOrgListByPage(queryRequest, sysOrganization);
+                IPage<SysOrganization> sysOrganizationList = sysOrganizationService.getOrgListByPage(queryRequest, sysOrganization);
                 long endTime = System.currentTimeMillis();
                 LOGGER.info("分页列举成功，用时" + (endTime - startTime) + "ms");
-                return Resp.getInstantiationSuccess("分页查看", Resp.LIST, SysOrganizationList);
+                return Resp.getInstantiationSuccess("分页查看", Resp.LIST, sysOrganizationList);
             }
             else
             {
@@ -153,18 +153,19 @@ public class SysOrganizationController {
     @ApiOperation(value = "根据id修改组织信息", httpMethod = "PUT")
     @PutMapping("/updateOrgById")
     @ControllerEndpoint(operation = "修改组织信息", exceptionMessage = "修改失败")
-    public Resp updateOrgById(SysOrganization sysOrganization) {
+    public Resp updateOrgById(@RequestBody SysOrganization sysOrganization){
         long startTime = System.currentTimeMillis();
         try {
-            if (sysOrganizationService.getOrganizationById(sysOrganization.getId()) == null) {
-                LOGGER.error("修改失败，原因：修改不存在，用时" + (System.currentTimeMillis() - startTime) + "ms");
-                return Resp.getInstantiationError("要修改的id不存在", Resp.STRING, null);
-            }
+//            if (sysOrganizationService.getOrganizationById(sysOrganization.getId()) == null) {
+//            LOGGER.error("修改失败，原因：修改不存在，用时" + (System.currentTimeMillis() - startTime) + "ms");
+//            return Resp.getInstantiationError("要修改的id不存在", Resp.STRING, null);
+//            }
             sysOrganizationService.updateOrgById(sysOrganization);
 //            SysOrganization sysOrganization1 = sysOrganizationService.updateOrgById(sysOrganization);
             LOGGER.info("修改组织成功，用时：" + (System.currentTimeMillis() - startTime) + "ms");
-            return Resp.getInstantiationSuccess("修改组织成功", Resp.STRING, sysOrganization);
+            return Resp.getInstantiationSuccess("修改组织成功", Resp.LIST, null );
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error("修改组织失败，原因：", e.getMessage()+ "，用时" +(System.currentTimeMillis() - startTime) + "ms");
             return Resp.getInstantiationError("修改失败："+ e.getMessage(),Resp.LIST,null );
         }

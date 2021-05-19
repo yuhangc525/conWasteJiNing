@@ -44,12 +44,34 @@
     </insert>
 
 
-<!--    分页查询组织-->
+<!--&lt;!&ndash;    分页查询组织&ndash;&gt;-->
+<!--    <select id="getOrgListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization"-->
+<!--            resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">-->
+<!--        SELECT * FROM sys_organization WHERE 1=1-->
+<!--        <if test="sysOrganization.organizationName != null and sysOrganization.organizationName != ''">-->
+<!--            AND organization_name = '${sysOrganization.organizationName}'-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;    用户列表不分页查询&ndash;&gt;-->
+<!--    <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization"-->
+<!--            resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">-->
+<!--        SELECT * FROM sys_organization WHERE 1=1-->
+<!--        <if test="_parameter.containsKey('sysOrganization') and sysOrganization!= null">-->
+<!--            <if test="sysOrganization.organizationName != null and sysOrganization.organizationName != ''">-->
+<!--                AND organization_name = '${sysOrganization.organizationName}'-->
+<!--            </if>N-->
+<!--        </if>-->
+<!--        <if test="_parameter.containsKey('ew') and ew!= null">-->
+<!--            ${ew.customSqlSegment}-->
+<!--        </if>-->
+<!--    </select>-->
+    <!--    分页查询组织-->
     <select id="getOrgListByPage" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization"
             resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">
         SELECT * FROM sys_organization WHERE 1=1
-        <if test="sysOrganization.organizationName != null and sysOrganization.organizationName != ''">
-            AND organization_name = '${sysOrganization.organizationName}'
+        <if test="sysOrganization.id != null and sysOrganization.id != ''">
+            AND id = '${sysOrganization.id}'
         </if>
     </select>
 
@@ -58,9 +80,9 @@
             resultType="cn.edu.bjtu.jzlj.dao.SysOrganization">
         SELECT * FROM sys_organization WHERE 1=1
         <if test="_parameter.containsKey('sysOrganization') and sysOrganization!= null">
-            <if test="sysOrganization.organization_name != null and sysOrganization.organization_name != ''">
-                AND organization_name = '${sysOrganization.organization_name}'
-            </if>N
+            <if test="sysOrganization.id != null and sysOrganization.id != ''">
+                AND id = '${sysOrganization.id}'
+            </if>
         </if>
         <if test="_parameter.containsKey('ew') and ew!= null">
             ${ew.customSqlSegment}
@@ -85,16 +107,16 @@
     <update id="updateOrgById" parameterType="cn.edu.bjtu.jzlj.dao.SysOrganization">
         UPDATE sys_organization
         <set>
-            organization_name = #{organization_name},
-            parent_account = #{parent_account},
-            social_credit_code = #{social_credit_code},
+            organization_name = #{organizationName},
+            parent_account = #{parentAccount},
+            social_credit_code = #{socialCreditCode},
             mobile = #{mobile},
             address = #{address},
             status = #{status},
-            create_user = #{create_user},
-            create_time = #{create_time},
-            update_user = #{update_user},
-            update_time = #{update_time},
+            create_user = #{createUser},
+            create_time = #{createTime},
+            update_user = #{updateUser},
+            update_time = #{updateTime},
             remark = #{remark},
         </set>
         WHERE id = #{id};

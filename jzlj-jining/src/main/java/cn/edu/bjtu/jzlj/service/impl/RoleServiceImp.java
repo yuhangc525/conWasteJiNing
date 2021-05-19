@@ -86,7 +86,7 @@ public class RoleServiceImp extends ServiceImpl<RoleMapper, Role> implements Rol
     public IPage<Role> getListByPage(QueryRequest queryRequest, Role role)
     {
         Page<Role> page = new Page<>(queryRequest.getPageNo(), queryRequest.getPageSize());
-        SortUtil.handlePageSort(queryRequest, page, "role_name", CommonUtil.ORDER_ASC, false);
+        SortUtil.handlePageSort(queryRequest, page, "id", CommonUtil.ORDER_ASC, false);
         IPage<Role> list = roleMapper.getListByPage(page, role);
         return list;
     }
@@ -96,7 +96,7 @@ public class RoleServiceImp extends ServiceImpl<RoleMapper, Role> implements Rol
     public List<Role> getAllList(QueryRequest queryRequest, Role role)
     {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "username", CommonUtil.ORDER_ASC, true);
+        SortUtil.handleWrapperSort(queryRequest, queryWrapper, "id", CommonUtil.ORDER_ASC, true);
         return roleMapper.getAllList(queryWrapper, role);
     }
 
