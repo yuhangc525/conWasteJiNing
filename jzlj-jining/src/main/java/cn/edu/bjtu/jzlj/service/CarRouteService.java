@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.service;
 
 import cn.edu.bjtu.jzlj.dao.CarRoute;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface CarRouteService extends IService<CarRoute> {
     List<CarRoute> getRouteListByTerminalId(String terminalId);
 
     Boolean insertCarRouteInfo(CarRoute carRoute);
+
+    Boolean insertMCarRoute(List<CarRoute> carRouteList) throws Exception;
+
+    List<String> getAllLinkedCarRoute(Integer routeId) throws Exception;
 }

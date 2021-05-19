@@ -1,8 +1,13 @@
 package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.CarRoute;
+import cn.edu.bjtu.jzlj.dao.PageSource;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -29,4 +34,8 @@ public interface CarRouteMapper extends BaseMapper<CarRoute>{
       * @throws:
       **/
     Boolean insertCarRouteInfo(CarRoute carRoute);
+
+    Boolean insertMCarRoute(@Param("carRouteList") List<CarRoute> carRouteList);
+
+    List<String> getAllLinkedCarRoute(@Param("routeId") Integer routeId);
 }

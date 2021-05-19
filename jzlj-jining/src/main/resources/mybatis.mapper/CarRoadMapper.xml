@@ -7,6 +7,11 @@
         <id property="Id" column="id"/>
         <result property="terminalId" column="terminal_id"/>
         <result property="routeId" column="route_id"/>
+        <result property="carNo" column="car_no"/>
+    </resultMap>
+
+    <resultMap id="carNoList" type="String">
+        <result property="carNo" column="car_no"/>
     </resultMap>
 
 
@@ -20,9 +25,33 @@
 <!--    插入路线和车辆的对应-->
     <insert id="insertCarRouteInfo">
         INSERT into car_route
-        (id, terminal_id, route_id)
+        (terminal_id, route_id)
         VALUES
-        (#{id},#{terminalId},#{routeId})
+        (#{terminalId},#{routeId})
     </insert>
+
+    <!--批量绑定路线和车辆的对应关系-->
+    <insert id="insertMCarRoute">
+        insert into car_route
+        (terminal_id, route_id)
+        values
+        <foreach collection="carRouteList" item="carRouteItem" index="index"  separator="," >
+        (#{carRouteItem.terminalId},
+        #{carRouteItem.routeId})
+        </foreach>
+    </insert>
+    
+    <!--查询已绑定到路线的车辆-->
+    <select id="getAllLinkedCarRoute" resultMap="carNoList">
+        SELECT car_no
+        from car_info
+        where `car_info`.terminal_id in
+        (
+        select DISTINCT cr.terminal_id
+        from car_route cr, route_info r
+        where cr.route_id = #{routeId}
+        and r.route_id = cr.route_id
+        )
+    </select>
 
 </mapper>

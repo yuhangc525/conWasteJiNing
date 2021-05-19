@@ -35,9 +35,6 @@ public class CarRoute implements Serializable{
 
      private static final long serialVersionUID=1L;
 
-     @TableId(value = "id", type = IdType.AUTO)
-     private Integer Id;
-
      /**
       * 车辆终端id
       */
@@ -47,4 +44,23 @@ public class CarRoute implements Serializable{
       * 路线id
       */
      private Integer routeId;
-}
+
+     @TableField(exist = false)
+     private String carNo;
+
+      public String getTerminalId() {
+           return terminalId;
+      }
+
+      public void setTerminalId(String terminalId) {
+           this.terminalId = terminalId;
+      }
+
+      public Integer getRouteId() {
+           return routeId;
+      }
+
+      public void setRouteId(Integer routeId) {
+           this.routeId = routeId;
+      }
+ }

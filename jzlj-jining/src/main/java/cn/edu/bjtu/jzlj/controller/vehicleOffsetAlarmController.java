@@ -1,9 +1,6 @@
 package cn.edu.bjtu.jzlj.controller;
 
-import cn.edu.bjtu.jzlj.dao.CarAlarm;
-import cn.edu.bjtu.jzlj.dao.CarRoute;
-import cn.edu.bjtu.jzlj.dao.PageSource;
-import cn.edu.bjtu.jzlj.dao.PointEntity;
+import cn.edu.bjtu.jzlj.dao.*;
 
 //import com.alibaba.fastjson.JSONArray;
 import cn.edu.bjtu.jzlj.service.CarAlarmService;
@@ -25,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import sun.tools.jconsole.CreateMBeanDialog;
 
@@ -170,6 +168,49 @@ public class vehicleOffsetAlarmController {
             return Resp.getInstantiationError("增加车辆--路线对应关系信息异常，原因：" + e.getMessage(), Resp.SINGLE, carRoute);
         }
     }
+
+
+
+
+    @ApiOperation(value = "批量插入车辆路线绑定信息", httpMethod = "POST")
+    @PostMapping("/insertMCarRoute")
+    @ResponseBody
+    public Resp insertMCarRoute(@RequestBody List<CarRoute> carRoutes) {
+        long startTime = System.currentTimeMillis();
+        try {
+            carRouteService.insertMCarRoute(carRoutes);
+            long endTime =System.currentTimeMillis();
+            LOGGER.info("批量插入车辆路线信息成功，用时:" + (endTime - startTime));
+            return Resp.getInstantiationSuccess("批量插入车辆路线信息成功",Resp.STRING,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("批量插入车辆路线信息失败，原因：" + e.getMessage() +",用时:" + (endTime - startTime));
+            return Resp.getInstantiationError("批量插入车辆路线信息失败",Resp.STRING,null);
+        }
+    }
+
+
+
+
+    @ApiOperation(value = "查询路线已绑定的车辆信息", httpMethod = "GET")
+    @GetMapping("/getAllLinkedCarRoute")
+    @ResponseBody
+    public Resp getAllLinkedCarRoute(@RequestParam(value = "routeID") Integer routeId){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<String> carNoList = carRouteService.getAllLinkedCarRoute(routeId);
+            long endTime =System.currentTimeMillis();
+            LOGGER.info("查询路线已绑定车辆信息成功，用时:" + (endTime - startTime));
+            return Resp.getInstantiationSuccess("查询路线已绑定车辆信息成功",Resp.LIST,carNoList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("查询路线已绑定车辆信息失败，原因：" + e.getMessage() +",用时:" + (endTime - startTime));
+            return Resp.getInstantiationError("查询路线已绑定车辆信息失败",Resp.STRING,null);
+        }
+    }
+
 
 
 
