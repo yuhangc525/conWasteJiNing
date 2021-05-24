@@ -71,4 +71,9 @@
         SELECT  COUNT(*) as number , review_status FROM car_info GROUP BY review_status
     </select>
 
+
+    <select id="proportionOfVehicleStatus" resultType="cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleStatusVo">
+        SELECT `status` , COUNT(*) as numOfStatus FROM car_info GROUP BY `status`
+    </select>
+
 </mapper>

@@ -1,10 +1,14 @@
 package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
+import cn.edu.bjtu.jzlj.dao.CarAlarm;
 import cn.edu.bjtu.jzlj.dao.EFInfo;
+import cn.edu.bjtu.jzlj.mapper.CarAlarmMapper;
 import cn.edu.bjtu.jzlj.mapper.CarInfoMapper;
+import cn.edu.bjtu.jzlj.mapper.THistoryPositionMapper;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
+import cn.edu.bjtu.jzlj.vo.graph.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,42 +33,54 @@ public class GraphController {
     @Autowired
     CarInfoMapper carInfoMapper;
 
+    @Autowired
+    CarAlarmMapper carAlarmMapper;
+
+    @Autowired
+    THistoryPositionMapper tHistoryPositionMapper;
+
     /* 车辆模块 * 5 */
 
-    @ApiOperation(value = "alarmCarNumberLineChart", httpMethod = "GET")
+    @ApiOperation(value = "7天报警车辆数量折线变化图", httpMethod = "GET")
     @GetMapping("/alarmCarNumberLineChart")
     @ControllerEndpoint(operation = "7天报警车辆数量折线变化图", exceptionMessage = "7天报警车辆数量折线变化图获取异常")
-    public Resp getAlarmCarNumber(QueryRequest queryRequest, EFInfo efInfo){
-        return null;
+    public Resp getAlarmCarNumber(){
+        List<getAlarmCarNumberVo> data = carAlarmMapper.getAlarmCarNumber();
+        return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
     }
 
     @ApiOperation(value = "车辆审核状态占比扇形图", httpMethod = "GET")
     @GetMapping("/proportionOfVehicleReview")
     @ControllerEndpoint(operation = "车辆审核状态占比扇形图", exceptionMessage = "车辆审核状态占比扇形图获取异常")
-    public Resp proportionOfVehicleReview(QueryRequest queryRequest, EFInfo efInfo){
-        List<Object> data = carInfoMapper.proportionOfVehicleReview();
+    public Resp proportionOfVehicleReview(){
+        List<proportionOfVehicleReviewVo> data = carInfoMapper.proportionOfVehicleReview();
         return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
     }
 
-    @ApiOperation(value = "Proportion of vehicle status", httpMethod = "GET")
+    @ApiOperation(value = "车辆使用状态占比扇形图", httpMethod = "GET")
     @GetMapping("/proportionOfVehicleStatus")
     @ControllerEndpoint(operation = "车辆使用状态占比扇形图", exceptionMessage = "车辆使用状态占比扇形图获取异常")
-    public Resp proportionOfVehicleStatus(QueryRequest queryRequest, EFInfo efInfo){
-        return null;
+    public Resp proportionOfVehicleStatus(){
+
+        List<proportionOfVehicleStatusVo> data = carInfoMapper.proportionOfVehicleStatus();
+        return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
     }
 
-    @ApiOperation(value = "number of vehicles used", httpMethod = "GET")
+    @ApiOperation(value = "7天车辆使用数量的周变化折线图", httpMethod = "GET")
     @GetMapping("/numberOfVehicleUsed")
     @ControllerEndpoint(operation = "7天车辆使用数量的周变化折线图", exceptionMessage = "7天车辆使用数量的周变化折线图获取异常")
-    public Resp numberOfVehicleUsed(QueryRequest queryRequest, EFInfo efInfo){
-        return null;
+    public Resp numberOfVehicleUsed(String tableName){
+        Integer data = tHistoryPositionMapper.numberOfVehicleUsed(tableName);
+        return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
     }
 
-    @ApiOperation(value = "Proportion of correct state of vehicle alarm", httpMethod = "GET")
+    @ApiOperation(value = "车辆报警状态的误报比例扇形图", httpMethod = "GET")
     @GetMapping("/proportionOfVehicleCorrectAlarm")
     @ControllerEndpoint(operation = "车辆报警状态的误报比例扇形图", exceptionMessage = "车辆报警状态的误报比例扇形图获取异常")
-    public Resp proportionOfVehicleCorrectAlarm(QueryRequest queryRequest, EFInfo efInfo){
-        return null;
+    public Resp proportionOfVehicleCorrectAlarm(){
+        List<proportionOfVehicleCorrectAlarmVo> data = carAlarmMapper.proportionOfVehicleCorrectAlarm();
+        return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
+
     }
 
     /* 工地模块 * 4 */

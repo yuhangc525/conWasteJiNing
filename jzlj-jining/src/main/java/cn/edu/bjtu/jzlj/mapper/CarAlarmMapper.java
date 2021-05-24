@@ -3,6 +3,9 @@ package cn.edu.bjtu.jzlj.mapper;
 import cn.edu.bjtu.jzlj.dao.CarAlarm;
 import cn.edu.bjtu.jzlj.dao.PageSource;
 import cn.edu.bjtu.jzlj.dao.RoadInfo;
+import cn.edu.bjtu.jzlj.vo.graph.getAlarmCarNumberVo;
+import cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleCorrectAlarmVo;
+import cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleReviewVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
@@ -41,6 +44,10 @@ public interface CarAlarmMapper extends BaseMapper<CarAlarm> {
                          @Param("updateTime") Date updateTime,
                          @Param("status") Integer status,
                          @Param("remarks") String remarks);
+
+    List<getAlarmCarNumberVo> getAlarmCarNumber();
+
+    List<proportionOfVehicleCorrectAlarmVo> proportionOfVehicleCorrectAlarm();
 
 
 }

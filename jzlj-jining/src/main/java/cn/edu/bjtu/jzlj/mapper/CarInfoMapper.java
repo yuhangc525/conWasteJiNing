@@ -1,6 +1,8 @@
 package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.CarInfo;
+import cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleReviewVo;
+import cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleStatusVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -33,5 +35,7 @@ public interface CarInfoMapper extends BaseMapper<CarInfo> {
 
     String getCarNoByTerminalId(String terminalId);
 
-    List<Object> proportionOfVehicleReview();
+    List<proportionOfVehicleReviewVo> proportionOfVehicleReview();
+
+    List<proportionOfVehicleStatusVo> proportionOfVehicleStatus();
 }

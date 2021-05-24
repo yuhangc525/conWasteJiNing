@@ -29,7 +29,7 @@
         WHERE ca.handled = 1
     </select>
 
-<!--    新增报警信息-->
+    <!--    新增报警信息-->
     <insert id="insertCarAlarmInfo">
         INSERT into car_alarm
         (id, terminal_id, car_no, route_id, latitude, longitude, handled, update_user, update_time)
@@ -37,7 +37,7 @@
         (#{id},#{terminalId}, #{carNo}, #{routeId},  #{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
     </insert>
 
-<!--    处理报警信息-->
+    <!--    处理报警信息-->
     <update id="handleCarAlarm">
         update car_alarm
         <set>
@@ -66,6 +66,21 @@
             #{id}
         </foreach>
     </update>
+
+
+    <select id="getAlarmCarNumber" resultType="cn.edu.bjtu.jzlj.vo.graph.getAlarmCarNumberVo">
+SELECT date_format(update_time,'%Y-%m-%d') as alarmDate,
+COUNT(*) as alarmNum
+FROM car_alarm
+GROUP BY date_format(update_time,'%Y-%m-%d')
+ORDER BY date_format(update_time,'%Y-%m-%d')
+DESC LIMIT 7
+
+    </select>
+
+    <select id="proportionOfVehicleCorrectAlarm" resultType="cn.edu.bjtu.jzlj.vo.graph.proportionOfVehicleCorrectAlarmVo">
+        SELECT `status`  ,count(`status`) as numOfMisinformation FROM car_alarm GROUP BY `status`
+    </select>
 
 
 </mapper>

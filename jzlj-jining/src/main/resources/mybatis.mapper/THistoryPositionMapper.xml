@@ -252,4 +252,9 @@
     where id = #{id,jdbcType=VARCHAR}
       and uptime = #{uptime,jdbcType=TIMESTAMP}
   </update>
+
+  <select id="numberOfVehicleUsed" resultType="INTEGER">
+    SELECT COUNT(DISTINCT terminal_id) as all_online FROM ${tableName}
+  </select>
+
 </mapper>
