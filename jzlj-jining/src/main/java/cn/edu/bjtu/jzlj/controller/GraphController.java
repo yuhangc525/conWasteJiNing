@@ -2,13 +2,18 @@ package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.EFInfo;
+import cn.edu.bjtu.jzlj.mapper.CarInfoMapper;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author: zjwang
@@ -21,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/graph")
 public class GraphController {
 
+    @Autowired
+    CarInfoMapper carInfoMapper;
+
     /* 车辆模块 * 5 */
 
     @ApiOperation(value = "alarmCarNumberLineChart", httpMethod = "GET")
@@ -30,11 +38,12 @@ public class GraphController {
         return null;
     }
 
-    @ApiOperation(value = "Proportion of vehicle review", httpMethod = "GET")
+    @ApiOperation(value = "车辆审核状态占比扇形图", httpMethod = "GET")
     @GetMapping("/proportionOfVehicleReview")
     @ControllerEndpoint(operation = "车辆审核状态占比扇形图", exceptionMessage = "车辆审核状态占比扇形图获取异常")
     public Resp proportionOfVehicleReview(QueryRequest queryRequest, EFInfo efInfo){
-        return null;
+        List<Object> data = carInfoMapper.proportionOfVehicleReview();
+        return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, data);
     }
 
     @ApiOperation(value = "Proportion of vehicle status", httpMethod = "GET")
