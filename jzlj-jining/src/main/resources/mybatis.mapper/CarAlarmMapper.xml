@@ -32,9 +32,9 @@
     <!--    新增报警信息-->
     <insert id="insertCarAlarmInfo">
         INSERT into car_alarm
-        (id, terminal_id, car_no, route_id, latitude, longitude, handled, update_user, update_time)
+        (id, terminal_id, route_id, latitude, longitude, handled, update_user, update_time)
         VALUES
-        (#{id},#{terminalId}, #{carNo}, #{routeId},  #{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
+        (#{id},#{terminalId}, #{routeId},  #{latitude, jdbcType=DOUBLE},#{longitude, jdbcType=DOUBLE},#{handled},#{updateUser},#{updateTime})
     </insert>
 
     <!--    处理报警信息-->

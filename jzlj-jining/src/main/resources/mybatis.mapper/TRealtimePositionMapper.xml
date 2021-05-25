@@ -36,6 +36,11 @@
   </select>
 
 
+  <select id="getOneList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from t_realtime_position where terminal_id = "15686248237"
+  </select>
+
+
   <select id="getPositionByTerminalId" resultType="cn.edu.bjtu.jzlj.dao.TRealtimePosition">
         SELECT * FROM t_realtime_position WHERE terminal_id=#{terminal_id}
     </select>

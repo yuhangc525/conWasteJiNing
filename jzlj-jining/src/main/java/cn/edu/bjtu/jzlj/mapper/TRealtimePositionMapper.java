@@ -10,6 +10,8 @@ import java.util.List;
 public interface TRealtimePositionMapper extends BaseMapper<TRealtimePosition> {
     List<TRealtimePosition> getAllList();
 
+    TRealtimePosition getOneList();
+
     List<TRealtimePosition> getPositionByTerminalId( String terninalId);
 
 
