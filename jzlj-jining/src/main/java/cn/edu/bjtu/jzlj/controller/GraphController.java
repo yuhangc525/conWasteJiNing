@@ -128,12 +128,12 @@ public class GraphController {
         try {
             List<SourceNameAndWasteTotal> ret = sourceInfoMapper.quantityOfGarbage();
             long endTime = System.currentTimeMillis();
-            LOGGER.info("工地垃圾种类占比图成功,用时:" + (endTime-startTime) + "ms");
-            return Resp.getInstantiationSuccess("工地垃圾种类占比图成功", Resp.LIST, ret);
+            LOGGER.info("不同工地垃圾数量直方图成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("不同工地垃圾数量直方图成功", Resp.LIST, ret);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
-            LOGGER.error("工地垃圾种类占比图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
-            return Resp.getInstantiationError("工地垃圾种类占比图失败:"+e.getMessage(), Resp.LIST, null);
+            LOGGER.error("不同工地垃圾数量直方图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("不同工地垃圾数量直方图失败:"+e.getMessage(), Resp.LIST, null);
         }
     }
 
@@ -162,12 +162,12 @@ public class GraphController {
         try {
             List<DateAndTotal> ret = sourceInfoMapper.quantityOfGarbageByMouth();
             long endTime = System.currentTimeMillis();
-            LOGGER.info("工地位置散点图成功,用时:" + (endTime-startTime) + "ms");
-            return Resp.getInstantiationSuccess("工地位置散点图成功", Resp.LIST, ret);
+            LOGGER.info("获取每月垃圾总量数据成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("获取每月垃圾总量数据成功", Resp.LIST, ret);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
-            LOGGER.error("工地位置散点图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
-            return Resp.getInstantiationError("工地位置散点图失败:"+e.getMessage(), Resp.LIST, null);
+            LOGGER.error("获取每月垃圾总量数据失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("获取每月垃圾总量数据失败:"+e.getMessage(), Resp.LIST, null);
         }
     }
 
