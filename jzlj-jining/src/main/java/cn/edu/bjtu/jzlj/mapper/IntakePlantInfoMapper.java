@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
+import cn.edu.bjtu.jzlj.vo.graph.ReviewAndNumber;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -34,5 +35,6 @@ public interface IntakePlantInfoMapper extends BaseMapper<IntakePlantInfo> {
 
     int updateInfoByApplyInfo(IntakePlantInfo intakePlantInfo);
 
+    List<ReviewAndNumber> proportionOfIntakeReview();
 
 }

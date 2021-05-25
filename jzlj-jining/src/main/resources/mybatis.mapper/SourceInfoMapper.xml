@@ -76,4 +76,16 @@
         </if>
     </select>
 
+    <select id="proportionOfGarbageTypes" resultType="cn.edu.bjtu.jzlj.vo.graph.SourceTypeAndNumber">
+        SELECT source_type,sum(waste_total) as number FROM source_info GROUP BY source_type
+    </select>
+
+    <select id="quantityOfGarbage" resultType="cn.edu.bjtu.jzlj.vo.graph.SourceNameAndWasteTotal">
+        SELECT source_name,waste_total FROM source_info
+    </select>
+
+    <select id="quantityOfGarbageByMouth" resultType="cn.edu.bjtu.jzlj.vo.graph.DateAndTotal">
+        SELECT date_format(start_date,'%Y-%m-%d') as my_date,SUM(waste_total) as total FROM source_info GROUP BY date_format(start_date,'%Y-%m-%d') ORDER BY date_format(start_date,'%Y-%m-%d') DESC LIMIT 7
+    </select>
+
 </mapper>

@@ -122,4 +122,8 @@
         WHERE intake_plant_id = #{intakePlantId};
     </update>
 
+    <select id="proportionOfIntakeReview" resultType="cn.edu.bjtu.jzlj.vo.graph.ReviewAndNumber">
+        SELECT review_status, COUNT(review_status) as number FROM intake_plant_info GROUP BY review_status
+    </select>
+
 </mapper>

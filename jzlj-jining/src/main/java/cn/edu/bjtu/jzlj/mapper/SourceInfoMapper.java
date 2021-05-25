@@ -2,6 +2,9 @@ package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.SourceInfo;
 //import cn.edu.bjtu.jzlj.dao.SourceInfoNew;
+import cn.edu.bjtu.jzlj.vo.graph.DateAndTotal;
+import cn.edu.bjtu.jzlj.vo.graph.SourceNameAndWasteTotal;
+import cn.edu.bjtu.jzlj.vo.graph.SourceTypeAndNumber;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,4 +35,10 @@ public interface SourceInfoMapper extends BaseMapper<SourceInfo> {
     List<SourceInfo> getSourceInfoByInputName(@Param("inputName") String inputName);
     /*根据ID查询*/
     List<SourceInfo> getSourceInfoBySourceId(@Param("sourceId") String sourceId);
+
+    List<SourceTypeAndNumber> proportionOfGarbageTypes();
+
+    List<SourceNameAndWasteTotal>  quantityOfGarbage();
+
+    List<DateAndTotal> quantityOfGarbageByMouth();
 }
