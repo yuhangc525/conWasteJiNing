@@ -15,6 +15,7 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -119,6 +120,22 @@ public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> impl
     @Override
     public String getCarNoByTerminalId(String TerminalId) {
         return carInfoMapper.getCarNoByTerminalId(TerminalId);
+    }
+
+    @Override
+    public List<CarInfo> getAllDataWithUptime() {
+        List<CarInfo> ret = carInfoMapper.getAllDataWithUptime();
+        Date now = new Date();
+        Date line = new Date(now.getTime() - 5 * 60 * 1000);
+        for(int i = 0; i < ret.size(); i++){
+            if(ret.get(i).getUptime() != null && ret.get(i).getUptime().after(line)){
+                ret.get(i).setOnline(true);
+            }else{
+                ret.get(i).setOnline(false);
+            }
+
+        }
+        return ret;
     }
 
 
