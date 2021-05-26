@@ -42,7 +42,7 @@ import java.util.List;
 @RequestMapping("/graph")
 public class GraphController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EfInfoController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GraphController.class);
 
     @Autowired
     CarInfoMapper carInfoMapper;
@@ -52,6 +52,7 @@ public class GraphController {
 
     @Autowired
     THistoryPositionMapper tHistoryPositionMapper;
+    @Autowired
     IntakePlantInfoMapper intakePlantInfoMapper;
     @Autowired
     IntakePlantInfoService intakePlantInfoService;
