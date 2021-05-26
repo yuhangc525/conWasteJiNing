@@ -1,6 +1,7 @@
 package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.ResourcePlantInfo;
+import cn.edu.bjtu.jzlj.vo.graph.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -32,4 +33,9 @@ public interface ResourcePlantInfoMapper extends BaseMapper<ResourcePlantInfo> {
 
     List<ResourcePlantInfo> getRESOURCEInfoByRESOURCEId(@Param("resourcePlantId") String resourcePlantId);
 
+    List<ResourceTypeAndNumber> proportionOfResourceType();
+
+    List<ResourceNameAndDailyAcceptance>  quantityOfAcceptanceResource();
+
+    List<ResourceNameAndDailyOutput>  quantityOfOutputResource();
 }

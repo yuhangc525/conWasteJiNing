@@ -76,9 +76,9 @@
     <select id="getAllList" parameterType="cn.edu.bjtu.jzlj.dao.SysUser"
             resultType="cn.edu.bjtu.jzlj.dao.SysUser">
         SELECT * FROM sys_user WHERE 1=1
-        <if test="_parameter.containsKey('role') and role != null">
+        <if test="_parameter.containsKey('sysUser') and sysUser != null">
             <if test="sysUser.id != null and sysUser.id != ''">
-                AND id = '${sysSuer.id}'
+                AND id = '${sysUser.id}'
             </if>
         </if>
         <if test="_parameter.containsKey('ew') and ew!= null">

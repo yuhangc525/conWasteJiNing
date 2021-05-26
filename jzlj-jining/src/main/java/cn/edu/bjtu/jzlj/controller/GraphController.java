@@ -1,16 +1,14 @@
 package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
-import cn.edu.bjtu.jzlj.mapper.CarAlarmMapper;
-import cn.edu.bjtu.jzlj.mapper.CarInfoMapper;
-import cn.edu.bjtu.jzlj.mapper.THistoryPositionMapper;
+import cn.edu.bjtu.jzlj.dao.ResourcePlantInfo;
+import cn.edu.bjtu.jzlj.mapper.*;
+import cn.edu.bjtu.jzlj.service.ResourcePlantInfoService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import cn.edu.bjtu.jzlj.vo.graph.*;
 import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.dao.SourceInfo;
-import cn.edu.bjtu.jzlj.mapper.IntakePlantInfoMapper;
-import cn.edu.bjtu.jzlj.mapper.SourceInfoMapper;
 import cn.edu.bjtu.jzlj.service.IntakePlantInfoService;
 import cn.edu.bjtu.jzlj.service.SourceInfoService;
 import cn.edu.bjtu.jzlj.vo.graph.DateAndTotal;
@@ -25,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 /**
@@ -36,6 +34,7 @@ import java.util.List;
 
 @Api(description = "图表接口")
 @RestController
+@CrossOrigin
 @RequestMapping("/graph")
 public class GraphController {
 
@@ -57,6 +56,11 @@ public class GraphController {
     SourceInfoService sourceInfoService;
     @Autowired
     SourceInfoMapper sourceInfoMapper;
+
+    @Autowired
+    ResourcePlantInfoService resourcePlantInfoService;
+    @Autowired
+    ResourcePlantInfoMapper resourcePlantInfoMapper;
 
     /* 车辆模块 * 5 */
 
@@ -207,4 +211,73 @@ public class GraphController {
         }
     }
 
+
+    /* 资源场模块 *  */
+    @ApiOperation(value = "获取资源场位置散点图数据", httpMethod = "GET")
+    @GetMapping("/scatterOfResourceLocation")
+    @ControllerEndpoint(operation = "资源场位置散点图", exceptionMessage = "资源场位置散点图获取异常")
+    public Resp scatterOfResourceLocation(QueryRequest queryRequest, ResourcePlantInfo resourcePlantInfo){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<ResourcePlantInfo> ret = resourcePlantInfoService.getAllList(queryRequest, resourcePlantInfo);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("资源场位置散点图成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("资源场位置散点图成功", Resp.LIST, ret);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("资源场位置散点图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("资源场位置散点图失败:"+e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+    @ApiOperation(value = "获取资源场资源类型饼图数据", httpMethod = "GET")
+    @GetMapping("/proportionOfResourceType")
+    @ControllerEndpoint(operation = "资源场资源类型饼图", exceptionMessage = "资源场资源类型饼图获取异常")
+    public Resp proportionOfResourceType(){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<ResourceTypeAndNumber> ret = resourcePlantInfoMapper.proportionOfResourceType();
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("资源场资源类型饼图成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("资源场资源类型饼图成功", Resp.LIST, ret);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("资源场资源类型饼图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("资源场资源类型饼图失败:"+e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+    @ApiOperation(value = "获取不同资源场资源日接收数量直方图数据", httpMethod = "GET")
+    @GetMapping("/quantityOfDailyAcceptanceResource")
+    @ControllerEndpoint(operation = "不同资源场资源日接收数量直方图", exceptionMessage = "不同资源场资源日接收数量直方图获取异常")
+    public Resp quantityOfAcceptanceResource(){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<ResourceNameAndDailyAcceptance> ret = resourcePlantInfoMapper.quantityOfAcceptanceResource();
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("不同资源场资源日接收数量直方图成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("不同工地垃圾数量直方图成功", Resp.LIST, ret);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("不同资源场资源日接收数量直方图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("不同工地垃圾数量直方图失败:"+e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+    @ApiOperation(value = "获取不同资源场资源日输出数量直方图数据", httpMethod = "GET")
+    @GetMapping("/quantityOfDailyOutputResource")
+    @ControllerEndpoint(operation = "不同资源场资源日输出数量直方图", exceptionMessage = "不同资源场资源日输出数量直方图获取异常")
+    public Resp quantityOfOutputResource(){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<ResourceNameAndDailyOutput> ret = resourcePlantInfoMapper.quantityOfOutputResource();
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("不同资源场资源日接收数量直方图成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("不同工地垃圾数量直方图成功", Resp.LIST, ret);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("不同资源场资源日接收数量直方图失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("不同工地垃圾数量直方图失败:"+e.getMessage(), Resp.LIST, null);
+        }
+    }
 }
