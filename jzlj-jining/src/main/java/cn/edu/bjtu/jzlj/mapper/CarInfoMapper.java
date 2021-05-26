@@ -38,4 +38,6 @@ public interface CarInfoMapper extends BaseMapper<CarInfo> {
     List<proportionOfVehicleReviewVo> proportionOfVehicleReview();
 
     List<proportionOfVehicleStatusVo> proportionOfVehicleStatus();
+
+    List<CarInfo> getAllDataWithUptime();
 }

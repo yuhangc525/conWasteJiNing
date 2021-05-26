@@ -20,6 +20,8 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +40,7 @@ import java.util.List;
 @RequestMapping("/graph")
 public class GraphController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EfInfoController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GraphController.class);
 
     @Autowired
     CarInfoMapper carInfoMapper;
@@ -48,6 +50,7 @@ public class GraphController {
 
     @Autowired
     THistoryPositionMapper tHistoryPositionMapper;
+    @Autowired
     IntakePlantInfoMapper intakePlantInfoMapper;
     @Autowired
     IntakePlantInfoService intakePlantInfoService;

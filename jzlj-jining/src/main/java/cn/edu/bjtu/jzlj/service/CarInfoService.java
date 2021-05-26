@@ -40,4 +40,6 @@ public interface CarInfoService extends IService<CarInfo> {
     String getTerminalIdByCarNo(String carNo);
 
     String getCarNoByTerminalId(String TerminalId);
+
+    List<CarInfo> getAllDataWithUptime();
 }

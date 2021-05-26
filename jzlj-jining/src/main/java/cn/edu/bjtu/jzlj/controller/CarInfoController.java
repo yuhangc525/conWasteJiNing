@@ -3,6 +3,7 @@ package cn.edu.bjtu.jzlj.controller;
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.dao.CarCompany;
 import cn.edu.bjtu.jzlj.dao.CarInfo;
+import cn.edu.bjtu.jzlj.dao.IntakePlantInfo;
 import cn.edu.bjtu.jzlj.service.CarInfoService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.UuidTool;
@@ -359,6 +360,23 @@ public class CarInfoController {
             long endTime = System.currentTimeMillis();
             LOGGER.error("分页列举失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationError("分页查看失败" + e.getMessage(), Resp.LIST, null);
+        }
+    }
+
+    @ApiOperation(value = "获取车辆信息包含是否在线的信息", httpMethod = "GET")
+    @GetMapping("/getAllDataWithOnlineInfo")
+    @ControllerEndpoint(operation = "获取车辆信息包含是否在线的信息查询", exceptionMessage = "获取车辆信息包含是否在线的信息查询失败")
+    public Resp getAllDataWithOnlineInfo() {
+        long startTime = System.currentTimeMillis();
+        try {
+            List<CarInfo> ret = carInfoService.getAllDataWithUptime();
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("获取车辆信息包含是否在线的信息成功,用时:" + (endTime-startTime) + "ms");
+            return Resp.getInstantiationSuccess("获取车辆信息包含是否在线的信息成功", Resp.LIST, ret);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("获取车辆信息包含是否在线的信息失败，原因："+ e.getMessage()+"，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("获取车辆信息包含是否在线的信息失败:"+e.getMessage(), Resp.LIST, null);
         }
     }
 

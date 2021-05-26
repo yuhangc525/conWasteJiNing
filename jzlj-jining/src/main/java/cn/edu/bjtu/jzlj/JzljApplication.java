@@ -9,16 +9,18 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ConfigurableApplicationContext;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @SpringBootApplication
 @EnableConfigurationProperties
+//@EnableScheduling
 @MapperScan("cn.edu.bjtu.jzlj.mapper")
 public class JzljApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext run = SpringApplication.run(JzljApplication.class, args);
-//		run.getBean(Receiver.class).receiver();
+		run.getBean(Receiver.class).receiver();
 
 	}
 

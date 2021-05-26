@@ -76,4 +76,15 @@
         SELECT `status` , COUNT(*) as numOfStatus FROM car_info GROUP BY `status`
     </select>
 
+    <select id="getAllDataWithUptime" resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
+        SELECT c.car_id, c.terminal_id, c.load_capacity, c.car_long, c.car_high, c.car_width, c.car_type,
+               c.driver_name, c.motorcade_id, c.terminal_company, c.company, c.car_no, c.from_ip,
+               c.status, c.linkman, c.phone_no, c.input_name, c.input_time, t.uptime
+        FROM car_info c
+
+                 LEFT OUTER JOIN t_realtime_position t
+                                 ON c.terminal_id =t.terminal_id
+    </select>
+
+
 </mapper>
