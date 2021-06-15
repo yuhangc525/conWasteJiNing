@@ -38,7 +38,8 @@
     </select>
 
     <select id="getAllList"  resultType="cn.edu.bjtu.jzlj.dao.CarCompany">
-        SELECT * FROM car_company
+--         SELECT * FROM car_company
+        SELECT * FROM `car_company` WHERE  car_company_name not like '%洒水车%' and car_company_name not like '%扫地车%'
         <if test="_parameter.containsKey('ew') and ew!= null">
             ${ew.customSqlSegment}
         </if>
