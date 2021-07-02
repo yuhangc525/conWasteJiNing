@@ -29,7 +29,7 @@ import java.util.Date;
 public class CarInfo {
 
     /* 继承Model<T> 或者 实现 Serializable */
-    @TableId(value = "car_id")
+    @TableId(value = "car_id", type = IdType.ASSIGN_UUID)
     private String carId;
     private String terminalId;
     private Float loadCapacity;

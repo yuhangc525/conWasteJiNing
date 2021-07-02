@@ -74,7 +74,7 @@ COUNT(*) as alarmNum
 FROM car_alarm
 GROUP BY date_format(update_time,'%Y-%m-%d')
 ORDER BY date_format(update_time,'%Y-%m-%d')
-DESC LIMIT 7
+ASC LIMIT 7
 
     </select>
 

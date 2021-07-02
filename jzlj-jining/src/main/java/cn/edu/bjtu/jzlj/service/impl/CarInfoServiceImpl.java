@@ -97,6 +97,13 @@ public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> impl
     }
 
     @Override
+    public void saveDataByBatch(List<CarInfo> carInfos) {
+        for(int i = 0; i < carInfos.size(); i++){
+            carInfoMapper.insert(carInfos.get(i));
+        }
+    }
+
+    @Override
     public int updateData(CarInfo carInfo) {
         return carInfoMapper.updateById(carInfo);
     }

@@ -239,6 +239,27 @@ public class CarInfoController {
     }
 
 
+    @ApiOperation(value = "批量新增车辆信息", httpMethod = "POST")
+    @PostMapping("/createCarInfoByBatch")
+    @ControllerEndpoint(operation = "批量新增", exceptionMessage = "批量新增失败")
+    public Resp saveByBatch(@RequestBody List<CarInfo> carInfos) {
+        long startTime = System.currentTimeMillis();
+        if (carInfos.isEmpty()) {
+            return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
+        }
+        try {
+            carInfoService.saveDataByBatch(carInfos);
+            long endTime = System.currentTimeMillis();
+            LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, null);
+        } catch (Exception e) {
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("创建失败，原因：" + e.getMessage() + "，用时" + (endTime - startTime) + "ms");
+            return Resp.getInstantiationError("创建异常，原因：" + e.getMessage(), Resp.SINGLE, carInfos);
+        }
+    }
+
+
     /**
      * @return cn.edu.bjtu.jzlj.util.results.Resp
      * @Author: wzj
