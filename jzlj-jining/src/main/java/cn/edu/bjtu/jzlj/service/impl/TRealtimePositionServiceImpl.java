@@ -38,6 +38,16 @@ public class TRealtimePositionServiceImpl  implements TRealtimePositionService {
     @Override
     public List<RegionalVehicleSelectionVo> getRectangleRegionalVehicles(double startLat, double startLong,
             double endLat, double endLong, double interval) {
+        if(startLat > endLat){
+            double temp = startLat;
+            startLat = endLat;
+            endLat = temp;
+        }
+        if(startLong > endLong){
+            double temp = startLong;
+            startLong = endLong;
+            endLong = temp;
+        }
         return tRealtimePositionMapper.getRectangleRegionalVehicles(startLat, startLong, endLat, endLong, interval);
     }
 
