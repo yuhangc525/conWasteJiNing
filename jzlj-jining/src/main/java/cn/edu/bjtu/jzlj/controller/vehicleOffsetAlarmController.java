@@ -2,10 +2,8 @@ package cn.edu.bjtu.jzlj.controller;
 
 import cn.edu.bjtu.jzlj.dao.*;
 
-//import com.alibaba.fastjson.JSONArray;
 import cn.edu.bjtu.jzlj.mapper.TRealtimePositionMapper;
 import cn.edu.bjtu.jzlj.redis.RedisConfig;
-import cn.edu.bjtu.jzlj.redis.Subscriber;
 import cn.edu.bjtu.jzlj.service.CarAlarmService;
 import cn.edu.bjtu.jzlj.service.CarRouteService;
 import cn.edu.bjtu.jzlj.service.RoadInfoService;
@@ -17,23 +15,16 @@ import cn.edu.bjtu.jzlj.util.PositionTransformationUtil;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-//import net.sf.json.JSONObject;
-//import net.sf.json.JSONArray;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import sun.tools.jconsole.CreateMBeanDialog;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;

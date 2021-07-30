@@ -2,6 +2,8 @@ package cn.edu.bjtu.jzlj.service.impl;
 import cn.edu.bjtu.jzlj.mapper.TRealtimePositionMapper;
 import cn.edu.bjtu.jzlj.dao.TRealtimePosition;
 import cn.edu.bjtu.jzlj.service.TRealtimePositionService;
+import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
+
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -31,6 +33,30 @@ public class TRealtimePositionServiceImpl  implements TRealtimePositionService {
     @Override
     public List<TRealtimePosition> getPositionByTerminalId(String ternimalId) {
         return tRealtimePositionMapper.getPositionByTerminalId(ternimalId);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getRectangleRegionalVehicles(double startLat, double startLong,
+            double endLat, double endLong, double interval) {
+        return tRealtimePositionMapper.getRectangleRegionalVehicles(startLat, startLong, endLat, endLong, interval);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getRectangleRegionalVehicles(double startLat, double startLong,
+            double endLat, double endLong) {
+        return tRealtimePositionMapper.getRectangleRegionalVehicles(startLat, startLong, endLat, endLong, 1);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong,
+            double semidiameter, double interval) {
+        return tRealtimePositionMapper.getCircleRegionalVehicles(centerLat, centerLong, semidiameter, interval);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong,
+            double semidiameter) {
+        return tRealtimePositionMapper.getCircleRegionalVehicles(centerLat, centerLong, semidiameter, 1);
     }
 
 

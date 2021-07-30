@@ -7,6 +7,7 @@ import cn.edu.bjtu.jzlj.service.TRealtimePositionService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 
+import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -14,10 +15,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import cn.edu.bjtu.jzlj.service.CarInfoService;
 
 import java.util.List;
+
+import javax.swing.plaf.synth.Region;
 
 @Api(description = "车辆实时位置接口接口")
 @RestController
@@ -58,7 +62,7 @@ public class TRealtimePositionController {
         try {
             String terninalId=carInfoService.getTerminalIdByCarNo(carNo);
             List<TRealtimePosition> tRealtimePosition=tRealTimePositionService.getPositionByTerminalId(terninalId);
-            return Resp.getInstantiationSuccess("车辆实时状态列表查询成功", Resp.LIST,tRealtimePosition);
+            return Resp.getInstantiationSuccess("车辆实时状态列表查询成功", Resp.LIST, tRealtimePosition);
         }catch (Exception e){
             long endTime = System.currentTimeMillis();
             LOGGER.error("根据车牌号查询车辆实时状态查询失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
@@ -67,5 +71,35 @@ public class TRealtimePositionController {
         }
 
 
+    }
+
+    @ApiOperation(value = "矩形区域 - 实时查询x小时（默认1）内出现的车辆，interval单位为小时", httpMethod = "POST")
+    @RequestMapping(value = "getRectangleRegionalVehicles")
+    @ControllerEndpoint(operation = "实时查询矩形区域的车辆", exceptionMessage = "实时查询矩形区域的车辆失败")
+    public Resp getRectangleRegionalVehicles(double startLat, double startLong, double endLat, double endLong, @RequestParam(defaultValue = "1.0", required = false) double interval){
+        long startTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tRealTimePositionService.getRectangleRegionalVehicles(startLat, startLong, endLat, endLong, interval);
+            return Resp.getInstantiationSuccess("实时查询矩形区域的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("实时查询矩形区域的车辆失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
+            return Resp.getInstantiationError("实时查询矩形区域的车辆失败，原因：" + e.getMessage(),null,null);
+        }
+    }
+
+    @ApiOperation(value = "圆形区域 - 实时查询x小时（默认1）内出现的车辆，interval单位为小时", httpMethod = "POST")
+    @RequestMapping(value = "getCircleRegionalVehicles")
+    @ControllerEndpoint(operation = "实时查询圆形区域的车辆", exceptionMessage = "实时查询圆形区域的车辆失败")
+    public Resp getCircleRegionalVehicles (double centerLat, double centerLong, double semidiameter, @RequestParam(defaultValue = "1.0", required = false) double interval) {
+        long startTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tRealTimePositionService.getCircleRegionalVehicles(centerLat, centerLong, semidiameter, interval);
+            return Resp.getInstantiationSuccess("实时查询圆形区域的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("实时查询矩形区域的车辆失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
+            return Resp.getInstantiationError("实时查询圆形区域的车辆失败，原因：" + e.getMessage(),null,null);
+        }
     }
 }

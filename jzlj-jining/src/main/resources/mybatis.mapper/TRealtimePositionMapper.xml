@@ -45,6 +45,35 @@
         SELECT * FROM t_realtime_position WHERE terminal_id=#{terminal_id}
     </select>
 
+  <select id="getRectangleRegionalVehicles" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
+    SELECT a.terminal_id, a.uptime, IFNULL(a.carno, c.car_no) car_no
+    FROM
+    (SELECT t.terminal_id, t.carno, t.uptime
+    FROM t_realtime_position t
+    WHERE t.lat >= #{startLat,jdbcType=DECIMAL} AND t.lat &lt;= #{endLat,jdbcType=DECIMAL}
+    AND t.lon >= #{startLong,jdbcType=DECIMAL} AND t.lon &lt;= #{endLong,jdbcType=DECIMAL}
+    AND t.uptime >= DATE_SUB(NOW(),INTERVAL #{interval,jdbcType=DECIMAL} HOUR) GROUP BY t.terminal_id
+    ) a
+    LEFT JOIN car_info c
+    ON a.terminal_id = c.terminal_id
+    ORDER BY uptime DESC
+  </select>
+
+  <select id="getCircleRegionalVehicles" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
+    SELECT a.terminal_id, a.uptime, IFNULL(a.carno, c.car_no) car_no
+    FROM
+    (SELECT t.terminal_id, t.carno, t.uptime
+    FROM t_realtime_position t
+    WHERE (t.lat - #{centerLat,jdbcType=DECIMAL}) * (t.lat - #{centerLat,jdbcType=DECIMAL})
+              + (t.lon - #{centerLong,jdbcType=DECIMAL}) * (t.lon - #{centerLong,jdbcType=DECIMAL})
+              &lt;= #{semidiameter,jdbcType=DECIMAL} * #{semidiameter,jdbcType=DECIMAL}
+    AND t.uptime >= DATE_SUB(NOW(),INTERVAL #{interval,jdbcType=DECIMAL} HOUR) GROUP BY t.terminal_id
+    ) a
+    LEFT JOIN car_info c
+    ON a.terminal_id = c.terminal_id
+    ORDER BY uptime DESC
+  </select>
+
 
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
