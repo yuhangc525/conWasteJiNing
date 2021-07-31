@@ -3,6 +3,7 @@ package cn.edu.bjtu.jzlj.controller;
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.service.THistoryPositionService;
 import cn.edu.bjtu.jzlj.util.results.Resp;
+import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ public class THistoryPositionController {
     THistoryPositionService tHistoryPositionService;
     @Autowired
     CarInfoService carInfoService;
+
     @ApiOperation(value = "车辆历史轨迹查询", httpMethod = "POST")
     @RequestMapping(value = "history")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+8")
@@ -108,6 +110,38 @@ public class THistoryPositionController {
             return Resp.getInstantiationError("车辆历史轨迹列表查询失败，原因：" + e.getMessage(),null,null);
         }
     }
+
+    @ApiOperation(value = "矩形区域 - 按时段查询出现的车辆，时间是yyyy-MM-dd HH:mm:ss格式字符串", httpMethod = "POST")
+    @RequestMapping(value = "getRectangleRegionalVehiclesWithTimeLimit")
+    @ControllerEndpoint(operation = "矩形区域 - 按时段查询出现的车辆", exceptionMessage = "矩形区域 - 按时段查询出现的车辆失败")
+    public Resp getRectangleRegionalVehiclesWithTimeLimit(double startLat, double startLong, double endLat, double endLong, String startTime, String endTime) {
+        long sTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tHistoryPositionService.getRectangleRegionalVehiclesWithTimeLimit(startLat, startLong, endLat, endLong, startTime, endTime);
+            return Resp.getInstantiationSuccess("矩形区域 - 按时段查询出现的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long eTime = System.currentTimeMillis();
+            LOGGER.error("矩形区域 - 按时段查询出现的车辆失败，原因：" + e.getMessage() + "，用时：" + (eTime - sTime) +"ms");
+            return Resp.getInstantiationError("矩形区域 - 按时段查询出现的车辆，原因：" + e.getMessage(),null,null);
+        }
+    }
+
+    @ApiOperation(value = "圆形区域 - 按时段查询出现的车辆，时间是yyyy-MM-dd HH:mm:ss格式字符串", httpMethod = "POST")
+    @RequestMapping(value = "getCircleRegionalVehiclesWithTimeLimit")
+    @ControllerEndpoint(operation = "圆形区域 - 按时段查询出现的车辆", exceptionMessage = "圆形区域 - 按时段查询出现的车辆失败")
+    public Resp getCircleRegionalVehiclesWithTimeLimit(double centerLat, double centerLong, double semidiameter,
+                                                       String startTime, String endTime) {
+        long sTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tHistoryPositionService.getCircleRegionalVehiclesWithTimeLimit(centerLat, centerLong, semidiameter, startTime, endTime);
+            return Resp.getInstantiationSuccess("圆形区域 - 按时段查询出现的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long eTime = System.currentTimeMillis();
+            LOGGER.error("圆形区域 - 按时段查询出现的车辆失败，原因：" + e.getMessage() + "，用时：" + (eTime - sTime) +"ms");
+            return Resp.getInstantiationError("圆形区域 - 按时段查询出现的车辆，原因：" + e.getMessage(),null,null);
+        }
+    }
+
     public List<String> getTableList(String stime,String etime)
     {
         List<String> dateList=new ArrayList();

@@ -3,21 +3,24 @@ package cn.edu.bjtu.jzlj.service.impl;
 import cn.edu.bjtu.jzlj.dao.THistoryPosition;
 import cn.edu.bjtu.jzlj.mapper.THistoryPositionMapper;
 import cn.edu.bjtu.jzlj.service.THistoryPositionService;
+import cn.edu.bjtu.jzlj.util.TimeUtil;
+import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.function.Function;
 @Service
 public class THistoryPositionServiceImpl implements THistoryPositionService {
     @Autowired
     THistoryPositionMapper tHistoryPositionMapper;
+
+    private Calendar calendar = new GregorianCalendar();
+
     @Override
     public List<THistoryPosition> getHistoryPoint(String sTime, String eTime, String terminalId,String tableName) {
 
@@ -26,6 +29,42 @@ public class THistoryPositionServiceImpl implements THistoryPositionService {
 //        System.out.println("----------------------2--------------------------------");
 
         return tHistoryPositionMapper.getHistoryPoint(sTime,eTime,terminalId,tableName);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getRectangleRegionalVehiclesWithTimeLimit(double startLat, double startLong, double endLat, double endLong, String startTime, String endTime) {
+        if(startLat > endLat){
+            double temp = startLat;
+            startLat = endLat;
+            endLat = temp;
+        }
+        if(startLong > endLong){
+            double temp = startLong;
+            startLong = endLong;
+            endLong = temp;
+        }
+        List<List<String>> times = getTimes(startTime, endTime);
+        List<RegionalVehicleSelectionVo> res = new ArrayList<>();
+        for(int i = times.size() - 1; i >= 0; i--) {
+            List<String> temp = times.get(i);
+            String tableName = getTableName(temp.get(0), temp.get(1));
+            List<RegionalVehicleSelectionVo> ans = tHistoryPositionMapper.getRectangleRegionalVehiclesWithTimeLimit(startLat, endLat, startLong, endLong, temp.get(0), temp.get(1), tableName);
+            res.addAll(ans);
+        }
+        return res;
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getCircleRegionalVehiclesWithTimeLimit(double centerLat, double centerLong, double semidiameter, String startTime, String endTime) {
+        List<List<String>> times = getTimes(startTime, endTime);
+        List<RegionalVehicleSelectionVo> res = new ArrayList<>();
+        for(int i = times.size() - 1; i >= 0; i--) {
+            List<String> temp = times.get(i);
+            String tableName = getTableName(temp.get(0), temp.get(1));
+            List<RegionalVehicleSelectionVo> ans = tHistoryPositionMapper.getCircleRegionalVehiclesWithTimeLimit(centerLat, centerLong, semidiameter, temp.get(0), temp.get(1), tableName);
+            res.addAll(ans);
+        }
+        return res;
     }
 
     @Override
@@ -143,6 +182,43 @@ public class THistoryPositionServiceImpl implements THistoryPositionService {
     @Override
     public BaseMapper<THistoryPosition> getBaseMapper() {
         return null;
+    }
+
+    private List<List<String>> getTimes(String startTime, String endTime) {
+
+        List<List<String>> dateList = new ArrayList();
+        Date d1 = TimeUtil.stringToDate(startTime, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = TimeUtil.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
+        String endDay = TimeUtil.dateToString(d2, "yyyyMMdd");
+        calendar.setTime(d1);
+        while(!calendar.getTime().after(d2)) {
+            if(TimeUtil.dateToString(calendar.getTime(),"yyyyMMdd").equals(endDay)) {
+                List<String> ans = new ArrayList<>();
+                ans.add(TimeUtil.dateToString(calendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+                ans.add(endTime);
+                dateList.add(ans);
+                calendar.add(calendar.DATE,1);
+            } else {
+                StringBuilder currentDay = new StringBuilder(TimeUtil.dateToString(calendar.getTime(),"yyyy-MM-dd"));
+                List<String> ans = new ArrayList<>();
+                ans.add(TimeUtil.dateToString(calendar.getTime(), "yyyy-MM-dd HH:mm:ss"));
+                ans.add(currentDay.append(" 23:59:59").toString());
+                dateList.add(ans);
+                calendar.add(calendar.DATE,1);
+                StringBuilder tomorrowDay = new StringBuilder(TimeUtil.dateToString(calendar.getTime(), "yyyy-MM-dd"));
+                tomorrowDay.append(" 00:00:00");
+                calendar.setTime(TimeUtil.stringToDate(tomorrowDay.toString(), "yyyy-MM-dd HH:mm:ss"));
+            }
+        }
+        return dateList;
+    }
+
+    private String getTableName(String startTime, String endTime){
+        Date d1 = TimeUtil.stringToDate(startTime, "yyyy-MM-dd HH:mm:ss");
+        Date d2 = TimeUtil.stringToDate(endTime, "yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        if(!fmt.format(d1).equals(fmt.format(d2))) return null;
+        return "t_history_position_" + fmt.format(d1);
     }
 
 }

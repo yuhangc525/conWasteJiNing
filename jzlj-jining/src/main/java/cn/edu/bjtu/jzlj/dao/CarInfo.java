@@ -43,7 +43,7 @@ public class CarInfo {
     private String company;
     private String carNo;
     private String fromIp;
-    private Integer status;
+    private String status;
     private String linkman;
     private String phoneNo;
     private String inputName;

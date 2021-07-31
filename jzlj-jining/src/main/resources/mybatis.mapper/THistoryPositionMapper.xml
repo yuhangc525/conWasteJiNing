@@ -258,22 +258,34 @@
   </select>
 
   <select id="getRectangleRegionalVehiclesWithTimeLimit" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
-
+    SELECT a.terminal_id, a.uptime, c.car_no
+    FROM
+    (SELECT t.terminal_id, MAX(t.uptime) uptime
+    FROM ${tableName} t
+    WHERE t.lat >= #{startLat,jdbcType=DECIMAL} AND t.lat &lt;= #{endLat,jdbcType=DECIMAL}
+      AND t.lon >= #{startLong,jdbcType=DECIMAL} AND t.lon &lt;= #{endLong,jdbcType=DECIMAL}
+    AND t.uptime >= #{startTime,jdbcType=TIMESTAMP} AND t.uptime &lt;= #{endTime,jdbcType=TIMESTAMP}
+    GROUP BY t.terminal_id
+    ) a
+    LEFT JOIN car_info c
+    ON a.terminal_id = c.terminal_id
+    Order By uptime DESC
   </select>
 
-  <select id="getCircleRegionalVehicles" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
-    SELECT a.terminal_id, a.uptime, IFNULL(a.carno, c.car_no) car_no
+  <select id="getCircleRegionalVehiclesWithTimeLimit" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
+    SELECT a.terminal_id, a.uptime, c.car_no
     FROM
-      (SELECT t.terminal_id, t.carno, t.uptime
-       FROM t_realtime_position t
-       WHERE (t.lat - #{centerLat,jdbcType=DECIMAL}) * (t.lat - #{centerLat,jdbcType=DECIMAL})
-               + (t.lon - #{centerLong,jdbcType=DECIMAL}) * (t.lon - #{centerLong,jdbcType=DECIMAL})
-         &lt;= #{semidiameter,jdbcType=DECIMAL} * #{semidiameter,jdbcType=DECIMAL}
-         AND t.uptime >= DATE_SUB(NOW(),INTERVAL #{interval,jdbcType=DECIMAL} HOUR) GROUP BY t.terminal_id
-      ) a
-        LEFT JOIN car_info c
-                  ON a.terminal_id = c.terminal_id
-    ORDER BY uptime DESC
+    (SELECT t.terminal_id, MAX(t.uptime) uptime
+    FROM ${tableName} t
+    WHERE (t.lat - #{centerLat,jdbcType=DECIMAL}) * (t.lat - #{centerLat,jdbcType=DECIMAL})
+              + (t.lon - #{centerLong,jdbcType=DECIMAL}) * (t.lon - #{centerLong,jdbcType=DECIMAL})
+              &lt;= #{semidiameter, jdbcType=DECIMAL} * #{semidiameter, jdbcType=DECIMAL}
+      AND t.uptime >= #{startTime,jdbcType=TIMESTAMP} AND t.uptime &lt;= #{endTime,jdbcType=TIMESTAMP}
+    GROUP BY t.terminal_id
+    ) a
+    LEFT JOIN car_info c
+    ON a.terminal_id = c.terminal_id
+    Order By uptime DESC
   </select>
 
 </mapper>
