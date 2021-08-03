@@ -288,4 +288,28 @@
     Order By uptime DESC
   </select>
 
+  <select id="getPolygonRegionalVehicles" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
+    SELECT a.terminal_id, a.uptime, IFNULL(r.carno, c.car_no)
+    FROM
+    (SELECT t.terminal_id, MAX(t.uptime) uptime
+    from t_history_position_20210802 t
+    where MBRContains(
+    ST_GeomFromText('POLYGON((
+    116.542703 35.35252,
+    116.726431 35.35252,
+    116.726431 35.783231,
+    116.542703 35.783231,
+    116.542703 35.35252 ))'),
+    ST_GeomFromText(CONCAT('POINT(', lon, ' ', lat, ')'))
+    ) > 0
+    AND t.uptime >= '2021-08-02 00:33:28'
+    AND t.uptime <= '2021-08-02 12:33:28'
+    GROUP BY t.terminal_id) a
+    LEFT JOIN car_info c
+    ON a.terminal_id = c.terminal_id
+    LEFT JOIN t_realtime_position r
+    ON a.terminal_id = r.terminal_id
+    Order By uptime DESC
+  </select>
+
 </mapper>

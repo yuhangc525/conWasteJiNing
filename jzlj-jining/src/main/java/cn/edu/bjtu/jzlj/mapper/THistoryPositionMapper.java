@@ -24,5 +24,7 @@ public interface THistoryPositionMapper extends BaseMapper<THistoryPosition> {
     List<RegionalVehicleSelectionVo> getCircleRegionalVehiclesWithTimeLimit(double centerLat, double centerLong, double semidiameter,
             String startTime, String endTime, String tableName);
 
+    // 多边形 - 有时间范围限制查询车辆
+    List<RegionalVehicleSelectionVo> getPolygonRegionalVehicles(double centerLat, double centerLong, double semidiameter, double interval);
 
 }

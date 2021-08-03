@@ -22,4 +22,7 @@ public interface TRealtimePositionMapper extends BaseMapper<TRealtimePosition> {
 
     // 圆形 - 区域实时查询车辆
     List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong, double semidiameter, double interval);
+
+    // 多边形 - 区域实时查询车辆
+    List<RegionalVehicleSelectionVo> getPolygonRegionalVehicles(String polygon, double interval);
 }
