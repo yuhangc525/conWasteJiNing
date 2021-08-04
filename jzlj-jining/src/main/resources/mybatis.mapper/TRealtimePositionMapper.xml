@@ -80,7 +80,7 @@
       (SELECT t.terminal_id, t.carno, t.uptime
        FROM t_realtime_position t
        where MBRContains(
-                     ST_GeomFromText('POLYGON((' #{polygon, jdbcType=VARCHAR} '))'),
+                     ST_GeomFromText(CONCAT('POLYGON((', #{polygon, jdbcType=VARCHAR}, '))')),
                      ST_GeomFromText(CONCAT('POINT(', lon, ' ', lat, ')'))
                ) > 0
          AND t.uptime >= DATE_SUB(NOW(),INTERVAL #{interval,jdbcType=DECIMAL} HOUR)

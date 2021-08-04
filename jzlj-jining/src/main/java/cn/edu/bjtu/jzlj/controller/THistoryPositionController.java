@@ -3,6 +3,7 @@ package cn.edu.bjtu.jzlj.controller;
 import cn.edu.bjtu.jzlj.aspect.ControllerEndpoint;
 import cn.edu.bjtu.jzlj.service.THistoryPositionService;
 import cn.edu.bjtu.jzlj.util.results.Resp;
+import cn.edu.bjtu.jzlj.vo.Point;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -139,6 +141,21 @@ public class THistoryPositionController {
             long eTime = System.currentTimeMillis();
             LOGGER.error("圆形区域 - 按时段查询出现的车辆失败，原因：" + e.getMessage() + "，用时：" + (eTime - sTime) +"ms");
             return Resp.getInstantiationError("圆形区域 - 按时段查询出现的车辆，原因：" + e.getMessage(),null,null);
+        }
+    }
+
+    @ApiOperation(value = "多边形区域 - 按时段查询出现的车辆，时间是yyyy-MM-dd HH:mm:ss格式字符串", httpMethod = "POST")
+    @RequestMapping(value = "getPolygonRegionalVehiclesWithTimeLimit")
+    @ControllerEndpoint(operation = "多边形区域 - 按时段查询出现的车辆", exceptionMessage = "多边形区域 - 按时段查询出现的车辆失败")
+    public Resp getPolygonRegionalVehiclesWithTimeLimit(@RequestBody List<Point> points, String startTime, String endTime) {
+        long sTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tHistoryPositionService.getPolygonRegionalVehiclesWithTimeLimit(points, startTime, endTime);
+            return Resp.getInstantiationSuccess("多边形区域 - 按时段查询出现的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long eTime = System.currentTimeMillis();
+            LOGGER.error("多边形区域 - 按时段查询出现的车辆失败，原因：" + e.getMessage() + "，用时：" + (eTime - sTime) +"ms");
+            return Resp.getInstantiationError("多边形区域 - 按时段查询出现的车辆，原因：" + e.getMessage(),null,null);
         }
     }
 

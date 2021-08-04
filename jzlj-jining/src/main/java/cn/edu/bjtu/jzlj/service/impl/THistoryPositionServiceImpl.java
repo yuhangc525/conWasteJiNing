@@ -4,6 +4,7 @@ import cn.edu.bjtu.jzlj.dao.THistoryPosition;
 import cn.edu.bjtu.jzlj.mapper.THistoryPositionMapper;
 import cn.edu.bjtu.jzlj.service.THistoryPositionService;
 import cn.edu.bjtu.jzlj.util.TimeUtil;
+import cn.edu.bjtu.jzlj.vo.Point;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -62,6 +63,29 @@ public class THistoryPositionServiceImpl implements THistoryPositionService {
             List<String> temp = times.get(i);
             String tableName = getTableName(temp.get(0), temp.get(1));
             List<RegionalVehicleSelectionVo> ans = tHistoryPositionMapper.getCircleRegionalVehiclesWithTimeLimit(centerLat, centerLong, semidiameter, temp.get(0), temp.get(1), tableName);
+            res.addAll(ans);
+        }
+        return res;
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getPolygonRegionalVehiclesWithTimeLimit(List<Point> points, String startTime, String endTime) {
+        if(points == null) return null;
+        // 获取 polygon
+        StringBuilder polygon = new StringBuilder("");
+        for(Point point : points) {
+            String ans = point.getLng() + " " + point.getLat() + ",";
+            polygon.append(ans);
+        }
+        String last = points.get(0).getLng() + " " + points.get(0).getLat();
+        polygon.append(last);
+        // 获取读取时间列表
+        List<List<String>> times = getTimes(startTime, endTime);
+        List<RegionalVehicleSelectionVo> res = new ArrayList<>();
+        for(int i = times.size() - 1; i >= 0; i--) {
+            List<String> temp = times.get(i);
+            String tableName = getTableName(temp.get(0), temp.get(1));
+            List<RegionalVehicleSelectionVo> ans = tHistoryPositionMapper.getPolygonRegionalVehiclesWithTimeLimit(polygon.toString(), temp.get(0), temp.get(1), tableName);
             res.addAll(ans);
         }
         return res;

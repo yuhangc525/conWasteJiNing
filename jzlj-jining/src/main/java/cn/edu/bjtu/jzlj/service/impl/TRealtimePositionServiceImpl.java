@@ -2,12 +2,14 @@ package cn.edu.bjtu.jzlj.service.impl;
 import cn.edu.bjtu.jzlj.mapper.TRealtimePositionMapper;
 import cn.edu.bjtu.jzlj.dao.TRealtimePosition;
 import cn.edu.bjtu.jzlj.service.TRealtimePositionService;
+import cn.edu.bjtu.jzlj.vo.Point;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import net.sf.jsqlparser.statement.select.SetOperationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +69,19 @@ public class TRealtimePositionServiceImpl  implements TRealtimePositionService {
     public List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong,
             double semidiameter) {
         return tRealtimePositionMapper.getCircleRegionalVehicles(centerLat, centerLong, semidiameter, 1);
+    }
+
+    @Override
+    public List<RegionalVehicleSelectionVo> getPolygonRegionalVehicles(List<Point> points, double interval) {
+        if(points == null) return null;
+        StringBuilder polygon = new StringBuilder("");
+        for(Point point : points) {
+            String ans = point.getLng() + " " + point.getLat() + ",";
+            polygon.append(ans);
+        }
+        String last = points.get(0).getLng() + " " + points.get(0).getLat();
+        polygon.append(last);
+        return tRealtimePositionMapper.getPolygonRegionalVehicles(polygon.toString(), interval);
     }
 
 

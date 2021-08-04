@@ -7,16 +7,14 @@ import cn.edu.bjtu.jzlj.service.TRealtimePositionService;
 import cn.edu.bjtu.jzlj.util.QueryRequest;
 import cn.edu.bjtu.jzlj.util.results.Resp;
 
+import cn.edu.bjtu.jzlj.vo.Point;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import cn.edu.bjtu.jzlj.service.CarInfoService;
 
 import java.util.List;
@@ -98,8 +96,23 @@ public class TRealtimePositionController {
             return Resp.getInstantiationSuccess("实时查询圆形区域的车辆", Resp.LIST, res);
         }catch (Exception e){
             long endTime = System.currentTimeMillis();
-            LOGGER.error("实时查询矩形区域的车辆失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
+            LOGGER.error("实时查询圆形区域的车辆失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
             return Resp.getInstantiationError("实时查询圆形区域的车辆失败，原因：" + e.getMessage(),null,null);
+        }
+    }
+
+    @ApiOperation(value = "多边形区域，- 实时查询x小时（默认1）内出现的车辆，interval单位为小时", httpMethod = "POST")
+    @RequestMapping(value = "getPolygonRegionalVehicles")
+    @ControllerEndpoint(operation = "实时查询多边形区域的车辆", exceptionMessage = "实时查询多边形区域的车辆失败")
+    public Resp getPolygonRegionalVehicles (@RequestBody List<Point> points, @RequestParam(defaultValue = "1.0", required = false) double interval) {
+        long startTime = System.currentTimeMillis();
+        try {
+            List<RegionalVehicleSelectionVo> res = tRealTimePositionService.getPolygonRegionalVehicles(points, interval);
+            return Resp.getInstantiationSuccess("实时查询多边型区域的车辆", Resp.LIST, res);
+        }catch (Exception e){
+            long endTime = System.currentTimeMillis();
+            LOGGER.error("实时查询多边型区域的车辆失败，原因：" + e.getMessage() + "，用时：" + (endTime - startTime) +"ms");
+            return Resp.getInstantiationError("实时查询多边型区域的车辆失败，原因：" + e.getMessage(),null,null);
         }
     }
 }

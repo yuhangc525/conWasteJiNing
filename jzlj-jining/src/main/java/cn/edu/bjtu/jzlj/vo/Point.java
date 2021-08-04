@@ -9,6 +9,6 @@ import lombok.Data;
 
 @Data
 public class Point {
-    private long lat;
-    private long lng;
+    private double lat;
+    private double lng;
 }

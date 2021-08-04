@@ -1,5 +1,6 @@
 package cn.edu.bjtu.jzlj.service;
 import cn.edu.bjtu.jzlj.dao.TRealtimePosition;
+import cn.edu.bjtu.jzlj.vo.Point;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
 
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -25,6 +26,10 @@ public interface TRealtimePositionService extends IService<TRealtimePosition> {
     // 圆形 - 区域实时查询车辆
     List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong, double semidiameter, double interval);
 
-    List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong, double semidiameter);
+    List<RegionalVehicleSelectionVo> getCircleRegionalVehicles(double centerLat, double centerLong,
+                                                                      double semidiameter);
+
+    // 多边形 - 区域实时查询车辆
+    List<RegionalVehicleSelectionVo> getPolygonRegionalVehicles(List<Point> points, double interval);
 
 }

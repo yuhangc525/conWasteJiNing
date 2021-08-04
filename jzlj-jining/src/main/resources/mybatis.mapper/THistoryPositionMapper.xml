@@ -280,7 +280,8 @@
     WHERE (t.lat - #{centerLat,jdbcType=DECIMAL}) * (t.lat - #{centerLat,jdbcType=DECIMAL})
               + (t.lon - #{centerLong,jdbcType=DECIMAL}) * (t.lon - #{centerLong,jdbcType=DECIMAL})
               &lt;= #{semidiameter, jdbcType=DECIMAL} * #{semidiameter, jdbcType=DECIMAL}
-      AND t.uptime >= #{startTime,jdbcType=TIMESTAMP} AND t.uptime &lt;= #{endTime,jdbcType=TIMESTAMP}
+      AND t.uptime >= #{startTime,jdbcType=TIMESTAMP}
+      AND t.uptime &lt;= #{endTime,jdbcType=TIMESTAMP}
     GROUP BY t.terminal_id
     ) a
     LEFT JOIN car_info c
@@ -288,22 +289,17 @@
     Order By uptime DESC
   </select>
 
-  <select id="getPolygonRegionalVehicles" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
-    SELECT a.terminal_id, a.uptime, IFNULL(r.carno, c.car_no)
+  <select id="getPolygonRegionalVehiclesWithTimeLimit" resultType="cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo">
+    SELECT a.terminal_id, a.uptime, IFNULL(r.carno, c.car_no) car_no
     FROM
     (SELECT t.terminal_id, MAX(t.uptime) uptime
-    from t_history_position_20210802 t
+    from ${tableName} t
     where MBRContains(
-    ST_GeomFromText('POLYGON((
-    116.542703 35.35252,
-    116.726431 35.35252,
-    116.726431 35.783231,
-    116.542703 35.783231,
-    116.542703 35.35252 ))'),
+    ST_GeomFromText(CONCAT('POLYGON((', #{polygon, jdbcType=VARCHAR}, '))')),
     ST_GeomFromText(CONCAT('POINT(', lon, ' ', lat, ')'))
     ) > 0
-    AND t.uptime >= '2021-08-02 00:33:28'
-    AND t.uptime <= '2021-08-02 12:33:28'
+    AND t.uptime >= #{startTime,jdbcType=TIMESTAMP}
+    AND t.uptime &lt;= #{endTime,jdbcType=TIMESTAMP}
     GROUP BY t.terminal_id) a
     LEFT JOIN car_info c
     ON a.terminal_id = c.terminal_id

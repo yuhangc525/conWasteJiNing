@@ -25,6 +25,6 @@ public interface THistoryPositionMapper extends BaseMapper<THistoryPosition> {
             String startTime, String endTime, String tableName);
 
     // 多边形 - 有时间范围限制查询车辆
-    List<RegionalVehicleSelectionVo> getPolygonRegionalVehicles(double centerLat, double centerLong, double semidiameter, double interval);
+    List<RegionalVehicleSelectionVo> getPolygonRegionalVehiclesWithTimeLimit(String polygon, String startTime, String endTime, String tableName);
 
 }
