@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: jzlj
@@ -100,6 +102,23 @@ public class CarInfoServiceImpl extends ServiceImpl<CarInfoMapper, CarInfo> impl
     public void saveDataByBatch(List<CarInfo> carInfos) {
         for(int i = 0; i < carInfos.size(); i++){
             carInfoMapper.insert(carInfos.get(i));
+        }
+    }
+
+    @Override
+    public void saveOrUpdateDataByBatch(List<CarInfo> carInfos) {
+        for(CarInfo temp : carInfos) {
+            Map<String, Object> quaryMap = new HashMap<>();
+            quaryMap.put("car_no", temp.getCarNo());
+            List<CarInfo> repeatCars = carInfoMapper.selectByMap(quaryMap);
+            if(repeatCars.size() != 0) {
+                for(CarInfo carInfo : repeatCars) {
+                    temp.setCarId(carInfo.getCarId());
+                    carInfoMapper.updateById(temp);
+                }
+            } else {
+                carInfoMapper.insert(temp);
+            }
         }
     }
 

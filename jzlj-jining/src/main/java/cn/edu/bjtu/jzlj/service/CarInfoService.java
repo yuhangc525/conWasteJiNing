@@ -31,6 +31,9 @@ public interface CarInfoService extends IService<CarInfo> {
     /*批量新增*/
     void saveDataByBatch(List<CarInfo> carInfo);
 
+    /*批量新增*/
+    void saveOrUpdateDataByBatch(List<CarInfo> carInfo);
+
     /*更新*/
     int updateData(CarInfo carInfo);
 
@@ -45,4 +48,6 @@ public interface CarInfoService extends IService<CarInfo> {
     String getCarNoByTerminalId(String TerminalId);
 
     List<CarInfo> getAllDataWithUptime();
+
+
 }

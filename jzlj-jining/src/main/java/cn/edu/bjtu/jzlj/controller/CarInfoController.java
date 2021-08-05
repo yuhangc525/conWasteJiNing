@@ -239,16 +239,20 @@ public class CarInfoController {
     }
 
 
-    @ApiOperation(value = "批量新增车辆信息", httpMethod = "POST")
+    @ApiOperation(value = "批量新增车辆信息, isCover: 默认false，开启时将重复元素覆盖原来的值而不是插入。", httpMethod = "POST")
     @PostMapping("/createCarInfoByBatch")
     @ControllerEndpoint(operation = "批量新增", exceptionMessage = "批量新增失败")
-    public Resp saveByBatch(@RequestBody List<CarInfo> carInfos) {
+    public Resp saveByBatch(@RequestBody List<CarInfo> carInfos, @RequestParam(defaultValue = "false", required = false) boolean isCover ){
         long startTime = System.currentTimeMillis();
         if (carInfos.isEmpty()) {
             return Resp.getInstantiationError("前端错误，参数为空", Resp.SINGLE, null);
         }
         try {
-            carInfoService.saveDataByBatch(carInfos);
+            if(isCover) {
+                carInfoService.saveOrUpdateDataByBatch(carInfos);
+            } else{
+                carInfoService.saveDataByBatch(carInfos);
+            }
             long endTime = System.currentTimeMillis();
             LOGGER.info("创建成功，用时" + (endTime - startTime) + "ms");
             return Resp.getInstantiationSuccess("创建成功", Resp.SINGLE, null);
