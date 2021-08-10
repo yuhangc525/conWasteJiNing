@@ -101,5 +101,9 @@ public class TRealtimePosition implements Serializable {
      */
     private Date uptime;
 
+    private Integer airtight;
+    private Integer load;
+    private Integer lift;
+
 
 }

@@ -55,7 +55,7 @@ public class CarInfo {
     @TableField(exist = false)
     @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date uptime;
-
+    private Integer cabMonitorType;
     @Transient
     @TableField(exist = false)
     private boolean isOnline;

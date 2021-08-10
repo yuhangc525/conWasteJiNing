@@ -48,6 +48,10 @@ public class THistoryPosition  implements Serializable {
 
     private Date uptime;
 
+    private Integer airtight;
+    private Integer load;
+    private Integer lift;
+
     private Date savetime;
 
 

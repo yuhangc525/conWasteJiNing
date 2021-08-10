@@ -2,8 +2,6 @@ package cn.edu.bjtu.jzlj.mapper;
 
 import cn.edu.bjtu.jzlj.dao.THistoryPosition;
 import cn.edu.bjtu.jzlj.vo.RegionalVehicleSelectionVo;
-import cn.edu.bjtu.jzlj.vo.graph.numberOfVehicleUsedVo;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 

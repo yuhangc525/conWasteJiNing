@@ -21,6 +21,7 @@
         <result column="input_name" property="inputName" />
         <result column="input_time" property="inputTime" />
         <result column="reviews_status" property="reviewsStatus" />
+        <result column="cab_monitor_type" property="cabMonitorType" />
     </resultMap>
 
     <resultMap id="NewResultMap" type="cn.edu.bjtu.jzlj.vo.Test">
@@ -78,7 +79,7 @@
 
     <select id="getAllDataWithUptime" resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
         SELECT c.car_id, c.terminal_id, c.load_capacity, c.car_long, c.car_high, c.car_width, c.car_type,
-               c.driver_name, c.motorcade_id, c.terminal_company, c.company, c.car_no, c.from_ip,
+               c.driver_name, c.motorcade_id, c.terminal_company, c.company, c.car_no, c.from_ip, c.cab_monitor_type
                c.status, c.linkman, c.phone_no, c.input_name, c.input_time, t.uptime
         FROM car_info c
 
