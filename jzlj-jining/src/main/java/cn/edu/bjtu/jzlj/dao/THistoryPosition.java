@@ -49,7 +49,7 @@ public class THistoryPosition  implements Serializable {
     private Date uptime;
 
     private Integer airtight;
-    private Integer load;
+    private Integer loadState;
     private Integer lift;
 
     private Date savetime;

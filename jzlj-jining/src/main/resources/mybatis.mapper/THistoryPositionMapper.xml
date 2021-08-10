@@ -20,13 +20,13 @@
     <result column="lon_gcj02" jdbcType="DECIMAL" property="lonGcj02" />
     <result column="lat_gcj02" jdbcType="DECIMAL" property="latGcj02" />
     <result column="airtight" jdbcType="TINYINT" property="airtight" />
-    <result column="load" jdbcType="TINYINT" property="load" />
+    <result column="load_state" jdbcType="TINYINT" property="loadState" />
     <result column="lift" jdbcType="TINYINT" property="lift" />
     <result column="savetime" jdbcType="TIMESTAMP" property="savetime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, uptime, terminal_id, carno, lon, lat, speed, direction, height, mile, oil, `status`, 
-    alarmflag, acc, `position`, lon_gcj02, lat_gcj02, savetime, airtight, load, lift
+    alarmflag, acc, `position`, lon_gcj02, lat_gcj02, savetime, airtight, load_state, lift
   </sql>
 
   <select id="getHistoryPoint" parameterType="cn.edu.bjtu.jzlj.dao.THistoryPosition" resultMap="BaseResultMap">
@@ -55,14 +55,14 @@
       direction, height, mile, 
       oil, `status`, alarmflag, 
       acc, `position`, lon_gcj02, 
-      lat_gcj02, savetime,airtight, load, lift)
+      lat_gcj02, savetime,airtight, load_state, lift)
     values (#{id,jdbcType=VARCHAR}, #{uptime,jdbcType=TIMESTAMP}, #{terminalId,jdbcType=VARCHAR}, 
       #{carno,jdbcType=VARCHAR}, #{lon,jdbcType=DECIMAL}, #{lat,jdbcType=DECIMAL}, #{speed,jdbcType=DECIMAL}, 
       #{direction,jdbcType=INTEGER}, #{height,jdbcType=DECIMAL}, #{mile,jdbcType=DECIMAL}, 
       #{oil,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{alarmflag,jdbcType=VARCHAR}, 
       #{acc,jdbcType=TINYINT}, #{position,jdbcType=TINYINT}, #{lonGcj02,jdbcType=DECIMAL}, 
       #{latGcj02,jdbcType=DECIMAL}, #{savetime,jdbcType=TIMESTAMP}, #{airtight,jdbcType=TINYINT},
-            #{load,jdbcType=TINYINT},#{lift,jdbcType=TINYINT})
+            #{loadState,jdbcType=TINYINT},#{lift,jdbcType=TINYINT})
 
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.bjtu.jzlj.dao.THistoryPosition">
@@ -125,8 +125,8 @@
       <if test="airtight != null">
         airtight,
       </if>
-      <if test="load != null">
-        load,
+      <if test="loadState != null">
+        load_state,
       </if>
       <if test="lift != null">
         lift
@@ -190,8 +190,8 @@
       <if test="airtight != null">
         #{airtight,jdbcType=TINYINT},
       </if>
-      <if test="load != null">
-        #{load,jdbcType=TINYINT},
+      <if test="loadState != null">
+        #{loadState,jdbcType=TINYINT},
       </if>
       <if test="lift != null">
         #{lift,jdbcType=TINYINT},
@@ -253,8 +253,8 @@
       <if test="airtight != null">
         airtight = #{airtight,jdbcType=TINYINT},
       </if>
-      <if test="load != null">
-        load = #{load,jdbcType=TINYINT},
+      <if test="loadState != null">
+        load_state = #{loadState,jdbcType=TINYINT},
       </if>
       <if test="lift != null">
         lift = #{lift ,jdbcType=TINYINT}
@@ -284,7 +284,7 @@
       lat_gcj02 = #{latGcj02,jdbcType=DECIMAL},
       savetime = #{savetime,jdbcType=TIMESTAMP},
         airtight = #{airtight,jdbcType=TINYINT},
-        load = #{load,jdbcType=TINYINT},
+        load_state = #{loadState,jdbcType=TINYINT},
         lift = #{lift,jdbcType=TINYINT}
 
     where id = #{id,jdbcType=VARCHAR}
