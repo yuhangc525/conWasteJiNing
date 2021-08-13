@@ -3,6 +3,7 @@ package cn.edu.bjtu.jzlj.service;
 import java.io.IOException;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -17,5 +18,7 @@ public interface CommonInfoService {
     String getSign();
 
     JSONObject getLogin() throws IOException;
+
+    JSONArray getQueryVehicleInfo() throws IOException;
 
 }

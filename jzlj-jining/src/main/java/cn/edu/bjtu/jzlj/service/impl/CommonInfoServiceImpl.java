@@ -1,7 +1,10 @@
 package cn.edu.bjtu.jzlj.service.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
+import com.alibaba.fastjson.JSONArray;
+import okhttp3.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
@@ -10,12 +13,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.edu.bjtu.jzlj.service.CommonInfoService;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * @author wangzhijin <wangzhijin@kuaishou.com>
@@ -55,33 +52,44 @@ public class CommonInfoServiceImpl implements CommonInfoService {
 
     @Override
     public JSONObject getLogin() throws IOException {
-        MediaType json = MediaType.parse("application/json;");
         String sign = getSign();
-        sign = "www";
         String url = "http://219.151.22.122:8008/openapi/authservice/login";
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("username", "济宁鹏翔");
+        jsonObject.put("username", "JNXP");
         jsonObject.put("password", "C5SEVCjYoQPnYfIa/2keFeg7OyQO8Rl9qsU3wPhsfyc7cU3g/ByK+bDRWefx6tY+mcORNUhrQZ4ZSp5Nca3j7/hNeNmXO1aDhMOiD8d91LJ79RAdiMHOWwLiZ5TpNxfrO0r94RHcExHNyeJAb/LZKI3ZqBVd6KfTCoCg4LRIUdo=");
-        String jsonObjectStr = jsonObject.toJSONString();
-        RequestBody body = RequestBody.create(json, jsonObjectStr);
-//        RequestBody formBody = new FormBody.Builder()
-//                .add("username", "济宁鹏翔")
-//                .add("password", "Z8d+TYngTI5qI27rAc+XxPddgwhTy8Xcn42EjRsUM8adxJ3h/Lenl5c49BAAVXyRqEZRVegwBcVcOBDVfsbgGhga9eMzte7PzK/O8aakshNXxj7/4l2QR/k8Q1uRRzXiwqeHXYgHSmDYoovbuZ0O4kc3yZyuo/cOVIWpe4ZHdcQ=")
-//                .build();
+
+        RequestBody body = RequestBody.create(null, jsonObject.toJSONString());
         OkHttpClient okHttpClient = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
-//                .addHeader("Sign", sign)
-//                .header("Sign", sign)
-//                .addHeader("Content-Type", "application/json")
-//                .header("Content-Type", "application/json")
-//                .post(body)
+                .addHeader("Sign", sign)
+                .header("Accept-Encoding", "*/*")
+                .header("Content-Type", "application/json")
+                .post(body)
                 .build();
+
         Response response = okHttpClient.newCall(request).execute();
         response.headers(); //响应头
         ResponseBody responseBody = response.body();
         JSONObject resultJsonObject = JSON.parseObject(responseBody.string());
         return resultJsonObject;
+    }
+
+    @Override
+    public JSONArray getQueryVehicleInfo() throws IOException {
+        String token = getLogin().get("token").toString();
+        String authorization = "Bearer " + token;
+        String url = "http://219.151.22.122:8008/openapi/gpsservice/v1/baseVehicle/QueryVehicleInfo";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", authorization)
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+        response.headers(); //响应头
+        ResponseBody responseBody = response.body();
+        JSONArray jsonArray = JSONArray.parseArray(responseBody.string());
+        return jsonArray;
     }
 
 
