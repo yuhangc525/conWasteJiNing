@@ -19,7 +19,6 @@ target/
 .idea
 *.iws
 *.iml
-<<<<<<< HEAD
 *.ipr
 .mvn
 mvnw*

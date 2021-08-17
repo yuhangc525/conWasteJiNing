@@ -60,4 +60,27 @@ public class CarInfo {
     @TableField(exist = false)
     private boolean isOnline;
 
+    private String navicertNo;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date registrationDate;
+    private String certNo;
+    private String drivingType;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date insuranceStartTime;
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date insuranceEndTime;
+    private String carColor;
+    private String carBrand;
+    private String fuelType;
+    private String emissionStandard;
+    private String insuranceCompany;
+    private String transportLicense;
+    private String engineNo;
+    private String vin;
+    private String airtightFlag;
+    private String capacityFlag;
+    private String liftFlag;
+    private String leakProofFlag;
+
+
 }

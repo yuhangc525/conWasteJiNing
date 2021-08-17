@@ -22,6 +22,27 @@
         <result column="input_time" property="inputTime" />
         <result column="reviews_status" property="reviewsStatus" />
         <result column="cab_monitor_type" property="cabMonitorType" />
+
+        <result column="navicert_no" property="navicertNo" />
+        <result column="registration_date" property="registrationDate" />
+        <result column="cert_no" property="certNo" />
+        <result column="driving_type" property="drivingType" />
+        <result column="insurance_start_time" property="insuranceStartTime" />
+        <result column="insurance_end_time" property="insuranceEndTime" />
+        <result column="car_ color" property="carColor" />
+        <result column="car_ brand" property="carBrand" />
+        <result column="fuel_type" property="fuelType" />
+        <result column="emission_standard" property="emissionStandard" />
+        <result column="insurance_company" property="insuranceCompany" />
+        <result column="transport_license" property="transportLicense" />
+        <result column="engine_no" property="engineNo" />
+        <result column="vin" property="vin" />
+        <result column="airtight_flag" property="airtightFlag" />
+        <result column="capacity_flag" property="capacityFlag" />
+        <result column="lift_flag" property="liftFlag" />
+        <result column="leak_proof_flag" property="leakProofFlag" />
+
+
     </resultMap>
 
     <resultMap id="NewResultMap" type="cn.edu.bjtu.jzlj.vo.Test">
@@ -81,6 +102,9 @@
         SELECT c.car_id, c.terminal_id, c.load_capacity, c.car_long, c.car_high, c.car_width, c.car_type,
                c.driver_name, c.motorcade_id, c.terminal_company, c.company, c.car_no, c.from_ip, c.cab_monitor_type
                c.status, c.linkman, c.phone_no, c.input_name, c.input_time, t.uptime
+               c.navicert_no, c.registration_date, c.cert_no, c.driving_type, c.insurance_start_time, c.insurance_end_time,
+               c.car_color, c.car_brand, c.fuel_type, c.emission_standard, c.insurance_company, c.transport_license,
+               c.engine_no, c.vin, c.airtight_flag, c.capacity_flag, c.lift_flag, c.leak_proof_flag
         FROM car_info c
 
                  LEFT OUTER JOIN t_realtime_position t
