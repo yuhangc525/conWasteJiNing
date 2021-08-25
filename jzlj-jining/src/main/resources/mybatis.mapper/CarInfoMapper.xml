@@ -29,8 +29,8 @@
         <result column="driving_type" property="drivingType" />
         <result column="insurance_start_time" property="insuranceStartTime" />
         <result column="insurance_end_time" property="insuranceEndTime" />
-        <result column="car_ color" property="carColor" />
-        <result column="car_ brand" property="carBrand" />
+        <result column="car_color" property="carColor" />
+        <result column="car_brand" property="carBrand" />
         <result column="fuel_type" property="fuelType" />
         <result column="emission_standard" property="emissionStandard" />
         <result column="insurance_company" property="insuranceCompany" />
@@ -106,9 +106,8 @@
                c.car_color, c.car_brand, c.fuel_type, c.emission_standard, c.insurance_company, c.transport_license,
                c.engine_no, c.vin, c.airtight_flag, c.capacity_flag, c.lift_flag, c.leak_proof_flag
         FROM car_info c
-
-                 LEFT OUTER JOIN t_realtime_position t
-                                 ON c.terminal_id =t.terminal_id
+        LEFT OUTER JOIN t_realtime_position t
+        ON c.terminal_id = t.terminal_id
     </select>
 
 
