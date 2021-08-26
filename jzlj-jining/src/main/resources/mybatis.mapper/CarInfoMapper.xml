@@ -101,7 +101,7 @@
     <select id="getAllDataWithUptime" resultType="cn.edu.bjtu.jzlj.dao.CarInfo">
         SELECT c.car_id, c.terminal_id, c.load_capacity, c.car_long, c.car_high, c.car_width, c.car_type,
                c.driver_name, c.motorcade_id, c.terminal_company, c.company, c.car_no, c.from_ip, c.cab_monitor_type
-               c.status, c.linkman, c.phone_no, c.input_name, c.input_time, t.uptime
+               c.status, c.linkman, c.phone_no, c.input_name, c.input_time, t.uptime,
                c.navicert_no, c.registration_date, c.cert_no, c.driving_type, c.insurance_start_time, c.insurance_end_time,
                c.car_color, c.car_brand, c.fuel_type, c.emission_standard, c.insurance_company, c.transport_license,
                c.engine_no, c.vin, c.airtight_flag, c.capacity_flag, c.lift_flag, c.leak_proof_flag
